@@ -9,6 +9,7 @@ public class Sprite{
 
     protected float x, y;
     protected Rect dst, top, bot, left, right;
+    protected boolean visible = true;
 
     public Sprite(float x, float y){
         this.x = x;
@@ -41,5 +42,9 @@ public class Sprite{
 
     public Rect getLeft(){
         return left;
+    }
+
+    public void die(){
+        visible = false;
     }
 }

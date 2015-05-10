@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Mario implements TimeConscious {
 
     private ArrayList<Bitmap> spriteLoader;
-    //private ArrayList<Obstacle> scene;
+    private ArrayList<Obstacle> scene;
     private Bitmap smallRedMario;
     private Bitmap bmp;
     private boolean visible = true, ground, touchFlag;
@@ -18,7 +18,7 @@ public class Mario implements TimeConscious {
     private int dir = 0, timer = 0;
     private float dy;
     private float gravity = 5;
-    private Rect dst;
+    private Rect dst, top, bot, left, right;
 
     public Mario(/*ArrayList<Obstacle> scene,*/ MarioSurfaceView view) {
         //Load default bitmap
@@ -39,6 +39,13 @@ public class Mario implements TimeConscious {
         this.x2 = this.x1 + marioWidth;
         this.y2 = this.y1 + marioHeight;
         dst = new Rect(x1, y1, x2, y2);
+
+        //Design hitboxes
+        top = new Rect(x1, y1, x2 , y1+marioHeight/4);
+        bot = new Rect(x1, y2-marioHeight/4, x2, y2);
+
+        left = new Rect(x1, y1+marioHeight/4, x1+marioWidth/2, y1+marioHeight/4);
+        right = new Rect(x2-marioWidth/2, y2-marioHeight/4, x2, y2-marioHeight/4);
 
         screenHeight = view.getHeight();
         touchFlag = false;
@@ -100,26 +107,33 @@ public class Mario implements TimeConscious {
         draw(c);
     }
 
-    /*public boolean checkCollision(){
+    public void checkEnemyCollision(ArrayList<Sprite> enemies) {
 
-        //TODO determine if list contains enemies or only interactable
-        boolean collide = false;
-        for(Obstacle o : scene){
-            if(dst.intersect(o.getRect())){
-                collide = true;
+        //TODO determine action for different collisions
+        for (Sprite s : enemies) {
+            if (right.intersect(s.getLeft())) {
+                die();
+                break;
+            } else if (left.intersect(s.getRight())) {
+                die();
+                break;
+            } else if (top.intersect(s.getBot())) {
+                die();
+                break;
+            } else if (bot.intersect(s.getTop())) {
+                s.die();
+                break;
             }
         }
-        return collide;
     }
-    */
-    /*
+
     public void checkPlatformIntersect(ArrayList<Obstacle> obs){
         //TODO
         for(Obstacle a: obs){
             if(bot.intersect(a.getTop())){
                 ground=true;
                 dy = 0;
-                this.y-=.10f;						//touch ground (top of object), counter against gravity
+                y1-=.10f;						//touch ground (top of object), counter against gravity
                 break;
             } else if(!bot.intersect(a.getTop())){
                 ground = false;
@@ -130,14 +144,19 @@ public class Mario implements TimeConscious {
                 ground=false;
                 dy = 0;
 
-                this.y+=.1f;
+                this.y1+=.1f;
             }
         }
     }
-    */
+
+    public void die(){
+        visible = false;
+    }
 
     protected void draw(Canvas c) {
-        Paint paint = new Paint();
-        c.drawBitmap(smallRedMario, null, dst, paint);
+        if(visible) {
+            Paint paint = new Paint();
+            c.drawBitmap(smallRedMario, null, dst, paint);
+        }
     }
 }
