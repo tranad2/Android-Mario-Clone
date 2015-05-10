@@ -11,8 +11,7 @@ public class Mario implements TimeConscious {
 
     private ArrayList<Bitmap> spriteLoader;
     private ArrayList<Obstacle> scene;
-    private Bitmap smallRedMario;
-    private Bitmap bmp;
+    private Bitmap currentImage;
     private boolean visible = true, ground, touchFlag;
     private int x1, y1, x2, y2, marioWidth, marioHeight, screenHeight;
     private int dir = 0, timer = 0;
@@ -24,14 +23,9 @@ public class Mario implements TimeConscious {
         //Load default bitmap
         //this.scene = scene;
 
-        //Load Mario bitmap
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        smallRedMario = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario1, options);
-
-        //Scale Mario bitmap
-        marioWidth = smallRedMario.getWidth() * 2;
-        marioHeight = smallRedMario.getHeight() * 2;
-        smallRedMario = Bitmap.createScaledBitmap(smallRedMario, marioWidth, marioHeight, true);
+        //Load Mario bitmaps
+        loadImages(view);
+        currentImage=spriteLoader.get(0);
 
         //Initialize Mario position
         this.x1 = view.getWidth() / 4;
@@ -63,26 +57,91 @@ public class Mario implements TimeConscious {
         touchFlag = flag;
     }
 
-    public void loadImages(){
+    //Loads scaled images into array
+    public void loadImages(MarioSurfaceView view){
         //TODO add image frames to array
+        spriteLoader = new ArrayList<>();
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+
+        Bitmap smallRedMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario1, options);
+        marioWidth = smallRedMario1.getWidth() * 2;
+        marioHeight = smallRedMario1.getHeight() * 2;
+        smallRedMario1 = Bitmap.createScaledBitmap(smallRedMario1, marioWidth, marioHeight, true);
+
+        Bitmap smallRedMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario2, options);
+        marioWidth = smallRedMario2.getWidth() * 2;
+        marioHeight = smallRedMario2.getHeight() * 2;
+        smallRedMario2 = Bitmap.createScaledBitmap(smallRedMario2, marioWidth, marioHeight, true);
+
+        Bitmap smallRedMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario3, options);
+        marioWidth = smallRedMario3.getWidth() * 2;
+        marioHeight = smallRedMario3.getHeight() * 2;
+        smallRedMario3 = Bitmap.createScaledBitmap(smallRedMario3, marioWidth, marioHeight, true);
+
+        Bitmap smallRedMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario4, options);
+        marioWidth = smallRedMario4.getWidth() * 2;
+        marioHeight = smallRedMario4.getHeight() * 2;
+        smallRedMario4 = Bitmap.createScaledBitmap(smallRedMario4, marioWidth, marioHeight, true);
+
+        Bitmap smallRedMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario5, options);
+        marioWidth = smallRedMario5.getWidth() * 2;
+        marioHeight = smallRedMario5.getHeight() * 2;
+        smallRedMario5 = Bitmap.createScaledBitmap(smallRedMario5, marioWidth, marioHeight, true);
+
+        spriteLoader.add(smallRedMario1);
+        spriteLoader.add(smallRedMario2);
+        spriteLoader.add(smallRedMario3);
+        spriteLoader.add(smallRedMario4);
+        spriteLoader.add(smallRedMario5);
 
     }
 
-    public void doAnim(int direction){
+    //Animates through Mario sprite frames
+    public void doAnim(){
         //TODO
         //Run through animation
-        /*if(direction == 1){   //Right direction
-
-        } else if( direction == -1){   //Left direction
-
+        if(dir == 1){   //Right direction
+            if(timer <= 15){
+                currentImage = spriteLoader.get(1);
+                timer++;
+            } else if(timer <= 30){
+                currentImage = spriteLoader.get(2);
+                timer++;
+            } else if(timer <= 45){
+                currentImage = spriteLoader.get(3);
+                timer++;
+            } else if(timer <= 60){
+                currentImage = spriteLoader.get(2);
+                timer = 0;
+            }
+        } else if( dir == -1){   //Left direction
+            if(timer <= 15){
+                currentImage = spriteLoader.get(1);
+                timer++;
+            } else if(timer <= 30){
+                currentImage = spriteLoader.get(2);
+                timer++;
+            } else if(timer <= 45){
+                currentImage = spriteLoader.get(3);
+                timer++;
+            } else if(timer <= 60){
+                currentImage = spriteLoader.get(2);
+                timer = 0;
+            }
         } else{     //Standing still
-            if(){   //if still after move right, choose right-face
-
+            if(currentImage == spriteLoader.get(0) || currentImage == spriteLoader.get(1) || currentImage == spriteLoader.get(2) || currentImage == spriteLoader.get(3)){   //if still after move right, choose right-face
+                currentImage = spriteLoader.get(0);
             } else{ //if still after move left, choose left face
-
+                currentImage = spriteLoader.get(0);     //TODO temporary directional sprite
             }
 
-        }*/
+        }
+    }
+
+    //Sets direction of Mario sprite
+    public void setDirection(int value){
+        dir = value;
     }
 
 
@@ -156,7 +215,7 @@ public class Mario implements TimeConscious {
     protected void draw(Canvas c) {
         if(visible) {
             Paint paint = new Paint();
-            c.drawBitmap(smallRedMario, null, dst, paint);
+            c.drawBitmap(currentImage, null, dst, paint);
         }
     }
 }
