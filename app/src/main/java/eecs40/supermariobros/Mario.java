@@ -16,7 +16,7 @@ public class Mario implements TimeConscious {
     private int x1, y1, x2, y2, marioWidth, marioHeight, screenHeight;
     private int dir = 0, timer = 0;
     private float dy;
-    private float gravity = 5;
+    private float gravity = 3;
     private Rect dst, top, bot, left, right;
 
     public Mario(/*ArrayList<Obstacle> scene,*/ MarioSurfaceView view) {

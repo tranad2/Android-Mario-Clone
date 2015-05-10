@@ -40,8 +40,10 @@ public class Buttons implements TimeConscious {
         dst3 = new Rect( x1, y1, x2, y2 );  //A button
         x2 = x1 - view.getWidth() / 40;
         x1 = x2 - buttonB.getWidth();
-        dst4 = new Rect( x1, y1, x2, y2 );
+        dst4 = new Rect( x1, y1, x2, y2 );  //B button
     }
+
+    public int getButtonLength() { return y2 - y1; }
 
     public void tick(Canvas c) {
         draw(c);
