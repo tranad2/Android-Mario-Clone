@@ -27,6 +27,13 @@ public class Mario implements TimeConscious {
         loadImages(view);
         currentImage=spriteLoader.get(0);
 
+
+        //Scale Mario bitmap
+        marioWidth = currentImage.getWidth();
+        marioHeight = currentImage.getHeight();
+        currentImage = Bitmap.createScaledBitmap(currentImage, marioWidth, marioHeight, true);
+
+
         //Initialize Mario position
         this.x1 = view.getWidth() / 4;
         this.y1 = view.getHeight() / 2;
@@ -65,29 +72,14 @@ public class Mario implements TimeConscious {
         BitmapFactory.Options options = new BitmapFactory.Options();
 
         Bitmap smallRedMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario1, options);
-        marioWidth = smallRedMario1.getWidth() * 2;
-        marioHeight = smallRedMario1.getHeight() * 2;
-        smallRedMario1 = Bitmap.createScaledBitmap(smallRedMario1, marioWidth, marioHeight, true);
 
         Bitmap smallRedMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario2, options);
-        marioWidth = smallRedMario2.getWidth() * 2;
-        marioHeight = smallRedMario2.getHeight() * 2;
-        smallRedMario2 = Bitmap.createScaledBitmap(smallRedMario2, marioWidth, marioHeight, true);
 
         Bitmap smallRedMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario3, options);
-        marioWidth = smallRedMario3.getWidth() * 2;
-        marioHeight = smallRedMario3.getHeight() * 2;
-        smallRedMario3 = Bitmap.createScaledBitmap(smallRedMario3, marioWidth, marioHeight, true);
 
         Bitmap smallRedMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario4, options);
-        marioWidth = smallRedMario4.getWidth() * 2;
-        marioHeight = smallRedMario4.getHeight() * 2;
-        smallRedMario4 = Bitmap.createScaledBitmap(smallRedMario4, marioWidth, marioHeight, true);
 
         Bitmap smallRedMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario5, options);
-        marioWidth = smallRedMario5.getWidth() * 2;
-        marioHeight = smallRedMario5.getHeight() * 2;
-        smallRedMario5 = Bitmap.createScaledBitmap(smallRedMario5, marioWidth, marioHeight, true);
 
         spriteLoader.add(smallRedMario1);
         spriteLoader.add(smallRedMario2);
@@ -149,10 +141,10 @@ public class Mario implements TimeConscious {
     public void tick(Canvas c) {
         //Jumping
         if (touchFlag && dy == 0) {
-            y1 -= 40;
+            y1 -= 25;
         }
         else {
-            y1 += dy;
+            y1 += dy*.25;
             dy += gravity;
         }
 
