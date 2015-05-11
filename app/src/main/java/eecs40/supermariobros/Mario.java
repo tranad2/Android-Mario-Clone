@@ -15,7 +15,7 @@ public class Mario implements TimeConscious {
     private boolean visible = true, ground, touchFlag;
     private int x1, y1, x2, y2, marioWidth, marioHeight, screenHeight;
     private int dir = 0, timer = 0;
-    private float dy;
+    private float dx = 0, dy;
     private float gravity = 3;
     private Rect dst, top, bot, left, right;
 
@@ -60,6 +60,10 @@ public class Mario implements TimeConscious {
         dst.set(x1, y1, x2, y2);
     }
 
+    public void setDx(float value){
+        dx = value;
+    }
+
     public void setTouchFlag(boolean flag) {
         touchFlag = flag;
     }
@@ -94,30 +98,30 @@ public class Mario implements TimeConscious {
         //TODO
         //Run through animation
         if(dir == 1){   //Right direction
-            if(timer <= 15){
+            if(timer <= 1){
                 currentImage = spriteLoader.get(1);
                 timer++;
-            } else if(timer <= 30){
+            } else if(timer <= 2){
                 currentImage = spriteLoader.get(2);
                 timer++;
-            } else if(timer <= 45){
+            } else if(timer <= 3){
                 currentImage = spriteLoader.get(3);
                 timer++;
-            } else if(timer <= 60){
+            } else if(timer <= 4){
                 currentImage = spriteLoader.get(2);
                 timer = 0;
             }
         } else if( dir == -1){   //Left direction
-            if(timer <= 15){
+            if(timer <= 1){
                 currentImage = spriteLoader.get(1);
                 timer++;
-            } else if(timer <= 30){
+            } else if(timer <= 2){
                 currentImage = spriteLoader.get(2);
                 timer++;
-            } else if(timer <= 45){
+            } else if(timer <= 3){
                 currentImage = spriteLoader.get(3);
                 timer++;
-            } else if(timer <= 60){
+            } else if(timer <= 4){
                 currentImage = spriteLoader.get(2);
                 timer = 0;
             }
@@ -153,8 +157,9 @@ public class Mario implements TimeConscious {
             y1 = screenHeight - marioHeight;
             dy = 0;
         }
-
+        x1+=dx;
         setLocation(x1, y1);
+        doAnim();
         draw(c);
     }
 
