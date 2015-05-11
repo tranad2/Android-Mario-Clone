@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Matrix;
 import java.util.ArrayList;
 
 public class Mario implements TimeConscious {
@@ -12,9 +13,9 @@ public class Mario implements TimeConscious {
     private ArrayList<Bitmap> spriteLoader;
     private ArrayList<Obstacle> scene;
     private Bitmap currentImage;
-    private boolean visible = true, ground, touchFlag;
+    private boolean visible = true, ground = true, jumpFlag, moveFlag;
     private int x1, y1, x2, y2, marioWidth, marioHeight, screenHeight;
-    private int dir = 0, timer = 0;
+    private int dir = 1, timer = 0;
     private float dx = 0, dy;
     private float gravity = 3;
     private Rect dst, top, bot, left, right;
@@ -26,7 +27,6 @@ public class Mario implements TimeConscious {
         //Load Mario bitmaps
         loadImages(view);
         currentImage=spriteLoader.get(0);
-
 
         //Scale Mario bitmap
         marioWidth = currentImage.getWidth();
@@ -49,7 +49,7 @@ public class Mario implements TimeConscious {
         right = new Rect(x2-marioWidth/2, y2-marioHeight/4, x2, y2-marioHeight/4);
 
         screenHeight = view.getHeight();
-        touchFlag = false;
+        jumpFlag = false;
     }
 
     public void setLocation(int xPos, int yPos) {
@@ -60,14 +60,25 @@ public class Mario implements TimeConscious {
         dst.set(x1, y1, x2, y2);
     }
 
+    //True if A button is pressed
+    public void setJumpFlag(boolean flag) {
+        jumpFlag = flag;
+    }
+
+    //True if left or right button is pressed
+    public void setMoveFlag(boolean flag) {
+        moveFlag = flag;
+    }
+    
+    //Sets direction of Mario sprite
+    public void setDirection(int value){
+        dir = value;
+    }
+
     public void setDx(float value){
         dx = value;
     }
-
-    public void setTouchFlag(boolean flag) {
-        touchFlag = flag;
-    }
-
+    
     //Loads scaled images into array
     public void loadImages(MarioSurfaceView view){
         //TODO add image frames to array
@@ -93,6 +104,13 @@ public class Mario implements TimeConscious {
 
     }
 
+    public Bitmap flipImage(Bitmap src) {
+        // create new matrix for transformation
+        Matrix matrix = new Matrix();
+        matrix.preScale(-1.0f, 1.0f);
+        return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
+    }
+
     //Animates through Mario sprite frames
     public void doAnim(){
         //TODO
@@ -100,11 +118,12 @@ public class Mario implements TimeConscious {
         if (!ground) {
             if(dir == 1) {
                 currentImage = spriteLoader.get(4);     //Jumping right
-            } else {
+            } else if (dir == -1){
                 currentImage = spriteLoader.get(4);     //Jumping left
+                currentImage = flipImage(currentImage);
             }
         }
-        else if(dir == 1) {   //Right direction
+        else if(dir == 1 && ground && moveFlag) {   //Moving right
             if(timer <= 10){
                 currentImage = spriteLoader.get(1);
                 timer++;
@@ -118,46 +137,45 @@ public class Mario implements TimeConscious {
                 currentImage = spriteLoader.get(2);
                 timer = 0;
             }
-        } else if(dir == -1){   //Left direction
+        } else if(dir == -1 && ground && moveFlag){   //Left direction
             if(timer <= 10){
                 currentImage = spriteLoader.get(1);
+                currentImage = flipImage(currentImage);
                 timer++;
             } else if(timer <= 20){
                 currentImage = spriteLoader.get(2);
+                currentImage = flipImage(currentImage);
                 timer++;
             } else if(timer <= 30){
                 currentImage = spriteLoader.get(3);
+                currentImage = flipImage(currentImage);
                 timer++;
             } else if(timer <= 40){
                 currentImage = spriteLoader.get(2);
+                currentImage = flipImage(currentImage);
                 timer = 0;
             }
         } else{     //Standing still
-            if(currentImage == spriteLoader.get(0) || currentImage == spriteLoader.get(1) || currentImage == spriteLoader.get(2) || currentImage == spriteLoader.get(3)){   //if still after move right, choose right-face
+            if(currentImage == spriteLoader.get(0) || currentImage == spriteLoader.get(1) || currentImage == spriteLoader.get(2) || currentImage == spriteLoader.get(3) || currentImage == spriteLoader.get(4) || dir == 1){   //if still after move right, choose right-face
                 currentImage = spriteLoader.get(0);
             } else{ //if still after move left, choose left face
-                currentImage = spriteLoader.get(0);     //TODO temporary directional sprite
+                currentImage = spriteLoader.get(0);
+                currentImage = flipImage(currentImage);
             }
 
         }
     }
-
-    //Sets direction of Mario sprite
-    public void setDirection(int value){
-        dir = value;
-    }
-
-
+    
     @Override
     public void tick(Canvas c) {
         //Keep Mario on screen
-        if (y1 >= screenHeight - marioHeight && !touchFlag) {     //Bottom bound
+        if (y2 >= screenHeight && !jumpFlag) {     //Bottom bound
             y1 = screenHeight - marioHeight;
             dy = 0;
             ground = true;
         }
         //Jumping
-        else if (touchFlag && dy == 0) {
+        else if (jumpFlag && dy == 0) {
             y1 -= 25;
             ground = false;
         }

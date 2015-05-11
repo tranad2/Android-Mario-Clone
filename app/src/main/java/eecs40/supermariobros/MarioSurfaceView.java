@@ -51,16 +51,18 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                         //Left button
                         mario.setDirection(-1);
                         mario.setDx(-15f);
+                        mario.setMoveFlag(true);
                     }
                     if ((e.getX() >= getWidth() / 12 + buttons.getButtonLength()) && (e.getX() <= getWidth() / 12 + 2 * buttons.getButtonLength())) {
                         //Right button
                         mario.setDirection(1);
                         mario.setDx(15f);
+                        mario.setMoveFlag(true);
 
                     }
                     if ((e.getX() >= 5 * getWidth() / 6) && (e.getX() <= 5 * getWidth() / 6 + buttons.getButtonLength())) {
                         //A button
-                        mario.setTouchFlag(true);
+                        mario.setJumpFlag(true);
                     }
                     if ((e.getX() >= 5 * getWidth() / 6 - getWidth() / 40 - buttons.getButtonLength()) && (e.getX() <= 5 * getWidth() / 6 - getWidth() / 40)) {
                         //B button
@@ -69,8 +71,9 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                 break;
             case MotionEvent.ACTION_UP:
                 //...
-                mario.setTouchFlag(false);
-                mario.setDirection(0);
+                mario.setJumpFlag(false);
+                mario.setMoveFlag(false);
+                //mario.setDirection(0);
                 mario.setDx(0);
                 break;
         }
