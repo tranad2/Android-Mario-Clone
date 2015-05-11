@@ -97,31 +97,38 @@ public class Mario implements TimeConscious {
     public void doAnim(){
         //TODO
         //Run through animation
-        if(dir == 1){   //Right direction
-            if(timer <= 1){
+        if (!ground) {
+            if(dir == 1) {
+                currentImage = spriteLoader.get(4);     //Jumping right
+            } else {
+                currentImage = spriteLoader.get(4);     //Jumping left
+            }
+        }
+        else if(dir == 1) {   //Right direction
+            if(timer <= 10){
                 currentImage = spriteLoader.get(1);
                 timer++;
-            } else if(timer <= 2){
+            } else if(timer <= 20){
                 currentImage = spriteLoader.get(2);
                 timer++;
-            } else if(timer <= 3){
+            } else if(timer <= 30){
                 currentImage = spriteLoader.get(3);
                 timer++;
-            } else if(timer <= 4){
+            } else if(timer <= 40){
                 currentImage = spriteLoader.get(2);
                 timer = 0;
             }
-        } else if( dir == -1){   //Left direction
-            if(timer <= 1){
+        } else if(dir == -1){   //Left direction
+            if(timer <= 10){
                 currentImage = spriteLoader.get(1);
                 timer++;
-            } else if(timer <= 2){
+            } else if(timer <= 20){
                 currentImage = spriteLoader.get(2);
                 timer++;
-            } else if(timer <= 3){
+            } else if(timer <= 30){
                 currentImage = spriteLoader.get(3);
                 timer++;
-            } else if(timer <= 4){
+            } else if(timer <= 40){
                 currentImage = spriteLoader.get(2);
                 timer = 0;
             }
@@ -143,19 +150,21 @@ public class Mario implements TimeConscious {
 
     @Override
     public void tick(Canvas c) {
+        //Keep Mario on screen
+        if (y1 >= screenHeight - marioHeight && !touchFlag) {     //Bottom bound
+            y1 = screenHeight - marioHeight;
+            dy = 0;
+            ground = true;
+        }
         //Jumping
-        if (touchFlag && dy == 0) {
+        else if (touchFlag && dy == 0) {
             y1 -= 25;
+            ground = false;
         }
         else {
             y1 += dy*.25;
             dy += gravity;
-        }
-
-        //Keep Mario on screen
-        if (y1 > screenHeight - marioHeight) {     //Bottom bound
-            y1 = screenHeight - marioHeight;
-            dy = 0;
+            ground = false;
         }
         x1+=dx;
         setLocation(x1, y1);
