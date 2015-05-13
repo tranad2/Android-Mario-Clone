@@ -11,7 +11,7 @@ public class Sprite{
     protected Rect dst, top, bot, left, right;
     protected boolean visible = true;
 
-    public Sprite(float x, float y){
+    public Sprite(int x, int y){
         this.x = x;
         this.y = y;
     }

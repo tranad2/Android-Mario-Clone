@@ -1,16 +1,58 @@
 package eecs40.supermariobros;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
 
 /**
  * Created by Alex on 5/9/2015.
  */
 
-public class Obstacle extends Sprite{
+public class Obstacle extends Sprite implements TimeConscious{
 
-    public Obstacle(float x, float y){
+    private float bmpWidth, bmpHeight, dx = 0;
+    private Bitmap image;
+
+    public Obstacle(int x, int y, Bitmap img){
         super(x,y);
+        image = img;
+        bmpWidth = img.getWidth();
+        bmpHeight = img.getHeight();
+        dst = new Rect(x, y, (int)(x+bmpWidth), (int)(y+bmpHeight));
+
+        top = new Rect(x, y, (int)(x+bmpWidth), (int)(y+bmpHeight/4));
+        bot = new Rect(x, (int)(y+bmpHeight-bmpHeight/4), (int)(x+bmpWidth), (int)(y+bmpHeight));
+
+        left = new Rect(x, (int)(y+bmpHeight/4), (int)(x+bmpWidth/2), (int)(y+bmpHeight-bmpHeight/4));
+        right = new Rect((int)(x+bmpWidth-bmpWidth/2), (int)(y+bmpHeight/4), (int)(x+bmpWidth), (int)(y+bmpHeight-bmpHeight/4));
     }
+
+    public void tick(Canvas c){
+        //x+=dx;
+        draw(c);
+    }
+
+    public void setLocation(int xPos, int yPos) {
+        x = xPos;
+        y = yPos;
+        dst.set(xPos, yPos, (int)(xPos+bmpWidth), (int)(yPos+bmpHeight));
+    }
+
+    public void draw(Canvas c){
+        Paint paint = new Paint();
+        //c.drawBitmap(image, null, dst, paint);
+        c.drawRect(top, paint);
+        c.drawRect(bot,paint);
+        c.drawRect(left,paint);
+        c.drawRect(right,paint);
+    }
+
+    public void setDx(float value){
+        dx = value;
+    }
+
+
 
 
 }

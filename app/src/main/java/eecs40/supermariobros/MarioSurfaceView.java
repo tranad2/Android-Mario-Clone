@@ -14,6 +14,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     //Background background;
     Buttons buttons;
     Mario mario;
+    World1 w1;
 
     public MarioSurfaceView(Context context) {
         super(context);
@@ -25,7 +26,8 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         renderThread = new MarioRenderThread(this);
         renderThread.start();
         //background = new Background(this);
-        mario = new Mario(this);
+        w1 = new World1(this);
+        mario = new Mario(w1.getObstacles(),this);
         buttons = new Buttons(this);
     }
 
@@ -81,6 +83,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     public void onDraw(Canvas c) {
         super.onDraw(c);
         //background.draw(c);
+        w1.tick(c);
         mario.draw(c);
         buttons.draw(c);
         //...
@@ -96,7 +99,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         paint.setColor(Color.CYAN);
         paint.setAntiAlias(true);
         c.drawPaint(paint);
-
+        w1.tick(c);
         mario.tick(c);
         buttons.draw(c);
 

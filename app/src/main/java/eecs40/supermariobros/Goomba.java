@@ -10,7 +10,7 @@ public class Goomba extends Sprite {
 
     Bitmap bitmapGoomba;
 
-    public Goomba(float x, float y){
+    public Goomba(int x, int y){
         //Load images
 
         //Design hitbox
