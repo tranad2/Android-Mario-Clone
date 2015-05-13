@@ -239,7 +239,7 @@ public class Mario implements TimeConscious {
                 y1-=d;						//touch ground (top of object), counter against gravity
                 break;
             } else if(!bot.intersect(o.getTop())){
-                //ground = false;
+                ground = false;
                 //if none of objects' top touch mario bottom, no grou
                 //return ground;
             } else if(top.intersect(o.getBot())){			//if mario top touch object bottom (ceiling), no ground and stop moving in that direction, offset outside rectangle
@@ -263,10 +263,10 @@ public class Mario implements TimeConscious {
             c.drawBitmap(currentImage, null, dst, paint);
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(Color.RED);
-            c.drawRect(top, paint);
-            c.drawRect(bot,paint);
-            c.drawRect(left,paint);
-            c.drawRect(right,paint);
+            //c.drawRect(top, paint);
+            //c.drawRect(bot,paint);
+            //c.drawRect(left,paint);
+            //c.drawRect(right,paint);
         }
     }
 }
