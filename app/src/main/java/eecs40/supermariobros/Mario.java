@@ -19,7 +19,7 @@ public class Mario implements TimeConscious {
     private Bitmap currentImage;
     private boolean visible = true, ground = true, jumpFlag, moveFlag;
     private int x1, y1, x2, y2, marioWidth, marioHeight, screenHeight;
-    private int dir = 0, timer = 0;
+    private int dir = 1, timer = 0;
     private float dx = 0, dy;
     private float gravity = 3;
     private Rect dst, top, bot, left, right;
@@ -180,22 +180,30 @@ public class Mario implements TimeConscious {
         Log.v(TAG, ""+x1+" "+y1+ " Ground:"+ground+" Visible:"+visible+" DY:"+dy+" Scene"+scene.size());
         checkPlatformIntersect();
         //Keep Mario on screen
-        if (y1 > screenHeight - marioHeight && !jumpFlag) {     //Bottom bound
+        if (y1 >= screenHeight - marioHeight && !jumpFlag) {     //Bottom bound
             y1 = screenHeight - marioHeight;
             dy = 0;
             ground = true;
         }
         //Jumping
         else if (jumpFlag && dy == 0) {
-            y1 -= 25;
+            dy = -25;
             ground = false;
         }
         else if(ground){
             dy = 0;
         }
         else if(!ground){
-            y1 += dy*.25;
+            y1 += dy;
             dy += gravity;
+            if (Math.abs(dy) > 30) {
+                if (dy > 0) {
+                    dy = 30;
+                }
+                else {
+                    dy = -30;
+                }
+            }
         }
 
         x1+=dx;
@@ -236,7 +244,7 @@ public class Mario implements TimeConscious {
                 ground=true;
                 dy = 0;
                 float d = Math.abs(y1+marioHeight-o.getTop().top);  //distance of intersection sides
-                y1-=d;						//touch ground (top of object), counter against gravity
+                y1-=d - 1;						//touch ground (top of object), counter against gravity
                 break;
             } else if(!bot.intersect(o.getTop())){
                 ground = false;
