@@ -3,16 +3,12 @@ package eecs40.supermariobros;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
-
 import java.util.ArrayList;
 
 public class Mario implements TimeConscious {
 
-    private static final String TAG = "Mario";
     private ArrayList<Bitmap> spriteLoader;
     private ArrayList<Obstacle> scene;
     private Bitmap currentImage;
@@ -23,9 +19,9 @@ public class Mario implements TimeConscious {
     private float gravity = 3;
     private Rect dst, top, bot, left, right;
 
-    public Mario(ArrayList<Obstacle> scene, MarioSurfaceView view) {
+    public Mario(/*ArrayList<Obstacle> scene,*/ MarioSurfaceView view) {
         //Load default bitmap
-        this.scene = scene;
+        //this.scene = scene;
 
         //Load Mario bitmaps
         loadImages(view);
@@ -62,10 +58,6 @@ public class Mario implements TimeConscious {
         this.x2 = this.x1 + marioWidth;
         this.y2 = this.y1 + marioHeight;
         dst.set(x1, y1, x2, y2);
-        top.set(x1,y1,x2,y1+marioHeight/4);
-        bot.set(x1,y2-marioHeight/4,x2,y2);
-        left.set(x1,y1,x1+marioWidth/2,y2);
-        right.set(x2-marioWidth/2,y1,x2,y2);
     }
 
     public void setDx(float value){
@@ -158,10 +150,8 @@ public class Mario implements TimeConscious {
 
     @Override
     public void tick(Canvas c) {
-        Log.v(TAG, ""+x1+" "+y1+ " Ground:"+ground+" Visible:"+visible+" DY:"+dy+" Scene"+scene.size());
-        checkPlatformIntersect();
         //Keep Mario on screen
-        if (y1 > screenHeight - marioHeight && !touchFlag) {     //Bottom bound
+        if (y1 >= screenHeight - marioHeight && !touchFlag) {     //Bottom bound
             y1 = screenHeight - marioHeight;
             dy = 0;
             ground = true;
@@ -171,20 +161,14 @@ public class Mario implements TimeConscious {
             y1 -= 25;
             ground = false;
         }
-        else if(ground){
-            dy = 0;
-        }
-        else if(!ground){
+        else {
             y1 += dy*.25;
             dy += gravity;
+            ground = false;
         }
-
         x1+=dx;
-
-        Log.v(TAG,"Mario");
         setLocation(x1, y1);
         doAnim();
-        Log.v(TAG,"DRAW");
         draw(c);
     }
 
@@ -208,30 +192,26 @@ public class Mario implements TimeConscious {
         }
     }
 
-    public void checkPlatformIntersect(){
+    public void checkPlatformIntersect(ArrayList<Obstacle> obs){
         //TODO
-        //Log.v(TAG,"Enter"+scene.size());
-        for(Obstacle o : scene) {
-            if(bot.intersect(o.getTop())){
-                Log.v(TAG,"Intersect");
+        for(Obstacle a: obs){
+            if(bot.intersect(a.getTop())){
                 ground=true;
                 dy = 0;
-                float d = Math.abs(y1+marioHeight-o.getTop().top);  //distance of intersection sides
-                y1-=d;						//touch ground (top of object), counter against gravity
+                y1-=.10f;						//touch ground (top of object), counter against gravity
                 break;
-            } else if(!bot.intersect(o.getTop())){
-                //ground = false;
-                //if none of objects' top touch mario bottom, no grou
+            } else if(!bot.intersect(a.getTop())){
+                ground = false;
+                //if none of objects' top touch mario bottom, no ground
                 //return ground;
-            } else if(top.intersect(o.getBot())){			//if mario top touch object bottom (ceiling), no ground and stop moving in that direction, offset outside rectangle
+            } if(top.intersect(a.getBot())){			//if mario top touch object bottom (ceiling), no ground and stop moving in that direction, offset outside rectangle
 
-                //ground=false;
-                //dy = 0;
+                ground=false;
+                dy = 0;
 
-                //this.y1+=.1f;
+                this.y1+=.1f;
             }
         }
-        Log.v(TAG,"Check done");
     }
 
     public void die(){
@@ -242,12 +222,6 @@ public class Mario implements TimeConscious {
         if(visible) {
             Paint paint = new Paint();
             c.drawBitmap(currentImage, null, dst, paint);
-            paint.setStyle(Paint.Style.FILL);
-            paint.setColor(Color.RED);
-            c.drawRect(top, paint);
-            c.drawRect(bot,paint);
-            c.drawRect(left,paint);
-            c.drawRect(right,paint);
         }
     }
 }
