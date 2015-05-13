@@ -21,7 +21,7 @@ public class Mario implements TimeConscious {
     private int x1, y1, x2, y2, marioWidth, marioHeight, screenHeight;
     private int dir = 1, timer = 0;
     private float dx = 0, dy;
-    private float gravity = 3;
+    private float gravity = 0.9f;
     private Rect dst, top, bot, left, right;
 
     public Mario(ArrayList<Obstacle> scene, MarioSurfaceView view) {
@@ -179,6 +179,7 @@ public class Mario implements TimeConscious {
     public void tick(Canvas c) {
         Log.v(TAG, ""+x1+" "+y1+ " Ground:"+ground+" Visible:"+visible+" DY:"+dy+" Scene"+scene.size());
         checkPlatformIntersect();
+        //checkSideIntersect();
         //Keep Mario on screen
         if (y1 >= screenHeight - marioHeight && !jumpFlag) {     //Bottom bound
             y1 = screenHeight - marioHeight;
@@ -244,7 +245,7 @@ public class Mario implements TimeConscious {
                 ground=true;
                 dy = 0;
                 float d = Math.abs(y1+marioHeight-o.getTop().top);  //distance of intersection sides
-                y1-=d - 1;						//touch ground (top of object), counter against gravity
+                y1-=d - 2;						//touch ground (top of object), counter against gravity
                 break;
             } else if(!bot.intersect(o.getTop())){
                 ground = false;
@@ -259,6 +260,27 @@ public class Mario implements TimeConscious {
             }
         }
         Log.v(TAG,"Check done");
+    }
+
+    public void checkSideIntersect(){
+        //boolean sidecollision = false;
+        for(Obstacle o: scene){
+
+            if(o.getLeft().intersect(right)){
+                if(dx>0){
+                    dx=0;
+                    float d = Math.abs(x1+marioWidth-o.getLeft().left);
+                    this.x1-=1.85f;
+                }
+            } if (o.getRight().intersect(left)){
+                if(dx<0) {
+                    dx = 0;
+                    float d = Math.abs(x1-o.getRight().right);
+                    this.x1 += 1.85f;
+                }
+            }
+
+        }
     }
 
     public void die(){

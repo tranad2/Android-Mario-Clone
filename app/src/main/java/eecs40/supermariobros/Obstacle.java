@@ -41,11 +41,11 @@ public class Obstacle extends Sprite implements TimeConscious{
 
     public void draw(Canvas c){
         Paint paint = new Paint();
-        //c.drawBitmap(image, null, dst, paint);
-        c.drawRect(top, paint);
-        c.drawRect(bot,paint);
-        c.drawRect(left,paint);
-        c.drawRect(right,paint);
+        c.drawBitmap(image, null, dst, paint);
+        //c.drawRect(top, paint);
+        //c.drawRect(bot,paint);
+        //c.drawRect(left,paint);
+        //c.drawRect(right,paint);
     }
 
     public void setDx(float value){
