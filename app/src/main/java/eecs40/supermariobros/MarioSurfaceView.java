@@ -26,8 +26,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         renderThread = new MarioRenderThread(this);
         renderThread.start();
         //background = new Background(this);
-        w1 = new World1(this);
-        mario = new Mario(w1.getObstacles(),this);
+        mario = new Mario(this);
         buttons = new Buttons(this);
     }
 
