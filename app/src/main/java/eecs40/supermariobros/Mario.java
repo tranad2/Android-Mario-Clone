@@ -21,7 +21,7 @@ public class Mario implements TimeConscious {
     private int x1, y1, x2, y2, marioWidth, marioHeight, screenHeight;
     private int dir = 1, timer = 0;
     private float dx = 0, dy;
-    private float gravity = 0.9f;
+    private float gravity = 0.75f;
     private Rect dst, top, bot, left, right;
 
     public Mario(ArrayList<Obstacle> scene, MarioSurfaceView view) {
@@ -178,8 +178,10 @@ public class Mario implements TimeConscious {
     @Override
     public void tick(Canvas c) {
         Log.v(TAG, ""+x1+" "+y1+ " Ground:"+ground+" Visible:"+visible+" DY:"+dy+" Scene"+scene.size());
-        checkPlatformIntersect();
-        //checkSideIntersect();
+        if (dy >= 0) {
+            checkPlatformIntersect();
+        }
+        checkSideIntersect();
         //Keep Mario on screen
         if (y1 >= screenHeight - marioHeight && !jumpFlag) {     //Bottom bound
             y1 = screenHeight - marioHeight;
@@ -197,12 +199,12 @@ public class Mario implements TimeConscious {
         else if(!ground){
             y1 += dy;
             dy += gravity;
-            if (Math.abs(dy) > 30) {
+            if (Math.abs(dy) > 60) {
                 if (dy > 0) {
-                    dy = 30;
+                    dy = 60;
                 }
                 else {
-                    dy = -30;
+                    dy = -60;
                 }
             }
         }

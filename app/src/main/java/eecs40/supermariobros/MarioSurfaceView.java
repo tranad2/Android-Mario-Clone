@@ -48,6 +48,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     public boolean onTouchEvent(MotionEvent e) {
         switch (e.getAction()) {
             case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_MOVE:
                 //...
                 if ((e.getY() >= 3 * getHeight() / 4) && (e.getY() <= 3 * getHeight() / 4 + buttons.getButtonLength())) {
                     if ((e.getX() >= getWidth() / 12) && (e.getX() <= getWidth() / 12 + buttons.getButtonLength())) {
