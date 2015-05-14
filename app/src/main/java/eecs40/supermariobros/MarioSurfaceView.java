@@ -92,7 +92,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     public void onDraw(Canvas c) {
         super.onDraw(c);
         //background.draw(c);
-        w1.tick(c);
+        w1.draw(c);
         mario.draw(c);
         buttons.draw(c);
         //...

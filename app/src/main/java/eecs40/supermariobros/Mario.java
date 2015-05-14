@@ -177,7 +177,7 @@ public class Mario implements TimeConscious {
 
     @Override
     public void tick(Canvas c) {
-        Log.v(TAG, ""+x1+" "+y1+ " Ground:"+ground+" Visible:"+visible+" DY:"+dy+" Scene"+scene.size());
+        //Log.v(TAG, ""+x1+" "+y1+ " Ground:"+ground+" Visible:"+visible+" DY:"+dy+" Scene"+scene.size());
         if (dy >= 0) {
             checkPlatformIntersect();
         }
@@ -211,10 +211,8 @@ public class Mario implements TimeConscious {
 
         x1+=dx;
 
-        Log.v(TAG,"Mario");
         setLocation(x1, y1);
         doAnim();
-        Log.v(TAG,"DRAW");
         draw(c);
     }
 
@@ -261,7 +259,6 @@ public class Mario implements TimeConscious {
                 //this.y1+=.1f;
             }
         }
-        Log.v(TAG,"Check done");
     }
 
     public void checkSideIntersect(){
