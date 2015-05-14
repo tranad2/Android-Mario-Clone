@@ -17,8 +17,8 @@ public class Mario implements TimeConscious {
     private ArrayList<Bitmap> spriteLoader;
     private ArrayList<Obstacle> scene;
     private Bitmap currentImage;
-    private boolean visible = true, ground = true, jumpFlag, moveFlag;
-    private int x1, y1, x2, y2, marioWidth, marioHeight, screenHeight;
+    private boolean visible = true, ground = true, jumpFlag, moveLeftFlag, moveRightFlag;
+    private int x1, y1, x2, y2, marioWidth, marioHeight, screenHeight, screenWidth;
     private int dir = 1, timer = 0;
     private float dx = 0, dy;
     private float gravity = 0.75f;
@@ -54,6 +54,7 @@ public class Mario implements TimeConscious {
         right = new Rect(x2-marioWidth/2, y2-marioHeight/4, x2, y2-marioHeight/4);
 
         screenHeight = view.getHeight();
+        screenWidth = view.getWidth();
         jumpFlag = false;
     }
 
@@ -69,15 +70,18 @@ public class Mario implements TimeConscious {
         right.set(x2-marioWidth/2,y1,x2,y2);
     }
 
+    public int getX2() { return x2; }
+
     //True if A button is pressed
     public void setJumpFlag(boolean flag) {
         jumpFlag = flag;
     }
 
-    //True if left or right button is pressed
-    public void setMoveFlag(boolean flag) {
-        moveFlag = flag;
+    //True if left button is pressed
+    public void setMoveLeftFlag(boolean flag) {
+        moveLeftFlag = flag;
     }
+    public void setMoveRightFlag(boolean flag) { moveRightFlag = flag; }
 
     //Sets direction of Mario sprite
     public void setDirection(int value){
@@ -132,7 +136,7 @@ public class Mario implements TimeConscious {
                 currentImage = flipImage(currentImage);
             }
         }
-        else if(dir == 1 && ground && moveFlag) {   //Moving right
+        else if(dir == 1 && ground && (moveLeftFlag||moveRightFlag)) {   //Moving right
             if(timer <= 10){
                 currentImage = spriteLoader.get(1);
                 timer++;
@@ -146,7 +150,7 @@ public class Mario implements TimeConscious {
                 currentImage = spriteLoader.get(2);
                 timer = 0;
             }
-        } else if(dir == -1 && ground && moveFlag){   //Left direction
+        } else if(dir == -1 && ground && (moveLeftFlag||moveRightFlag)){   //Left direction
             if(timer <= 10){
                 currentImage = spriteLoader.get(1);
                 currentImage = flipImage(currentImage);
@@ -182,12 +186,21 @@ public class Mario implements TimeConscious {
             checkPlatformIntersect();
         }
         checkSideIntersect();
-        //Keep Mario on screen
+        //Horizontal moving bounds
+        if (x1 <= 0 && dir== -1) {
+            dx = 0;
+        }
+        else if (x2 >= screenWidth / 2 && dir == 1) {
+            dx = 0;
+        }
+
+        //Keep Mario on screen (remove later)
         if (y1 >= screenHeight - marioHeight && !jumpFlag) {     //Bottom bound
             y1 = screenHeight - marioHeight;
             dy = 0;
             ground = true;
         }
+
         //Jumping
         else if (jumpFlag && dy == 0) {
             dy = -25;

@@ -28,14 +28,23 @@ public class Obstacle extends Sprite implements TimeConscious{
         right = new Rect((int)(x+bmpWidth-bmpWidth/2), (int)(y+bmpHeight/4), (int)(x+bmpWidth), (int)(y+bmpHeight-bmpHeight/4));
     }
 
+    public void setDx (float dx) {
+        this.dx = dx;
+    }
+
     public void tick(Canvas c){
-        //x+=dx;
+        x += dx;
+        setLocation((int)x, (int)y);
         draw(c);
     }
 
     public void setLocation(int xPos, int yPos) {
         x = xPos;
         y = yPos;
+        top.set((int)x, (int)y, (int)(x+bmpWidth), (int)(y+bmpHeight/4));
+        bot.set((int)x, (int)(y+bmpHeight-bmpHeight/4), (int)(x+bmpWidth), (int)(y+bmpHeight));
+        left.set((int)x, (int)(y+bmpHeight/4), (int)(x+bmpWidth/2), (int)(y+bmpHeight-bmpHeight/4));
+        right.set((int)(x+bmpWidth-bmpWidth/2), (int)(y+bmpHeight/4), (int)(x+bmpWidth), (int)(y+bmpHeight-bmpHeight/4));
         dst.set(xPos, yPos, (int)(xPos+bmpWidth), (int)(yPos+bmpHeight));
     }
 
@@ -47,12 +56,4 @@ public class Obstacle extends Sprite implements TimeConscious{
         //c.drawRect(left,paint);
         //c.drawRect(right,paint);
     }
-
-    public void setDx(float value){
-        dx = value;
-    }
-
-
-
-
 }

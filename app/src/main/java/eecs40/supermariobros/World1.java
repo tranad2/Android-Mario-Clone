@@ -16,6 +16,7 @@ public class World1 {
     private int screenWidth, screenHeight;
     private ArrayList<Obstacle> scene;
     private ArrayList<Bitmap> imageLoader;
+    private Mario mario;
 
     public World1(MarioSurfaceView view){
         screenWidth = view.getWidth();
@@ -28,7 +29,7 @@ public class World1 {
         int offset = 0;
 
         for(int i = 1; i<=2; i++) {
-            for(int j = 0; j<10; j++) {
+            for(int j = 0; j<20; j++) {
                 scene.add(new Obstacle(j*imageLoader.get(3).getWidth(),screenHeight-imageLoader.get(3).getHeight()*i , imageLoader.get(3)));
             }
         }
@@ -42,7 +43,7 @@ public class World1 {
         }
 */
 
-        Log.v(TAG,""+scene.isEmpty());
+        Log.v(TAG, "" + scene.isEmpty());
     }
 
     public void loadImages(MarioSurfaceView view){
@@ -60,12 +61,20 @@ public class World1 {
         imageLoader.add(brick1);
         imageLoader.add(tile1);
 
+    }
 
-
+    public void setMario (Mario mario) {
+        this.mario = mario;
     }
 
     public void tick(Canvas c){
         for(Obstacle o : scene){
+            if (mario.getX2() >= screenWidth / 2) {
+                o.setDx(-15f);
+            }
+            else {
+                o.setDx(0f);
+            }
             o.tick(c);
         }
 

@@ -12,9 +12,9 @@ import android.view.SurfaceView;
 public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callback, TimeConscious {
     private MarioRenderThread    renderThread;
     //Background background;
-    Buttons buttons;
-    Mario mario;
     World1 w1;
+    Mario mario;
+    Buttons buttons;
 
     public MarioSurfaceView(Context context) {
         super(context);
@@ -28,6 +28,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         //background = new Background(this);
         w1 = new World1(this);
         mario = new Mario(w1.getObstacles(), this);
+        w1.setMario(mario);
         buttons = new Buttons(this);
 
     }
@@ -57,13 +58,13 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                             //Left button
                             mario.setDirection(-1);
                             mario.setDx(-15f);
-                            mario.setMoveFlag(true);
+                            mario.setMoveLeftFlag(true);
                         }
                         if ((e.getX(i) >= getWidth() / 12 + buttons.getButtonLength()) && (e.getX(i) <= getWidth() / 12 + 2 * buttons.getButtonLength())) {
                             //Right button
                             mario.setDirection(1);
                             mario.setDx(15f);
-                            mario.setMoveFlag(true);
+                            mario.setMoveRightFlag(true);
 
                         }
                         if ((e.getX(i) >= 5 * getWidth() / 6) && (e.getX(i) <= 5 * getWidth() / 6 + buttons.getButtonLength())) {
@@ -80,7 +81,8 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
             case MotionEvent.ACTION_POINTER_UP:
                 //...
                 mario.setJumpFlag(false);
-                mario.setMoveFlag(false);
+                mario.setMoveLeftFlag(false);
+                mario.setMoveRightFlag(false);
                 //mario.setDirection(0);
                 mario.setDx(0);
                 break;
@@ -105,10 +107,14 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         //Fill background
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.CYAN);
+        paint.setColor(Color.parseColor("#6B8CFF"));
         paint.setAntiAlias(true);
         c.drawPaint(paint);
+
         w1.tick(c);
+        if (mario.getX2() == getWidth() / 2) {
+
+        }
         mario.tick(c);
         buttons.draw(c);
 
