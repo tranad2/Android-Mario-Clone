@@ -46,34 +46,38 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-        switch (e.getAction()) {
+        switch (e.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_POINTER_DOWN:
                 //...
-                if ((e.getY() >= 3 * getHeight() / 4) && (e.getY() <= 3 * getHeight() / 4 + buttons.getButtonLength())) {
-                    if ((e.getX() >= getWidth() / 12) && (e.getX() <= getWidth() / 12 + buttons.getButtonLength())) {
-                        //Left button
-                        mario.setDirection(-1);
-                        mario.setDx(-15f);
-                        mario.setMoveFlag(true);
-                    }
-                    if ((e.getX() >= getWidth() / 12 + buttons.getButtonLength()) && (e.getX() <= getWidth() / 12 + 2 * buttons.getButtonLength())) {
-                        //Right button
-                        mario.setDirection(1);
-                        mario.setDx(15f);
-                        mario.setMoveFlag(true);
+                for (int i = 0; i < e.getPointerCount(); i++) {
+                    if ((e.getY(i) >= 3 * getHeight() / 4) && (e.getY(i) <= 3 * getHeight() / 4 + buttons.getButtonLength())) {
+                        if ((e.getX(i) >= getWidth() / 12) && (e.getX(i) <= getWidth() / 12 + buttons.getButtonLength())) {
+                            //Left button
+                            mario.setDirection(-1);
+                            mario.setDx(-15f);
+                            mario.setMoveFlag(true);
+                        }
+                        if ((e.getX(i) >= getWidth() / 12 + buttons.getButtonLength()) && (e.getX(i) <= getWidth() / 12 + 2 * buttons.getButtonLength())) {
+                            //Right button
+                            mario.setDirection(1);
+                            mario.setDx(15f);
+                            mario.setMoveFlag(true);
 
-                    }
-                    if ((e.getX() >= 5 * getWidth() / 6) && (e.getX() <= 5 * getWidth() / 6 + buttons.getButtonLength())) {
-                        //A button
-                        mario.setJumpFlag(true);
-                    }
-                    if ((e.getX() >= 5 * getWidth() / 6 - getWidth() / 40 - buttons.getButtonLength()) && (e.getX() <= 5 * getWidth() / 6 - getWidth() / 40)) {
-                        //B button
+                        }
+                        if ((e.getX(i) >= 5 * getWidth() / 6) && (e.getX(i) <= 5 * getWidth() / 6 + buttons.getButtonLength())) {
+                            //A button
+                            mario.setJumpFlag(true);
+                        }
+                        if ((e.getX(i) >= 5 * getWidth() / 6 - getWidth() / 40 - buttons.getButtonLength()) && (e.getX(i) <= 5 * getWidth() / 6 - getWidth() / 40)) {
+                            //B button
+                        }
                     }
                 }
                 break;
             case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
                 //...
                 mario.setJumpFlag(false);
                 mario.setMoveFlag(false);
