@@ -20,6 +20,7 @@ public class Mario implements TimeConscious {
     private boolean visible = true, ground = true, jumpFlag, moveLeftFlag, moveRightFlag;
     private int x1, y1, x2, y2, marioWidth, marioHeight, screenHeight, screenWidth;
     private int dir = 1, timer = 0;
+    private int form = 0; //0 small, 1 big, 2 fire
     private float dx = 0, dy;
     private float gravity = 0.75f;
     private Rect dst, top, bot, left, right;
@@ -56,6 +57,7 @@ public class Mario implements TimeConscious {
         screenHeight = view.getHeight();
         screenWidth = view.getWidth();
         jumpFlag = false;
+        setForm(0);
     }
 
     public void setLocation(int xPos, int yPos) {
@@ -71,6 +73,14 @@ public class Mario implements TimeConscious {
     }
 
     public int getX2() { return x2; }
+
+    public float getDx() { return dx; }
+
+    public boolean moveRightFlag() { return moveRightFlag ;}
+
+    public boolean moveLeftFlag() { return moveLeftFlag ;}
+
+    public int getDir() { return dir; }
 
     //True if A button is pressed
     public void setJumpFlag(boolean flag) {
@@ -88,13 +98,21 @@ public class Mario implements TimeConscious {
         dir = value;
     }
 
+    //Set moving speed
     public void setDx(float value){
         dx = value;
     }
 
+    //set form (small, big, fire)
+    public void setForm(int value) {
+        this.form = value;
+        if (form > 0) {
+            marioHeight = currentImage.getHeight();
+        }
+    }
+
     //Loads scaled images into array
     public void loadImages(MarioSurfaceView view){
-        //TODO add image frames to array
         spriteLoader = new ArrayList<>();
 
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -109,12 +127,41 @@ public class Mario implements TimeConscious {
 
         Bitmap smallRedMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario5, options);
 
+        Bitmap bigRedMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario1, options);
+
+        Bitmap bigRedMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario2, options);
+
+        Bitmap bigRedMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario3, options);
+
+        Bitmap bigRedMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario4, options);
+
+        Bitmap bigRedMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario5, options);
+
+        Bitmap fireMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.firemario1, options);
+
+        Bitmap fireMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.firemario2, options);
+
+        Bitmap fireMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.firemario3, options);
+
+        Bitmap fireMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.firemario4, options);
+
+        Bitmap fireMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.firemario5, options);
+
         spriteLoader.add(smallRedMario1);
         spriteLoader.add(smallRedMario2);
         spriteLoader.add(smallRedMario3);
         spriteLoader.add(smallRedMario4);
         spriteLoader.add(smallRedMario5);
-
+        spriteLoader.add(bigRedMario1);
+        spriteLoader.add(bigRedMario2);
+        spriteLoader.add(bigRedMario3);
+        spriteLoader.add(bigRedMario4);
+        spriteLoader.add(bigRedMario5);
+        spriteLoader.add(fireMario1);
+        spriteLoader.add(fireMario2);
+        spriteLoader.add(fireMario3);
+        spriteLoader.add(fireMario4);
+        spriteLoader.add(fireMario5);
     }
 
     public Bitmap flipImage(Bitmap src) {
@@ -128,51 +175,130 @@ public class Mario implements TimeConscious {
     public void doAnim(){
         //TODO
         //Run through animation
+
+        //Jumping
         if (!ground) {
             if(dir == 1) {
-                currentImage = spriteLoader.get(4);     //Jumping right
+                if (form == 0) {
+                    currentImage = spriteLoader.get(4);     //Jumping right
+                } else if (form == 1) {
+                    currentImage = spriteLoader.get(9);
+                } else if (form == 2) {
+                    currentImage = spriteLoader.get(14);
+                }
             } else if (dir == -1){
-                currentImage = spriteLoader.get(4);     //Jumping left
+                if (form == 0) {
+                    currentImage = spriteLoader.get(4);     //Jumping left
+                } else if (form == 1) {
+                    currentImage = spriteLoader.get(9);
+                } else if (form == 2) {
+                    currentImage = spriteLoader.get(14);
+                }
                 currentImage = flipImage(currentImage);
             }
         }
+
+        //Moving
         else if(dir == 1 && ground && (moveLeftFlag||moveRightFlag)) {   //Moving right
             if(timer <= 10){
-                currentImage = spriteLoader.get(1);
+                if (form == 0) {
+                    currentImage = spriteLoader.get(1);
+                } else if (form == 1) {
+                    currentImage = spriteLoader.get(6);
+                } else if (form == 2) {
+                    currentImage = spriteLoader.get(11);
+                }
                 timer++;
             } else if(timer <= 20){
-                currentImage = spriteLoader.get(2);
+                if (form == 0) {
+                    currentImage = spriteLoader.get(2);
+                } else if (form == 1) {
+                    currentImage = spriteLoader.get(7);
+                } else if (form == 2) {
+                    currentImage = spriteLoader.get(12);
+                }
                 timer++;
             } else if(timer <= 30){
-                currentImage = spriteLoader.get(3);
+                if (form == 0) {
+                    currentImage = spriteLoader.get(3);
+                } else if (form == 1) {
+                    currentImage = spriteLoader.get(8);
+                } else if (form == 2) {
+                    currentImage = spriteLoader.get(13);
+                }
                 timer++;
             } else if(timer <= 40){
-                currentImage = spriteLoader.get(2);
+                if (form == 0) {
+                    currentImage = spriteLoader.get(2);
+                } else if (form == 1) {
+                    currentImage = spriteLoader.get(7);
+                } else if (form == 2) {
+                    currentImage = spriteLoader.get(12);
+                }
                 timer = 0;
             }
         } else if(dir == -1 && ground && (moveLeftFlag||moveRightFlag)){   //Left direction
             if(timer <= 10){
-                currentImage = spriteLoader.get(1);
+                if (form == 0) {
+                    currentImage = spriteLoader.get(1);
+                } else if (form == 1) {
+                    currentImage = spriteLoader.get(6);
+                } else if (form == 2) {
+                    currentImage = spriteLoader.get(11);
+                }
                 currentImage = flipImage(currentImage);
                 timer++;
             } else if(timer <= 20){
-                currentImage = spriteLoader.get(2);
+                if (form == 0) {
+                    currentImage = spriteLoader.get(2);
+                } else if (form == 1) {
+                    currentImage = spriteLoader.get(7);
+                } else if (form == 2) {
+                    currentImage = spriteLoader.get(12);
+                }
                 currentImage = flipImage(currentImage);
                 timer++;
             } else if(timer <= 30){
-                currentImage = spriteLoader.get(3);
+                if (form == 0) {
+                    currentImage = spriteLoader.get(3);
+                } else if (form == 1) {
+                    currentImage = spriteLoader.get(8);
+                } else if (form == 2) {
+                    currentImage = spriteLoader.get(13);
+                }
                 currentImage = flipImage(currentImage);
                 timer++;
             } else if(timer <= 40){
-                currentImage = spriteLoader.get(2);
+                if (form == 0) {
+                    currentImage = spriteLoader.get(2);
+                } else if (form == 1) {
+                    currentImage = spriteLoader.get(7);
+                } else if (form == 2) {
+                    currentImage = spriteLoader.get(12);
+                }
                 currentImage = flipImage(currentImage);
                 timer = 0;
             }
-        } else{     //Standing still
+        }
+
+        //Standing still
+        else{
             if(currentImage == spriteLoader.get(0) || currentImage == spriteLoader.get(1) || currentImage == spriteLoader.get(2) || currentImage == spriteLoader.get(3) || currentImage == spriteLoader.get(4) || dir == 1){   //if still after move right, choose right-face
-                currentImage = spriteLoader.get(0);
+                if (form == 0) {
+                    currentImage = spriteLoader.get(0);
+                } else if (form == 1) {
+                    currentImage = spriteLoader.get(5);
+                } else if (form == 2) {
+                    currentImage = spriteLoader.get(10);
+                }
             } else{ //if still after move left, choose left face
-                currentImage = spriteLoader.get(0);
+                if (form == 0) {
+                    currentImage = spriteLoader.get(0);
+                } else if (form == 1) {
+                    currentImage = spriteLoader.get(5);
+                } else if (form == 2) {
+                    currentImage = spriteLoader.get(10);
+                }
                 currentImage = flipImage(currentImage);
             }
 

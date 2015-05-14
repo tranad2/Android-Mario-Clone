@@ -68,16 +68,24 @@ public class World1 {
     }
 
     public void tick(Canvas c){
+        boolean backgroundMove = false;
+        if (mario.moveRightFlag() && !mario.moveLeftFlag() && mario.getX2() >= screenWidth / 2  && mario.getDx() >= 0) {
+            backgroundMove = true;
+        }
         for(Obstacle o : scene){
-            if (mario.getX2() >= screenWidth / 2) {
+            if (backgroundMove) {
                 o.setDx(-15f);
+            }
+            else if ( mario.getDx()== 0 ){
+                o.setDx(0f);
+                backgroundMove = false;
             }
             else {
                 o.setDx(0f);
+                backgroundMove = false;
             }
             o.tick(c);
         }
-
     }
 
     protected void draw(Canvas c){
