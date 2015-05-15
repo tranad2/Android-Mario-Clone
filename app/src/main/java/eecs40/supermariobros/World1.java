@@ -10,19 +10,23 @@ import java.util.ArrayList;
 /**
  * Created by Alex on 5/10/2015.
  */
-public class World1 {
+public class World1 extends World{
 
     private static final String TAG = "World1";
     private int screenWidth, screenHeight;
     private ArrayList<Obstacle> scene;
-    private ArrayList<Bitmap> imageLoader;
+    private ArrayList<Item> itemList;
+    private ArrayList<Sprite> enemies;
     private Mario mario;
+    private boolean end;
 
     public World1(MarioSurfaceView view){
+        super(view);
         screenWidth = view.getWidth();
         screenHeight = view.getHeight();
 
         scene = new ArrayList<>();
+        enemies = new ArrayList<>();
         loadImages(view);
 
         float tileWidth = imageLoader.get(0).getWidth();
@@ -33,6 +37,8 @@ public class World1 {
                 scene.add(new Obstacle(j*imageLoader.get(3).getWidth(),screenHeight-imageLoader.get(3).getHeight()*i , imageLoader.get(3)));
             }
         }
+        scene.add(new Obstacle(imageLoader.get(0).getWidth()*10,screenHeight-imageLoader.get(0).getHeight()*3, imageLoader.get(0)));
+        enemies.add(new Goomba(2*screenWidth/3,screenHeight/2,view, scene));
 
         offset = (int)((scene.get(scene.size()-1)).getX()+tileWidth);  //New x after last obstacle
 /*
@@ -44,27 +50,6 @@ public class World1 {
 */
 
         Log.v(TAG, "" + scene.isEmpty());
-    }
-
-    public void loadImages(MarioSurfaceView view){
-        imageLoader = new ArrayList<>();
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-
-        Bitmap block1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.block1, options);
-        Bitmap block2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.block2, options);
-        Bitmap brick1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.brick1, options);
-        Bitmap tile1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.tile1, options);
-
-        imageLoader.add(block1);
-        imageLoader.add(block2);
-        imageLoader.add(brick1);
-        imageLoader.add(tile1);
-
-    }
-
-    public void setMario (Mario mario) {
-        this.mario = mario;
     }
 
     public void tick(Canvas c){
@@ -86,16 +71,51 @@ public class World1 {
             }
             o.tick(c);
         }
+        for(Sprite s : enemies){
+            if(s instanceof Goomba)
+                ((Goomba)(s)).tick(c);
+        }
     }
 
     protected void draw(Canvas c){
         for(Obstacle o : scene){
             o.draw(c);
         }
+        for(Sprite s : enemies){
+            if(s instanceof Goomba)
+                ((Goomba)s).tick(c);
+        }
     }
 
     public ArrayList<Obstacle> getObstacles(){
         return scene;
     }
+
+    public boolean end(){
+        return end;
+    }
+
+    public void start(Canvas c){
+        end = true;
+        tick(c);
+    }
+
+    public void loadImages(MarioSurfaceView view){
+        imageLoader = new ArrayList<>();
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+
+        Bitmap block1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.block1, options);
+        Bitmap block2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.block2, options);
+        Bitmap brick1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.brick1, options);
+        Bitmap tile1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.tile1, options);
+
+        imageLoader.add(block1);
+        imageLoader.add(block2);
+        imageLoader.add(brick1);
+        imageLoader.add(tile1);
+    }
+
+    public void setMario(Mario mario){ this.mario = mario; }
 
 }

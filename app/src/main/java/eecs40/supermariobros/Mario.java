@@ -48,8 +48,8 @@ public class Mario implements TimeConscious {
         dst = new Rect(x1, y1, x2, y2);
 
         //Design hitboxes
-        top = new Rect(x1, y1, x2 , y1+marioHeight/4);
-        bot = new Rect(x1, y2-marioHeight/4, x2, y2);
+        top = new Rect(x1+marioWidth/6, y1, x2-marioWidth/6 , y1+marioHeight/4);
+        bot = new Rect(x1+marioWidth/6, y2-marioHeight/4, x2-marioWidth/6, y2);
 
         left = new Rect(x1, y1+marioHeight/4, x1+marioWidth/2, y1+marioHeight/4);
         right = new Rect(x2-marioWidth/2, y2-marioHeight/4, x2, y2-marioHeight/4);
@@ -368,7 +368,7 @@ public class Mario implements TimeConscious {
             } else if (top.intersect(s.getBot())) {
                 die();
                 break;
-            } else if (bot.intersect(s.getTop())) {
+            } else if (bot.intersect(s.getTop())) {     //Stomp enemy, enemy dies
                 s.die();
                 break;
             }
