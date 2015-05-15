@@ -47,4 +47,12 @@ public class Sprite{
     public void die(){
         visible = false;
     }
+
+    public void setVisible(boolean vis){
+        visible = vis;
+    }
+
+    public boolean isVisible(){
+        return visible;
+    }
 }
