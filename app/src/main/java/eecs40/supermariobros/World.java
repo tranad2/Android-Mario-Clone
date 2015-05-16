@@ -11,6 +11,7 @@ import java.util.ArrayList;
  */
 public abstract class World implements TimeConscious{
 
+
     protected ArrayList<Obstacle> scene;
     protected ArrayList<Item> itemList;
     protected ArrayList<Sprite> enemies;

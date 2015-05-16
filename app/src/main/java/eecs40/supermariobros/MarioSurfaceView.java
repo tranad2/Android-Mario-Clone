@@ -50,7 +50,6 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
             case MotionEvent.ACTION_POINTER_DOWN:
-                //...
                 for (int i = 0; i < e.getPointerCount(); i++) {
                     if ((e.getY(i) >= 3 * getHeight() / 4) && (e.getY(i) <= 3 * getHeight() / 4 + buttons.getButtonLength())) {
                         if ((e.getX(i) >= getWidth() / 12) && (e.getX(i) <= getWidth() / 12 + buttons.getButtonLength())) {
@@ -74,18 +73,18 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                         }
                         if ((e.getX(i) >= 5 * getWidth() / 6 - getWidth() / 40 - buttons.getButtonLength()) && (e.getX(i) <= 5 * getWidth() / 6 - getWidth() / 40)) {
                             //B button
-                            mario.setForm(1);
+                            //mario.setForm(2);
+                            mario.setFireballFlag(true);
                         }
                     }
                 }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
-                //...
                 mario.setJumpFlag(false);
+                mario.setFireballFlag(false);
                 mario.setMoveLeftFlag(false);
                 mario.setMoveRightFlag(false);
-                //mario.setDirection(0);
                 mario.setDx(0);
                 break;
         }
@@ -99,7 +98,6 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         w1.draw(c);
         mario.draw(c);
         buttons.draw(c);
-        //...
     }
 
     @Override
@@ -114,9 +112,6 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         c.drawPaint(paint);
 
         w1.tick(c);
-        if (mario.getX2() == getWidth() / 2) {
-
-        }
         mario.tick(c);
         buttons.draw(c);
 

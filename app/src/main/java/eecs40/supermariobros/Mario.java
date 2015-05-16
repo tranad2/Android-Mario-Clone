@@ -15,18 +15,22 @@ public class Mario implements TimeConscious {
 
     private static final String TAG = "Mario";
     private ArrayList<Bitmap> spriteLoader;
+    private ArrayList<Fireball> fireballs;
     private ArrayList<Obstacle> scene;
     private ArrayList<Item> items;
     private Bitmap currentImage;
-    private boolean visible = true, ground = true, jumpFlag, moveLeftFlag, moveRightFlag;
+    private boolean visible = true, ground = true, jumpFlag, fireballFlag, moveLeftFlag, moveRightFlag;
     private int x1, y1, x2, y2, marioWidth, marioHeight, screenHeight, screenWidth;
-    private int dir = 1, timer = 0;
+    private int dir = 1, timer = 0, fireballDelay;
     private int form = 0; //0 small, 1 big, 2 fire
     private float dx = 0, dy;
-    private float gravity = 0.75f;
+    private float gravity = 1.4f;
+    private MarioSurfaceView view;
     private Rect dst, top, bot, left, right;
 
     public Mario(World w1, MarioSurfaceView view) {
+        this.view = view;
+
         //Load default bitmap
         scene = w1.getObstacles();
         items = w1.getItems();
@@ -36,7 +40,7 @@ public class Mario implements TimeConscious {
         currentImage=spriteLoader.get(0);
 
 
-        //Scale Mario bitmap
+        //Mario dimensions
         marioWidth = currentImage.getWidth();
         marioHeight = currentImage.getHeight();
         currentImage = Bitmap.createScaledBitmap(currentImage, marioWidth, marioHeight, true);
@@ -55,6 +59,9 @@ public class Mario implements TimeConscious {
 
         left = new Rect(x1, y1+marioHeight/4, x1+marioWidth/2, y1+marioHeight/4);
         right = new Rect(x2-marioWidth/2, y2-marioHeight/4, x2, y2-marioHeight/4);
+
+        //Initialize fireballs
+        fireballs = new ArrayList<>();
 
         screenHeight = view.getHeight();
         screenWidth = view.getWidth();
@@ -89,7 +96,12 @@ public class Mario implements TimeConscious {
         jumpFlag = flag;
     }
 
-    //True if left button is pressed
+    //True if B button is pressed
+    public void setFireballFlag(boolean flag) {
+        fireballFlag = flag;
+    }
+
+    //True if left or right button is pressed
     public void setMoveLeftFlag(boolean flag) {
         moveLeftFlag = flag;
     }
@@ -107,10 +119,14 @@ public class Mario implements TimeConscious {
 
     //set form (small, big, fire)
     public void setForm(int value) {
-        this.form = value;
+        form = value;
         if (form > 0) {
             marioHeight = currentImage.getHeight();
         }
+    }
+
+    public ArrayList<Fireball> getFireballs() {
+        return fireballs;
     }
 
     //Loads scaled images into array
@@ -330,7 +346,7 @@ public class Mario implements TimeConscious {
 
         //Jumping
         if (jumpFlag && dy == 0) {
-            dy = -25;
+            dy = -35;
             ground = false;
         }
         else if(ground){
@@ -339,21 +355,37 @@ public class Mario implements TimeConscious {
         else if(!ground){
             y1 += dy;
             dy += gravity;
-            if (Math.abs(dy) > 60) {
+            if (Math.abs(dy) > 100) {
                 if (dy > 0) {
-                    dy = 60;
+                    dy = 100;
                 }
                 else {
-                    dy = -60;
+                    dy = -100;
                 }
             }
         }
 
-        x1+=dx;
+        //Shooting fireball
+        fireballDelay++;
+        if (fireballFlag && form == 2 &&  fireballDelay > 15) {
+            fireballDelay = 0;
+            if (dir == 1) {
+                fireballs.add(new Fireball(view, x2, y2 - marioHeight / 2, dir));
+            } else {
+                fireballs.add(new Fireball(view, x1, y2 - marioHeight / 2, dir));
+            }
 
+        }
+
+        x1+=dx;
         setLocation(x1, y1);
         doAnim();
         draw(c);
+
+        //Draw fireballs
+        for(Fireball f : fireballs){
+            f.tick(c);
+        }
     }
 
     public void checkEnemyCollision(ArrayList<Sprite> enemies) {
@@ -409,13 +441,13 @@ public class Mario implements TimeConscious {
                 if(dx>0){
                     dx=0;
                     float d = Math.abs(x1+marioWidth-o.getLeft().left);
-                    this.x1-=1.85f;
+                    this.x1-= d - 1;
                 }
             } if (o.getRight().intersect(left)){
                 if(dx<0) {
                     dx = 0;
                     float d = Math.abs(x1-o.getRight().right);
-                    this.x1 += 1.85f;
+                    this.x1 += d - 1;
                 }
             }
 
@@ -425,7 +457,7 @@ public class Mario implements TimeConscious {
     public void checkItem(){
         for(Item i : items){
             if(dst.intersect(i.getRect())){
-                setForm(1);
+                setForm(2);
             }
         }
     }

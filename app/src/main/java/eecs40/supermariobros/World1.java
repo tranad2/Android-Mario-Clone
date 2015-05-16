@@ -93,6 +93,18 @@ public class World1 extends World{
             }
             i.tick(c);
         }
+
+        for(Fireball f : mario.getFireballs()) {
+            if (backgroundMove) {
+                f.setBackgroundDx(-15f);
+            } else if (mario.getDx() == 0) {
+                f.setBackgroundDx(0f);
+                backgroundMove = false;
+            } else {
+                f.setBackgroundDx(0f);
+                backgroundMove = false;
+            }
+        }
     }
 
     protected void draw(Canvas c){
