@@ -2,9 +2,6 @@ package eecs40.supermariobros;
 
 import android.graphics.Rect;
 
-/**
- * Created by Alex on 5/9/2015.
- */
 public class Sprite{
 
     protected float x, y;
@@ -40,9 +37,7 @@ public class Sprite{
         return right;
     }
 
-    public Rect getLeft(){
-        return left;
-    }
+    public Rect getLeft(){ return left; }
 
     public void die(){
         visible = false;

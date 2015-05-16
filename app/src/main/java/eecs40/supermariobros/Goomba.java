@@ -9,15 +9,12 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-/**
- * Created by Alex on 5/9/2015.
- */
 public class Goomba extends Sprite implements TimeConscious{
 
     private static final String TAG = "Goomba";
     private Bitmap currentImage;
     private Mario mario;
-    private float dx=-5f, dy, imageWidth, imageHeight;
+    private float dx=-5f, bgdx, dy, imageWidth, imageHeight;
     private boolean ground;
     private final float gravity = 0.75f;
     private ArrayList<Obstacle> scene;
@@ -46,6 +43,8 @@ public class Goomba extends Sprite implements TimeConscious{
 
     }
 
+    public void setBackgroundDx(float bgdx) { this.bgdx = bgdx; }
+
     public void tick(Canvas c){
         checkSideIntersect();
         checkPlatformIntersect();
@@ -65,7 +64,7 @@ public class Goomba extends Sprite implements TimeConscious{
                 }
             }
         }
-        x+=dx;
+        x+=dx + bgdx;
         setLocation((int)x, (int)y);
         draw(c);
 
