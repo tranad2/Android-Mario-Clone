@@ -41,13 +41,13 @@ public class World1 extends World{
         enemies.add(new Goomba(2*screenWidth/3,screenHeight/2,view, scene));
 
         offset = (int)((scene.get(scene.size()-1)).getX()+tileWidth);  //New x after last obstacle
-/*
+
         for(int i = 1; i<=2; i++) {
             for(int j = 0; j<10; j++) {
                 scene.add(new Obstacle(j*imageLoader.get(3).getWidth()+2*offset,screenHeight-imageLoader.get(3).getHeight()*i , imageLoader.get(3)));
             }
         }
-*/
+
 
         Log.v(TAG, "" + scene.isEmpty());
     }
