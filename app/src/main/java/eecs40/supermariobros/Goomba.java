@@ -9,9 +9,6 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-/**
- * Created by Alex on 5/9/2015.
- */
 public class Goomba extends Sprite implements TimeConscious{
 
     private static final String TAG = "Goomba";

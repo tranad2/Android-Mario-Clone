@@ -320,15 +320,13 @@ public class Mario implements TimeConscious {
             dx = 0;
         }
 
-        //Keep Mario on screen (remove later)
+        //Mario falls into pit
         if (y1 >= screenHeight - marioHeight && !jumpFlag) {     //Bottom bound
-            y1 = screenHeight - marioHeight;
-            dy = 0;
-            ground = true;
+            //mario dies
         }
 
         //Jumping
-        else if (jumpFlag && dy == 0) {
+        if (jumpFlag && dy == 0) {
             dy = -25;
             ground = false;
         }
