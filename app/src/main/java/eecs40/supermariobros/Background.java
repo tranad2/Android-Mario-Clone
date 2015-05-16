@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+/*test*/
+
 public class Background implements TimeConscious {
 
     Bitmap                  bitmap;
