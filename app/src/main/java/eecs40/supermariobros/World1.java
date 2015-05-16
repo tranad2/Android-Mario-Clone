@@ -33,7 +33,7 @@ public class World1 extends World{
         int offset = 0;
 
         for(int i = 1; i<=2; i++) {
-            for(int j = 0; j<20; j++) {
+            for(int j = 0; j<50; j++) {
                 scene.add(new Obstacle(j*imageLoader.get(3).getWidth(),screenHeight-imageLoader.get(3).getHeight()*i , imageLoader.get(3)));
             }
         }
@@ -72,8 +72,18 @@ public class World1 extends World{
             o.tick(c);
         }
         for(Sprite s : enemies){
-            if(s instanceof Goomba)
-                ((Goomba)(s)).tick(c);
+            if(s instanceof Goomba) {
+                if (backgroundMove) {
+                    ((Goomba)(s)).setBackgroundDx(-15f);
+                } else if (mario.getDx() == 0) {
+                    ((Goomba)(s)).setBackgroundDx(0f);
+                    backgroundMove = false;
+                } else {
+                    ((Goomba)(s)).setBackgroundDx(0f);
+                    backgroundMove = false;
+                }
+                ((Goomba) (s)).tick(c);
+            }
         }
     }
 
