@@ -16,6 +16,7 @@ public class Mario implements TimeConscious {
     private static final String TAG = "Mario";
     private ArrayList<Bitmap> spriteLoader;
     private ArrayList<Obstacle> scene;
+    private ArrayList<Item> items;
     private Bitmap currentImage;
     private boolean visible = true, ground = true, jumpFlag, moveLeftFlag, moveRightFlag;
     private int x1, y1, x2, y2, marioWidth, marioHeight, screenHeight, screenWidth;
@@ -25,9 +26,10 @@ public class Mario implements TimeConscious {
     private float gravity = 0.75f;
     private Rect dst, top, bot, left, right;
 
-    public Mario(ArrayList<Obstacle> scene, MarioSurfaceView view) {
+    public Mario(World w1, MarioSurfaceView view) {
         //Load default bitmap
-        this.scene = scene;
+        scene = w1.getObstacles();
+        items = w1.getItems();
 
         //Load Mario bitmaps
         loadImages(view);
@@ -308,6 +310,7 @@ public class Mario implements TimeConscious {
     @Override
     public void tick(Canvas c) {
         //Log.v(TAG, ""+x1+" "+y1+ " Ground:"+ground+" Visible:"+visible+" DY:"+dy+" Scene"+scene.size());
+        checkItem();
         if (dy >= 0) {
             checkPlatformIntersect();
         }
@@ -416,6 +419,14 @@ public class Mario implements TimeConscious {
                 }
             }
 
+        }
+    }
+
+    public void checkItem(){
+        for(Item i : items){
+            if(dst.intersect(i.getRect())){
+                setForm(1);
+            }
         }
     }
 

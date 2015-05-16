@@ -45,7 +45,7 @@ public class Bullet extends Sprite implements TimeConscious{
 
     public void tick(Canvas c){
         checkSideIntersect();
-        x+=dx;
+        x+=dx+bgdx;
         setLocation((int)x, (int)y);
         draw(c);
 

@@ -11,7 +11,7 @@ import android.graphics.Rect;
 
 public class Obstacle extends Sprite implements TimeConscious{
 
-    private float bmpWidth, bmpHeight, dx = 0;
+    private float bmpWidth, bmpHeight;
     private Bitmap image;
 
     public Obstacle(int x, int y, Bitmap img){
@@ -28,12 +28,9 @@ public class Obstacle extends Sprite implements TimeConscious{
         right = new Rect((int)(x+bmpWidth-bmpWidth/2), (int)(y+bmpHeight/4), (int)(x+bmpWidth), (int)(y+bmpHeight-bmpHeight/4));
     }
 
-    public void setDx (float dx) {
-        this.dx = dx;
-    }
 
     public void tick(Canvas c){
-        x += dx;
+        x += bgdx;
         setLocation((int)x, (int)y);
         draw(c);
     }
@@ -48,12 +45,14 @@ public class Obstacle extends Sprite implements TimeConscious{
         dst.set(xPos, yPos, (int)(xPos+bmpWidth), (int)(yPos+bmpHeight));
     }
 
-    public void draw(Canvas c){
-        Paint paint = new Paint();
-        c.drawBitmap(image, null, dst, paint);
-        //c.drawRect(top, paint);
-        //c.drawRect(bot,paint);
-        //c.drawRect(left,paint);
-        //c.drawRect(right,paint);
+    protected void draw(Canvas c){
+        if(visible) {
+            Paint paint = new Paint();
+            c.drawBitmap(image, null, dst, paint);
+            //c.drawRect(top, paint);
+            //c.drawRect(bot,paint);
+            //c.drawRect(left,paint);
+            //c.drawRect(right,paint);
+        }
     }
 }

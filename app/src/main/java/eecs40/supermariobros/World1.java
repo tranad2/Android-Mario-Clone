@@ -13,11 +13,8 @@ import java.util.ArrayList;
 public class World1 extends World{
 
     private static final String TAG = "World1";
-    private int screenWidth, screenHeight;
-    private ArrayList<Obstacle> scene;
-    private ArrayList<Item> itemList;
-    private ArrayList<Sprite> enemies;
-    private Mario mario;
+    private ArrayList<Bitmap> imageLoader;
+
     private boolean end;
 
     public World1(MarioSurfaceView view){
@@ -25,8 +22,7 @@ public class World1 extends World{
         screenWidth = view.getWidth();
         screenHeight = view.getHeight();
 
-        scene = new ArrayList<>();
-        enemies = new ArrayList<>();
+
         loadImages(view);
 
         float tileWidth = imageLoader.get(0).getWidth();
@@ -39,6 +35,7 @@ public class World1 extends World{
         }
         scene.add(new Obstacle(imageLoader.get(0).getWidth()*10,screenHeight-imageLoader.get(0).getHeight()*3, imageLoader.get(0)));
         enemies.add(new Goomba(2*screenWidth/3,screenHeight/2,view, scene));
+        itemList.add(new Item(imageLoader.get(0).getWidth()*10,screenHeight-imageLoader.get(0).getHeight()*4, imageLoader.get(4)));
 
         offset = (int)((scene.get(scene.size()-1)).getX()+tileWidth);  //New x after last obstacle
 
@@ -59,14 +56,14 @@ public class World1 extends World{
         }
         for(Obstacle o : scene){
             if (backgroundMove) {
-                o.setDx(-15f);
+                o.setBackgroundDx(-15f);
             }
             else if ( mario.getDx()== 0 ){
-                o.setDx(0f);
+                o.setBackgroundDx(0f);
                 backgroundMove = false;
             }
             else {
-                o.setDx(0f);
+                o.setBackgroundDx(0f);
                 backgroundMove = false;
             }
             o.tick(c);
@@ -83,6 +80,19 @@ public class World1 extends World{
             }
             s.tick(c);
         }
+
+        for(Item i : itemList){
+            if (backgroundMove) {
+                i.setBackgroundDx(-15f);
+            } else if (mario.getDx() == 0) {
+                i.setBackgroundDx(0f);
+                backgroundMove = false;
+            } else {
+                i.setBackgroundDx(0f);
+                backgroundMove = false;
+            }
+            i.tick(c);
+        }
     }
 
     protected void draw(Canvas c){
@@ -92,11 +102,12 @@ public class World1 extends World{
         for(Sprite s : enemies){
             s.draw(c);
         }
+        for(Item i : itemList){
+            i.draw(c);
+        }
     }
 
-    public ArrayList<Obstacle> getObstacles(){
-        return scene;
-    }
+
 
     public boolean end(){
         return end;
@@ -116,13 +127,15 @@ public class World1 extends World{
         Bitmap block2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.block2, options);
         Bitmap brick1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.brick1, options);
         Bitmap tile1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.tile1, options);
+        Bitmap mushroom1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.mushroom1, options);
 
         imageLoader.add(block1);
         imageLoader.add(block2);
         imageLoader.add(brick1);
         imageLoader.add(tile1);
+        imageLoader.add(mushroom1);
     }
 
-    public void setMario(Mario mario){ this.mario = mario; }
+
 
 }

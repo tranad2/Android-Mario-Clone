@@ -11,7 +11,7 @@ import android.view.SurfaceView;
 public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callback, TimeConscious {
     private MarioRenderThread    renderThread;
     //Background background;
-    World1 w1;
+    World w1;
     Mario mario;
     Buttons buttons;
 
@@ -26,7 +26,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         renderThread.start();
         //background = new Background(this);
         w1 = new World1(this);
-        mario = new Mario(w1.getObstacles(), this);
+        mario = new Mario(w1, this);
         w1.setMario(mario);
         buttons = new Buttons(this);
 
