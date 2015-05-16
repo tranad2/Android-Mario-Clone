@@ -1,10 +1,11 @@
 package eecs40.supermariobros;
 
+import android.graphics.Canvas;
 import android.graphics.Rect;
 
-public class Sprite{
+public abstract class Sprite{
 
-    protected float x, y;
+    protected float x, y, bgdx;
     protected Rect dst, top, bot, left, right;
     protected boolean visible = true;
 
@@ -12,6 +13,8 @@ public class Sprite{
         this.x = x;
         this.y = y;
     }
+
+    public void setBackgroundDx(float bgdx) { this.bgdx = bgdx; }
 
     public float getX(){
         return x;
@@ -50,4 +53,10 @@ public class Sprite{
     public boolean isVisible(){
         return visible;
     }
+
+    public abstract void tick(Canvas c);
+
+    protected abstract void draw(Canvas c);
+
+
 }

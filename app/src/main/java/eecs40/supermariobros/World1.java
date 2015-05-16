@@ -72,18 +72,16 @@ public class World1 extends World{
             o.tick(c);
         }
         for(Sprite s : enemies){
-            if(s instanceof Goomba) {
-                if (backgroundMove) {
-                    ((Goomba)(s)).setBackgroundDx(-15f);
-                } else if (mario.getDx() == 0) {
-                    ((Goomba)(s)).setBackgroundDx(0f);
-                    backgroundMove = false;
-                } else {
-                    ((Goomba)(s)).setBackgroundDx(0f);
-                    backgroundMove = false;
-                }
-                ((Goomba) (s)).tick(c);
+            if (backgroundMove) {
+                s.setBackgroundDx(-15f);
+            } else if (mario.getDx() == 0) {
+                s.setBackgroundDx(0f);
+                backgroundMove = false;
+            } else {
+                s.setBackgroundDx(0f);
+                backgroundMove = false;
             }
+            s.tick(c);
         }
     }
 
@@ -92,8 +90,7 @@ public class World1 extends World{
             o.draw(c);
         }
         for(Sprite s : enemies){
-            if(s instanceof Goomba)
-                ((Goomba)s).tick(c);
+            s.draw(c);
         }
     }
 
