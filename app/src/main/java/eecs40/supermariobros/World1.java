@@ -35,7 +35,8 @@ public class World1 extends World{
         }
         scene.add(new Obstacle(imageLoader.get(0).getWidth()*10,screenHeight-imageLoader.get(0).getHeight()*3, imageLoader.get(0)));
         enemies.add(new Goomba(2*screenWidth/3,screenHeight/2,view, scene));
-        itemList.add(new Item(imageLoader.get(0).getWidth()*10,screenHeight-imageLoader.get(0).getHeight()*4, imageLoader.get(4)));
+        itemList.add(new Item(imageLoader.get(0).getWidth()*10,screenHeight-imageLoader.get(0).getHeight()*4, 0, view, scene));
+        scene.add(new Obstacle(imageLoader.get(0).getWidth()*6,screenHeight-imageLoader.get(0).getHeight()*7, imageLoader.get(0)));
 
         offset = (int)((scene.get(scene.size()-1)).getX()+tileWidth);  //New x after last obstacle
 

@@ -16,8 +16,8 @@ public class Goomba extends Sprite implements TimeConscious{
     private Mario mario;
     private float dx=-5f, dy, imageWidth, imageHeight;
     private boolean ground;
-    private final float gravity = 0.75f;
     private int goombaTimer=0;
+    private final float gravity = 1.4f;
     private ArrayList<Obstacle> scene;
     private ArrayList<Bitmap> spriteLoader;
 //    private Mario mario;
@@ -69,7 +69,6 @@ public class Goomba extends Sprite implements TimeConscious{
     public void tick(Canvas c){
         checkSideIntersect();
         checkPlatformIntersect();
-        Log.v("STUFF"," X:"+x+" Y:"+y);
         if(ground){
             dy = 0;
         }

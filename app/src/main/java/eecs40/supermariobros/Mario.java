@@ -24,7 +24,7 @@ public class Mario implements TimeConscious {
     private int dir = 1, timer = 0, fireballDelay;
     private int form = 0; //0 small, 1 big, 2 fire
     private float dx = 0, dy;
-    private float gravity = 1.4f;
+    private static final float gravity = 1.4f;
     private MarioSurfaceView view;
     private Rect dst, top, bot, left, right;
 
@@ -414,25 +414,30 @@ public class Mario implements TimeConscious {
 
     public void checkPlatformIntersect(){
         //TODO
-        //Log.v(TAG,"Enter"+scene.size());
+        Log.v(TAG,"Ground: "+ground);
         for(Obstacle o : scene) {
-            if(bot.intersect(o.getTop())){
-                Log.v(TAG,"Intersect");
+            if(bot.intersect(o.getTop())){//Top intersect
+                Log.v(TAG,"TOP");
                 ground=true;
                 dy = 0;
                 float d = Math.abs(y1+marioHeight-o.getTop().top);  //distance of intersection sides
-                y1-=d - 2;						//touch ground (top of object), counter against gravity
+                y1-=d-2;						//touch ground (top of object), counter against gravity
                 break;
-            } else if(!bot.intersect(o.getTop())){
+            }
+            else if(!bot.intersect(o.getTop())){//Free fall
                 ground = false;
                 //if none of objects' top touch mario bottom, no grou
                 //return ground;
-            } else if(top.intersect(o.getBot())){			//if mario top touch object bottom (ceiling), no ground and stop moving in that direction, offset outside rectangle
+                //Log.v(TAG,"FREE FALL");
+            }
 
-                //ground=false;
-                //dy = 0;
-
-                //this.y1+=.1f;
+            if(top.intersect(o.getBot())){//Bot intersect			//if mario top touch object bottom (ceiling), no ground and stop moving in that direction, offset outside rectangle
+                Log.v(TAG,"SUCCESS");
+                dy = 0;
+                float d = Math.abs(y1-o.getTop().bottom);  //distance of intersection sides
+                this.y1+=d;
+                ground = false;
+                break;
             }
         }
     }
@@ -459,9 +464,17 @@ public class Mario implements TimeConscious {
     }
 
     public void checkItem(){
-        for(Item i : items){
-            if(dst.intersect(i.getRect())){
-                setForm(2);
+        for(int i = 0; i<items.size(); i++){
+            Item item = items.get(i);
+            if(dst.intersect(item.getRect())){
+                if(item.type == 0){//Mushroom
+
+                }else if(item.type == 1){//Fire Flower
+
+                }else{
+
+                }
+
             }
         }
     }
@@ -476,7 +489,7 @@ public class Mario implements TimeConscious {
             c.drawBitmap(currentImage, null, dst, paint);
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(Color.RED);
-            //c.drawRect(top, paint);
+            c.drawRect(top, paint);
             //c.drawRect(bot,paint);
             //c.drawRect(left,paint);
             //c.drawRect(right,paint);
