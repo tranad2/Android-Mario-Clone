@@ -42,6 +42,24 @@ public abstract class World implements TimeConscious{
         return enemies;
     }
 
+    public void clean(){
+        for(int i = 0; i<itemList.size(); i++){
+            Item item = itemList.get(i);
+            if(item.isDead()){
+                itemList.remove(i);
+                i--;
+            }
+        }
+        for(int j = 0; j<enemies.size(); j++){
+            Sprite e = enemies.get(j);
+            if(e.isDead()){
+                enemies.remove(j);
+                j--;
+            }
+        }
+
+    }
+
     public void setMario(Mario mario){ this.mario = mario; }
 
     protected abstract void draw(Canvas c);

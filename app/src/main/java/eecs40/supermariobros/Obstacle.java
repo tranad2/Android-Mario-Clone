@@ -12,51 +12,45 @@ import android.graphics.Rect;
 
 public class Obstacle extends Sprite implements TimeConscious{
 
-    private float bmpWidth, bmpHeight;
+    private int imageWidth, imageHeight;
     private Bitmap image;
 
     public Obstacle(int x, int y, Bitmap img){
         super(x,y);
         image = img;
-        bmpWidth = img.getWidth();
-        bmpHeight = img.getHeight();
-        dst = new Rect(x, y, (int)(x+bmpWidth), (int)(y+bmpHeight));
+        imageWidth = img.getWidth();
+        imageHeight = img.getHeight();
+        dst = new Rect(x, y, (x+imageWidth), (y+imageHeight));
 
-        top = new Rect((int)(x+bmpWidth/4), y, (int)(x+bmpWidth-bmpWidth/4), (int)(y+bmpHeight/4));
-        bot = new Rect((int)(x+bmpWidth/4), (int)(y+bmpHeight-bmpHeight/4), (int)(x+bmpWidth-bmpWidth/4), (int)(y+bmpHeight));
+        top = new Rect((x+imageWidth/4), y, (x+imageWidth-imageWidth/4), (y+imageHeight/4));
+        bot = new Rect((x+imageWidth/4), (y+imageHeight-imageHeight/4), (x+imageWidth-imageWidth/4), (y+imageHeight));
 
-        left = new Rect(x, (int)(y+bmpHeight/4), (int)(x+bmpWidth/2), (int)(y+bmpHeight-bmpHeight/4));
-        right = new Rect((int)(x+bmpWidth-bmpWidth/2), (int)(y+bmpHeight/4), (int)(x+bmpWidth), (int)(y+bmpHeight-bmpHeight/4));
+        left = new Rect(x, (y+imageHeight/4), (x+imageWidth/2), (y+imageHeight-imageHeight/4));
+        right = new Rect((x+imageWidth-imageWidth/2), (y+imageHeight/4), (x+imageWidth), (y+imageHeight-imageHeight/4));
     }
 
 
     public void tick(Canvas c){
         x += bgdx;
-        setLocation((int)x, (int)y);
+        setLocation(x, y);
         draw(c);
     }
 
     public void setLocation(int xPos, int yPos) {
         x = xPos;
         y = yPos;
-        top.set((int)x, (int)y, (int)(x+bmpWidth), (int)(y+bmpHeight/4));
-        bot.set((int)x, (int)(y+bmpHeight-bmpHeight/4), (int)(x+bmpWidth), (int)(y+bmpHeight));
-        left.set((int)x, (int)(y+bmpHeight/4), (int)(x+bmpWidth/2), (int)(y+bmpHeight-bmpHeight/4));
-        right.set((int)(x+bmpWidth-bmpWidth/2), (int)(y+bmpHeight/4), (int)(x+bmpWidth), (int)(y+bmpHeight-bmpHeight/4));
-        dst.set(xPos, yPos, (int)(xPos+bmpWidth), (int)(yPos+bmpHeight));
+        top.set(x, y, (x+imageWidth), (y+imageHeight/4));
+        bot.set(x, (y+imageHeight-imageHeight/4), (x+imageWidth), (y+imageHeight));
+        left.set(x, (y+imageHeight/4), (x+imageWidth/2), (y+imageHeight-imageHeight/4));
+        right.set((x+imageWidth-imageWidth/2), (y+imageHeight/4), (x+imageWidth), (y+imageHeight-imageHeight/4));
+        dst.set(xPos, yPos, (xPos+imageWidth), (yPos+imageHeight));
     }
 
     protected void draw(Canvas c){
         if(visible) {
             Paint paint = new Paint();
             c.drawBitmap(image, null, dst, paint);
-            paint.setColor(Color.BLUE);
-            c.drawRect(top, paint);
-            c.drawRect(bot, paint);
-            paint.setColor(Color.GREEN);
-           // c.drawRect(left, paint);
-            paint.setColor(Color.YELLOW);
-            //c.drawRect(right, paint);
+
         }
     }
 }

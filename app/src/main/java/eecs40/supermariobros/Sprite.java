@@ -5,9 +5,11 @@ import android.graphics.Rect;
 
 public abstract class Sprite{
 
-    protected float x, y, bgdx;
+    protected int x, y;
+    protected float bgdx;
     protected Rect dst, top, bot, left, right;
     protected boolean visible = true;
+    protected boolean dead = false;
 
     public Sprite(int x, int y){
         this.x = x;
@@ -43,7 +45,12 @@ public abstract class Sprite{
     public Rect getLeft(){ return left; }
 
     public void die(){
+        dead = true;
         visible = false;
+    }
+
+    public boolean isDead(){
+        return dead;
     }
 
     public void setVisible(boolean vis){

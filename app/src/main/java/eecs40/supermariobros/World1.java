@@ -51,6 +51,7 @@ public class World1 extends World{
     }
 
     public void tick(Canvas c){
+        clean();
         boolean backgroundMove = false;
         if (mario.moveRightFlag() && !mario.moveLeftFlag() && mario.getX2() >= screenWidth / 2  && mario.getDx() >= 0) {
             backgroundMove = true;

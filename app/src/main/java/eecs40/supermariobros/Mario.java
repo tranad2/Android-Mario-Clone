@@ -11,29 +11,32 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-public class Mario implements TimeConscious {
+public class Mario extends Sprite implements TimeConscious {
 
     private static final String TAG = "Mario";
     private ArrayList<Bitmap> spriteLoader;
     private ArrayList<Fireball> fireballs;
     private ArrayList<Obstacle> scene;
     private ArrayList<Item> items;
+    private ArrayList<Sprite> enemies;
     private Bitmap currentImage;
     private boolean visible = true, ground = true, jumpFlag, fireballFlag, moveLeftFlag, moveRightFlag;
-    private int x1, y1, x2, y2, marioWidth, marioHeight, screenHeight, screenWidth;
+    private int marioWidth, marioHeight, screenHeight, screenWidth, x2, y2;
     private int dir = 1, timer = 0, fireballDelay;
     private int form = 0; //0 small, 1 big, 2 fire
     private float dx = 0, dy;
     private static final float gravity = 1.4f;
     private MarioSurfaceView view;
-    private Rect dst, top, bot, left, right;
 
-    public Mario(World w1, MarioSurfaceView view) {
+
+    public Mario(int x, int y, World w, MarioSurfaceView view) {
+        super(x, y);
         this.view = view;
 
         //Load default bitmap
-        scene = w1.getObstacles();
-        items = w1.getItems();
+        scene = w.getObstacles();
+        items = w.getItems();
+        enemies = w.getEnemies();
 
         //Load Mario bitmaps
         loadImages(view);
@@ -47,17 +50,17 @@ public class Mario implements TimeConscious {
 
 
         //Initialize Mario position
-        this.x1 = view.getWidth() / 4;
-        this.y1 = view.getHeight() / 2;
-        this.x2 = this.x1 + marioWidth;
-        this.y2 = this.y1 + marioHeight;
-        dst = new Rect(x1, y1, x2, y2);
+        this.x = x;
+        this.y = y;
+        x2 = x + marioWidth;
+        y2 = y + marioHeight;
+        dst = new Rect(x, y, x2, y2);
 
         //Design hitboxes
-        top = new Rect(x1+marioWidth/6, y1, x2-marioWidth/6 , y1+marioHeight/4);
-        bot = new Rect(x1+marioWidth/6, y2-marioHeight/4, x2-marioWidth/6, y2);
+        top = new Rect(x+marioWidth/6, y, x2-marioWidth/6 , y+marioHeight/4);
+        bot = new Rect(x+marioWidth/6, y2-marioHeight/4, x2-marioWidth/6, y2);
 
-        left = new Rect(x1, y1+marioHeight/4, x1+marioWidth/2, y1+marioHeight/4);
+        left = new Rect(x, y+marioHeight/4, x+marioWidth/2, y+marioHeight/4);
         right = new Rect(x2-marioWidth/2, y2-marioHeight/4, x2, y2-marioHeight/4);
 
         //Initialize fireballs
@@ -70,15 +73,16 @@ public class Mario implements TimeConscious {
     }
 
     public void setLocation(int xPos, int yPos) {
-        this.x1 = xPos;
-        this.y1 = yPos;
-        this.x2 = this.x1 + marioWidth;
-        this.y2 = this.y1 + marioHeight;
-        dst.set(x1, y1, x2, y2);
-        top.set(x1,y1,x2,y1+marioHeight/4);
-        bot.set(x1,y2-marioHeight/4,x2,y2);
-        left.set(x1,y1,x1+marioWidth/2,y2);
-        right.set(x2-marioWidth/2,y1,x2,y2);
+        x = xPos;
+        y = yPos;
+        x2 = x + marioWidth;
+        y2 = y + marioHeight;
+        dst.set(x, y, x2, y2);
+
+        top.set(x+marioWidth/6,y,x2-marioWidth/6,y+marioHeight/4);
+        bot.set(x+marioWidth/6,y2-marioHeight/4,x2-marioWidth/6,y2);
+        left.set(x,y+marioHeight/4,x+marioWidth/2,y2-marioHeight/4);
+        right.set(x2-marioWidth/2,y+marioHeight/4,x2,y2-marioHeight/4);
     }
 
     public int getX2() { return x2; }
@@ -191,9 +195,7 @@ public class Mario implements TimeConscious {
 
     //Animates through Mario sprite frames
     public void doAnim(){
-        //TODO
         //Run through animation
-
         //Jumping
         if (!ground) {
             if(dir == 1) {
@@ -329,13 +331,12 @@ public class Mario implements TimeConscious {
 
     @Override
     public void tick(Canvas c) {
-        //Log.v(TAG, ""+x1+" "+y1+ " Ground:"+ground+" Visible:"+visible+" DY:"+dy+" Scene"+scene.size());
         checkItem();
-
+        checkEnemyCollision();
         checkPlatformIntersect();
         checkSideIntersect();
         //Horizontal moving bounds
-        if (x1 <= 0 && dir== -1) {
+        if (x <= 0 && dir== -1) {
             dx = 0;
         }
         else if (x2 >= screenWidth / 2 && dir == 1) {
@@ -343,7 +344,7 @@ public class Mario implements TimeConscious {
         }
 
         //Mario falls into pit
-        if (y1 >= screenHeight - marioHeight && !jumpFlag) {     //Bottom bound
+        if (y >= screenHeight - marioHeight && !jumpFlag) {     //Bottom bound
             //mario dies
         }
         if(ground){
@@ -374,14 +375,14 @@ public class Mario implements TimeConscious {
             if (dir == 1) {
                 fireballs.add(new Fireball(view, x2, y2 - marioHeight / 2, dir));
             } else {
-                fireballs.add(new Fireball(view, x1, y2 - marioHeight / 2, dir));
+                fireballs.add(new Fireball(view, x, y2 - marioHeight / 2, dir));
             }
 
         }
-        y1 += dy;
+        y += dy;
         dy += gravity;
-        x1+=dx;
-        setLocation(x1, y1);
+        x+=dx;
+        setLocation(x, y);
         doAnim();
         draw(c);
         //Draw fireballs
@@ -390,9 +391,7 @@ public class Mario implements TimeConscious {
         }
     }
 
-    public void checkEnemyCollision(ArrayList<Sprite> enemies) {
-
-        //TODO determine action for different collisions
+    public void checkEnemyCollision() {
         for (Sprite s : enemies) {
             if (right.intersect(s.getLeft())) {
                 die();
@@ -404,21 +403,22 @@ public class Mario implements TimeConscious {
                 die();
                 break;
             } else if (bot.intersect(s.getTop())) {     //Stomp enemy, enemy dies
+                dy=-15f;
                 s.die();
+                view.score+=1000;
                 break;
             }
         }
     }
 
     public void checkPlatformIntersect(){
-        //TODO
 
         for(Obstacle o : scene) {
             if(bot.intersect(o.getTop())){//Top intersect
                 ground=true;
                 dy = 0;
-                float d = Math.abs(y1+marioHeight-o.getTop().top);  //distance of intersection sides use for offset
-                y1-=d-2;
+                float d = Math.abs(y+marioHeight-o.getTop().top);  //distance of intersection sides use for offset
+                y-=d-2;
                 break;
             }
             else if(!bot.intersect(o.getTop())){//Free fall
@@ -428,8 +428,8 @@ public class Mario implements TimeConscious {
             if(top.intersect(o.getBot())){//Bot intersect
                 //if mario top touch object bottom (ceiling), no ground and stop moving in that direction, offset outside rectangle
                 dy = -dy;
-                float d = Math.abs(y1-o.getBot().bottom);  //distance of intersection sides
-                this.y1+=d;
+                float d = Math.abs(y-o.getBot().bottom);  //distance of intersection sides
+                this.y+=d;
                 ground = false;
                 break;
             }
@@ -442,14 +442,14 @@ public class Mario implements TimeConscious {
             if(o.getLeft().intersect(right)){
                 if(dx>0){
                     dx=0;
-                    float d = Math.abs(x1+marioWidth-o.getLeft().left);
-                    this.x1-= d - 1;
+                    float d = Math.abs(x+marioWidth-o.getLeft().left);
+                    this.x-= d - 1;
                 }
             } if (o.getRight().intersect(left)){
                 if(dx<0) {
                     dx = 0;
-                    float d = Math.abs(x1-o.getRight().right);
-                    this.x1 += d - 1;
+                    float d = Math.abs(x-o.getRight().right);
+                    this.x += d - 1;
                 }
             }
 
@@ -463,35 +463,34 @@ public class Mario implements TimeConscious {
             if(dst.intersect(item.getRect())){
                 if(item.type == 0){//Mushroom
                     setForm(1);
-                    view.score += 1000;
-                    item.setVisible(false);
+                    view.score += 10000;
+                    item.die();
                 }else if(item.type == 1){//Fire Flower
                     setForm(2);
-                    view.score += 1000;
-                    item.setVisible(false);
+                    view.score += 10000;
+                    item.die();
                 }else{//Coin
-                    view.score+= 100;
-                    item.setVisible(false);
+                    view.score+= 1000;
+                    item.die();
                 }
 
             }
         }
     }
 
-    public void die(){
-        visible = false;
-    }
-
     protected void draw(Canvas c) {
         if(visible) {
             Paint paint = new Paint();
             c.drawBitmap(currentImage, null, dst, paint);
+            /*
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(Color.RED);
-            //c.drawRect(top, paint);
-            //c.drawRect(bot,paint);
-            //c.drawRect(left,paint);
-            //c.drawRect(right,paint);
+            c.drawRect(top, paint);
+            c.drawRect(bot,paint);
+            paint.setColor(Color.CYAN);
+            c.drawRect(left,paint);
+            c.drawRect(right,paint);
+            */
         }
     }
 }

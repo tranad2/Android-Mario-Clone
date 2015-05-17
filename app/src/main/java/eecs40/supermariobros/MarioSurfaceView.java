@@ -34,7 +34,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         renderThread.start();
         //background = new Background(this);
         w1 = new World1(this);
-        mario = new Mario(w1, this);
+        mario = new Mario(this.getWidth()/4,this.getHeight()/2,w1, this);
         w1.setMario(mario);
         buttons = new Buttons(this);
 
@@ -67,7 +67,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                 }
                 else if (gameState > 0 && gameState < 4) {
                     for (int i = 0; i < e.getPointerCount(); i++) {
-                        if ((e.getY(i) >= 3 * getHeight() / 4) && (e.getY(i) <= 3 * getHeight() / 4 + buttons.getButtonLength())) {
+                        if ((e.getY(i) >= 3 * getHeight() / 4) && (e.getY(i) <= 3 * getHeight() / 4 + buttons.getButtonLength()) && !(mario.isDead())) {
                             if ((e.getX(i) >= getWidth() / 12) && (e.getX(i) <= getWidth() / 12 + buttons.getButtonLength())) {
                                 //Left button
                                 mario.setDirection(-1);

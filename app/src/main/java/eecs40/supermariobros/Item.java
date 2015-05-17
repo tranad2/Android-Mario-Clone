@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class Item extends Sprite implements TimeConscious{
 
-    private float bmpWidth, bmpHeight;
+    private int imageWidth, imageHeight;
     private Bitmap image;
     private ArrayList<Bitmap> imageLoader;
     public int type;
@@ -22,22 +22,27 @@ public class Item extends Sprite implements TimeConscious{
     private static final float gravity = 3f;
     private boolean ground;
     private ArrayList<Obstacle> scene;
-
+    private MarioSurfaceView view;
+    private float screenHeight, screenWidth;
 
     public Item(int x, int y, int type, MarioSurfaceView view, ArrayList<Obstacle> scene){
         super(x, y);
         this.scene = scene;
+        this.view = view;
+        screenHeight = view.getHeight();
+        screenWidth = view.getWidth();
+
         loadImages(view);
         image = imageLoader.get(type);
-        bmpWidth = image.getWidth();
-        bmpHeight = image.getHeight();
-        dst = new Rect(x, y, (int)(x+bmpWidth), (int)(y+bmpHeight));
+        imageWidth = image.getWidth();
+        imageHeight = image.getHeight();
+        dst = new Rect(x, y, (x+imageWidth), (y+imageHeight));
 
-        top = new Rect((int)(x+bmpWidth/4), y, (int)(x+bmpWidth-bmpWidth/4), (int)(y+bmpHeight/4));
-        bot = new Rect((int)(x+bmpWidth/4), (int)(y+bmpHeight-bmpHeight/4), (int)(x+bmpWidth-bmpWidth/4), (int)(y+bmpHeight));
+        top = new Rect((x+imageWidth/4), y, (x+imageWidth-imageWidth/4), (y+imageHeight/4));
+        bot = new Rect((x+imageWidth/4), (y+imageHeight-imageHeight/4), (x+imageWidth-imageWidth/4), (y+imageHeight));
 
-        left = new Rect(x, (int)(y+bmpHeight/4), (int)(x+bmpWidth/2), (int)(y+bmpHeight-bmpHeight/4));
-        right = new Rect((int)(x+bmpWidth-bmpWidth/2), (int)(y+bmpHeight/4), (int)(x+bmpWidth), (int)(y+bmpHeight-bmpHeight/4));
+        left = new Rect(x, (y+imageHeight/4), (x+imageWidth/2), (y+imageHeight-imageHeight/4));
+        right = new Rect((x+imageWidth-imageWidth/2), (y+imageHeight/4), (x+imageWidth), (y+imageHeight-imageHeight/4));
     }
 
     public void loadImages(MarioSurfaceView view){
@@ -56,14 +61,15 @@ public class Item extends Sprite implements TimeConscious{
 
     public void tick(Canvas c){
         checkPlatformIntersect();
+        if(y>screenHeight+imageHeight)
+            die();
+
         if(type == 0){
             dx = 10f;
             if(ground){
                 dy = 0;
             }
             else if(!ground){
-                y += dy;
-                dy += gravity;
                 if (Math.abs(dy) > 100) {
                     if (dy > 0) {
                         dy = 100;
@@ -74,42 +80,34 @@ public class Item extends Sprite implements TimeConscious{
                 }
             }
         }
-
+        y += dy;
+        dy += gravity;
         x+=dx+bgdx;
-        setLocation((int) x, (int) y);
+        setLocation( x,  y);
         draw(c);
     }
 
     public void setLocation(int xPos, int yPos) {
         x = xPos;
         y = yPos;
-        top.set((int)x, (int)y, (int)(x+bmpWidth), (int)(y+bmpHeight/4));
-        bot.set((int)x, (int)(y+bmpHeight-bmpHeight/4), (int)(x+bmpWidth), (int)(y+bmpHeight));
-        left.set((int)x, (int)(y+bmpHeight/4), (int)(x+bmpWidth/2), (int)(y+bmpHeight-bmpHeight/4));
-        right.set((int) (x + bmpWidth - bmpWidth / 2), (int) (y + bmpHeight / 4), (int) (x + bmpWidth), (int) (y + bmpHeight - bmpHeight / 4));
-        dst.set(xPos, yPos, (int) (xPos + bmpWidth), (int) (yPos + bmpHeight));
+        top.set(x, y, (x+imageWidth), (y+imageHeight/4));
+        bot.set(x, (y+imageHeight-imageHeight/4), (x+imageWidth), (y+imageHeight));
+        left.set(x, (y+imageHeight/4), (x+imageWidth/2), (y+imageHeight-imageHeight/4));
+        right.set( (x + imageWidth - imageWidth / 2),  (y + imageHeight / 4),  (x + imageWidth),  (y + imageHeight - imageHeight / 4));
+        dst.set(xPos, yPos,  (xPos + imageWidth),  (yPos + imageHeight));
     }
 
     public void checkPlatformIntersect(){
-        //TODO
-        //Log.v(TAG,"Enter"+scene.size());
         for(Obstacle o : scene) {
             if(bot.intersect(o.getTop())){
                 ground=true;
                 dy = 0;
-                float d = Math.abs(y+bmpHeight-o.getTop().top);  //distance of intersection sides
-                y-=d - 2;						//touch ground (top of object), counter against gravity
+                float d = Math.abs(y+imageHeight-o.getTop().top);  //distance of intersection sides
+                y-=d-2;						//touch ground (top of object), counter against gravity
                 break;
             } else if(!bot.intersect(o.getTop())){
                 ground = false;
-                //if none of objects' top touch mario bottom, no grou
-                //return ground;
-            } else if(top.intersect(o.getBot())){			//if mario top touch object bottom (ceiling), no ground and stop moving in that direction, offset outside rectangle
-
-                //ground=false;
-                //dy = 0;
-
-                //this.y1+=.1f;
+                //if none of objects' top touch mario bottom, no ground
             }
         }
     }
