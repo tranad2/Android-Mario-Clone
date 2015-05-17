@@ -96,20 +96,19 @@ public class Goomba extends Sprite implements TimeConscious{
         c.drawBitmap(currentImage, null, dst, paint);
     }
     public void checkSideIntersect(){
-        //boolean sidecollision = false;
         for(Obstacle o: scene){
 
             if(o.getLeft().intersect(right)){
                 if(dx>0){
-                    dx = -dx;
+                    dx=0;
                     float d = Math.abs(x+imageWidth-o.getLeft().left);
-                    x-=1.85f;
+                    this.x-=d-1;
                 }
             } if (o.getRight().intersect(left)){
                 if(dx<0) {
-                    dx = -dx;
+                    dx = 0;
                     float d = Math.abs(x-o.getRight().right);
-                    x += 1.85f;
+                    this.x+=d-1;
                 }
             }
 
@@ -117,26 +116,26 @@ public class Goomba extends Sprite implements TimeConscious{
     }
 
     public void checkPlatformIntersect(){
-        //TODO
-        //Log.v(TAG,"Enter"+scene.size());
         for(Obstacle o : scene) {
-            if(bot.intersect(o.getTop())){
-                Log.v(TAG, "Intersect");
+            if(bot.intersect(o.getTop())){//Top intersect
+                Log.v(TAG,"TOP");
                 ground=true;
                 dy = 0;
-                float d = Math.abs(y+imageHeight-o.getTop().top);  //distance of intersection sides
-                y-=d - 2;						//touch ground (top of object), counter against gravity
+                float d = Math.abs(y+imageHeight-o.getTop().top);  //distance of intersection sides use for offset
+                y-=d-2;
                 break;
-            } else if(!bot.intersect(o.getTop())){
+            }
+            else if(!bot.intersect(o.getTop())){//Free fall
+                ground = false; //if none of objects' top touch bottom, no ground
+            }
+
+            if(top.intersect(o.getBot())){//Bot intersect
+                //if top touch object bottom (ceiling), no ground and stop moving in that direction, offset outside rectangle
+                dy = -dy;
+                float d = Math.abs(y-o.getBot().bottom);  //distance of intersection sides
+                this.y+=d;
                 ground = false;
-                //if none of objects' top touch mario bottom, no grou
-                //return ground;
-            } else if(top.intersect(o.getBot())){			//if mario top touch object bottom (ceiling), no ground and stop moving in that direction, offset outside rectangle
-
-                //ground=false;
-                //dy = 0;
-
-                //this.y1+=.1f;
+                break;
             }
         }
     }

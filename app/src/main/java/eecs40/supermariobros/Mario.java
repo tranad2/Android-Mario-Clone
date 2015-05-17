@@ -331,9 +331,8 @@ public class Mario implements TimeConscious {
     public void tick(Canvas c) {
         //Log.v(TAG, ""+x1+" "+y1+ " Ground:"+ground+" Visible:"+visible+" DY:"+dy+" Scene"+scene.size());
         checkItem();
-        if (dy >= 0) {
-            checkPlatformIntersect();
-        }
+
+        checkPlatformIntersect();
         checkSideIntersect();
         //Horizontal moving bounds
         if (x1 <= 0 && dir== -1) {
@@ -347,18 +346,10 @@ public class Mario implements TimeConscious {
         if (y1 >= screenHeight - marioHeight && !jumpFlag) {     //Bottom bound
             //mario dies
         }
-
-        //Jumping
-        if (jumpFlag && dy == 0) {
-            dy = -35;
-            ground = false;
-        }
-        else if(ground){
+        if(ground){
             dy = 0;
         }
         else if(!ground){
-            y1 += dy;
-            dy += gravity;
             if (Math.abs(dy) > 100) {
                 if (dy > 0) {
                     dy = 100;
@@ -368,6 +359,13 @@ public class Mario implements TimeConscious {
                 }
             }
         }
+        //Jumping
+        if (jumpFlag && ground) {
+            dy = -35;
+            ground = false;
+
+        }
+
 
         //Shooting fireball
         fireballDelay++;
@@ -380,12 +378,12 @@ public class Mario implements TimeConscious {
             }
 
         }
-
+        y1 += dy;
+        dy += gravity;
         x1+=dx;
         setLocation(x1, y1);
         doAnim();
         draw(c);
-
         //Draw fireballs
         for(Fireball f : fireballs){
             f.tick(c);
@@ -414,27 +412,24 @@ public class Mario implements TimeConscious {
 
     public void checkPlatformIntersect(){
         //TODO
-        Log.v(TAG,"Ground: "+ground);
+
         for(Obstacle o : scene) {
             if(bot.intersect(o.getTop())){//Top intersect
                 Log.v(TAG,"TOP");
                 ground=true;
                 dy = 0;
-                float d = Math.abs(y1+marioHeight-o.getTop().top);  //distance of intersection sides
-                y1-=d-2;						//touch ground (top of object), counter against gravity
+                float d = Math.abs(y1+marioHeight-o.getTop().top);  //distance of intersection sides use for offset
+                y1-=d-2;
                 break;
             }
             else if(!bot.intersect(o.getTop())){//Free fall
-                ground = false;
-                //if none of objects' top touch mario bottom, no grou
-                //return ground;
-                //Log.v(TAG,"FREE FALL");
+                ground = false; //if none of objects' top touch mario bottom, no ground
             }
 
-            if(top.intersect(o.getBot())){//Bot intersect			//if mario top touch object bottom (ceiling), no ground and stop moving in that direction, offset outside rectangle
-                Log.v(TAG,"SUCCESS");
-                dy = 0;
-                float d = Math.abs(y1-o.getTop().bottom);  //distance of intersection sides
+            if(top.intersect(o.getBot())){//Bot intersect
+                //if mario top touch object bottom (ceiling), no ground and stop moving in that direction, offset outside rectangle
+                dy = -dy;
+                float d = Math.abs(y1-o.getBot().bottom);  //distance of intersection sides
                 this.y1+=d;
                 ground = false;
                 break;
@@ -443,7 +438,6 @@ public class Mario implements TimeConscious {
     }
 
     public void checkSideIntersect(){
-        //boolean sidecollision = false;
         for(Obstacle o: scene){
 
             if(o.getLeft().intersect(right)){
@@ -489,7 +483,7 @@ public class Mario implements TimeConscious {
             c.drawBitmap(currentImage, null, dst, paint);
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(Color.RED);
-            c.drawRect(top, paint);
+            //c.drawRect(top, paint);
             //c.drawRect(bot,paint);
             //c.drawRect(left,paint);
             //c.drawRect(right,paint);

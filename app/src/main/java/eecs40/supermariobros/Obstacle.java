@@ -22,8 +22,8 @@ public class Obstacle extends Sprite implements TimeConscious{
         bmpHeight = img.getHeight();
         dst = new Rect(x, y, (int)(x+bmpWidth), (int)(y+bmpHeight));
 
-        top = new Rect((int)(x+bmpWidth/4), y, (int)(x+bmpWidth-bmpWidth/4), (int)(y+bmpHeight/2));
-        bot = new Rect((int)(x+bmpWidth/4), (int)(y+bmpHeight-bmpHeight/2), (int)(x+bmpWidth-bmpWidth/4), (int)(y+bmpHeight));
+        top = new Rect((int)(x+bmpWidth/4), y, (int)(x+bmpWidth-bmpWidth/4), (int)(y+bmpHeight/4));
+        bot = new Rect((int)(x+bmpWidth/4), (int)(y+bmpHeight-bmpHeight/4), (int)(x+bmpWidth-bmpWidth/4), (int)(y+bmpHeight));
 
         left = new Rect(x, (int)(y+bmpHeight/4), (int)(x+bmpWidth/2), (int)(y+bmpHeight-bmpHeight/4));
         right = new Rect((int)(x+bmpWidth-bmpWidth/2), (int)(y+bmpHeight/4), (int)(x+bmpWidth), (int)(y+bmpHeight-bmpHeight/4));
@@ -39,8 +39,8 @@ public class Obstacle extends Sprite implements TimeConscious{
     public void setLocation(int xPos, int yPos) {
         x = xPos;
         y = yPos;
-        top.set((int)x, (int)y, (int)(x+bmpWidth), (int)(y+bmpHeight/2));
-        bot.set((int)x, (int)(y+bmpHeight-bmpHeight/2), (int)(x+bmpWidth), (int)(y+bmpHeight));
+        top.set((int)x, (int)y, (int)(x+bmpWidth), (int)(y+bmpHeight/4));
+        bot.set((int)x, (int)(y+bmpHeight-bmpHeight/4), (int)(x+bmpWidth), (int)(y+bmpHeight));
         left.set((int)x, (int)(y+bmpHeight/4), (int)(x+bmpWidth/2), (int)(y+bmpHeight-bmpHeight/4));
         right.set((int)(x+bmpWidth-bmpWidth/2), (int)(y+bmpHeight/4), (int)(x+bmpWidth), (int)(y+bmpHeight-bmpHeight/4));
         dst.set(xPos, yPos, (int)(xPos+bmpWidth), (int)(yPos+bmpHeight));
