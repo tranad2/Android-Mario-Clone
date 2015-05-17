@@ -218,13 +218,31 @@ public class Mario implements TimeConscious {
 
         //Moving
         else if(dir == 1 && ground && (moveLeftFlag||moveRightFlag)) {   //Moving right
-            if(timer <= 10){
+            if(timer <= 5){
                 if (form == 0) {
                     currentImage = spriteLoader.get(1);
                 } else if (form == 1) {
                     currentImage = spriteLoader.get(6);
                 } else if (form == 2) {
                     currentImage = spriteLoader.get(11);
+                }
+                timer++;
+            } else if(timer <= 10){
+                if (form == 0) {
+                    currentImage = spriteLoader.get(2);
+                } else if (form == 1) {
+                    currentImage = spriteLoader.get(7);
+                } else if (form == 2) {
+                    currentImage = spriteLoader.get(12);
+                }
+                timer++;
+            } else if(timer <= 15){
+                if (form == 0) {
+                    currentImage = spriteLoader.get(3);
+                } else if (form == 1) {
+                    currentImage = spriteLoader.get(8);
+                } else if (form == 2) {
+                    currentImage = spriteLoader.get(13);
                 }
                 timer++;
             } else if(timer <= 20){
@@ -236,33 +254,37 @@ public class Mario implements TimeConscious {
                     currentImage = spriteLoader.get(12);
                 }
                 timer++;
-            } else if(timer <= 30){
-                if (form == 0) {
-                    currentImage = spriteLoader.get(3);
-                } else if (form == 1) {
-                    currentImage = spriteLoader.get(8);
-                } else if (form == 2) {
-                    currentImage = spriteLoader.get(13);
-                }
-                timer++;
-            } else if(timer <= 40){
-                if (form == 0) {
-                    currentImage = spriteLoader.get(2);
-                } else if (form == 1) {
-                    currentImage = spriteLoader.get(7);
-                } else if (form == 2) {
-                    currentImage = spriteLoader.get(12);
-                }
+            } else if(timer <= 30) {
                 timer = 0;
             }
         } else if(dir == -1 && ground && (moveLeftFlag||moveRightFlag)){   //Left direction
-            if(timer <= 10){
+            if(timer <= 5){
                 if (form == 0) {
                     currentImage = spriteLoader.get(1);
                 } else if (form == 1) {
                     currentImage = spriteLoader.get(6);
                 } else if (form == 2) {
                     currentImage = spriteLoader.get(11);
+                }
+                currentImage = flipImage(currentImage);
+                timer++;
+            } else if(timer <= 10){
+                if (form == 0) {
+                    currentImage = spriteLoader.get(2);
+                } else if (form == 1) {
+                    currentImage = spriteLoader.get(7);
+                } else if (form == 2) {
+                    currentImage = spriteLoader.get(12);
+                }
+                currentImage = flipImage(currentImage);
+                timer++;
+            } else if(timer <= 15){
+                if (form == 0) {
+                    currentImage = spriteLoader.get(3);
+                } else if (form == 1) {
+                    currentImage = spriteLoader.get(8);
+                } else if (form == 2) {
+                    currentImage = spriteLoader.get(13);
                 }
                 currentImage = flipImage(currentImage);
                 timer++;
@@ -276,25 +298,7 @@ public class Mario implements TimeConscious {
                 }
                 currentImage = flipImage(currentImage);
                 timer++;
-            } else if(timer <= 30){
-                if (form == 0) {
-                    currentImage = spriteLoader.get(3);
-                } else if (form == 1) {
-                    currentImage = spriteLoader.get(8);
-                } else if (form == 2) {
-                    currentImage = spriteLoader.get(13);
-                }
-                currentImage = flipImage(currentImage);
-                timer++;
-            } else if(timer <= 40){
-                if (form == 0) {
-                    currentImage = spriteLoader.get(2);
-                } else if (form == 1) {
-                    currentImage = spriteLoader.get(7);
-                } else if (form == 2) {
-                    currentImage = spriteLoader.get(12);
-                }
-                currentImage = flipImage(currentImage);
+            } else if(timer <= 30) {
                 timer = 0;
             }
         }

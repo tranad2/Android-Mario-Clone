@@ -69,8 +69,10 @@ public class Fireball extends Sprite implements TimeConscious{
             } else if(timer <= 6){
                 currentImage = spriteLoader.get(2);
                 timer++;
-            } else if(timer <= 8){
+            } else if(timer <= 8) {
                 currentImage = spriteLoader.get(3);
+                timer++;
+            } else if(timer <= 10) {
                 timer = 0;
             }
         } else if (dir == -1){
@@ -89,6 +91,8 @@ public class Fireball extends Sprite implements TimeConscious{
             } else if(timer <= 8){
                 currentImage = spriteLoader.get(3);
                 currentImage = flipImage(currentImage);
+                timer++;
+            } else if(timer <= 10) {
                 timer = 0;
             }
         }

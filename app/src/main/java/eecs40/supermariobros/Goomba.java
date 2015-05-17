@@ -17,15 +17,16 @@ public class Goomba extends Sprite implements TimeConscious{
     private float dx=-5f, dy, imageWidth, imageHeight;
     private boolean ground;
     private final float gravity = 0.75f;
+    private int goombaTimer=0;
     private ArrayList<Obstacle> scene;
+    private ArrayList<Bitmap> spriteLoader;
 //    private Mario mario;
 
     public Goomba(int x, int y, MarioSurfaceView view, ArrayList<Obstacle> scene){
-        super(x,y);
+        super(x, y);
         //Load images
-        BitmapFactory.Options options = new BitmapFactory.Options();
-
-        currentImage = BitmapFactory.decodeResource(view.getResources(), R.drawable.goomba1, options);
+        loadImages(view);
+        currentImage = spriteLoader.get(0);
 
         imageWidth = currentImage.getWidth();
         imageHeight = currentImage.getHeight();
@@ -41,6 +42,28 @@ public class Goomba extends Sprite implements TimeConscious{
         left = new Rect(x, (int)(y+imageHeight/4), (int)(x+imageWidth/2), (int)(y+imageHeight/4));
         right = new Rect((int)(x+imageWidth-imageWidth/2), (int)(y-imageHeight/4), (int)(x+imageWidth), (int)(y+imageHeight-imageHeight/4));
 
+    }
+
+    public void loadImages(MarioSurfaceView view){
+        spriteLoader = new ArrayList<>();
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        Bitmap goomba1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.goomba1, options);
+        Bitmap goomba2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.goomba2, options);
+
+        spriteLoader.add(goomba1);
+        spriteLoader.add(goomba2);
+    }
+
+    public void doAnim() {
+        if(goombaTimer <= 10){
+            currentImage = spriteLoader.get(0);
+            goombaTimer++;
+        } else if(goombaTimer <= 20) {
+            currentImage = spriteLoader.get(1);
+            goombaTimer++;
+        } else if (goombaTimer <=30) {
+            goombaTimer = 0;
+        }
     }
 
     public void tick(Canvas c){
@@ -64,6 +87,7 @@ public class Goomba extends Sprite implements TimeConscious{
         }
         x+=dx + bgdx;
         setLocation((int)x, (int)y);
+        doAnim();
         draw(c);
 
     }
