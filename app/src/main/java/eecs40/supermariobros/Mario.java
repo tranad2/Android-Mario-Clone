@@ -415,7 +415,6 @@ public class Mario implements TimeConscious {
 
         for(Obstacle o : scene) {
             if(bot.intersect(o.getTop())){//Top intersect
-                Log.v(TAG,"TOP");
                 ground=true;
                 dy = 0;
                 float d = Math.abs(y1+marioHeight-o.getTop().top);  //distance of intersection sides use for offset
@@ -457,16 +456,22 @@ public class Mario implements TimeConscious {
         }
     }
 
+    //Item interaction and score increment
     public void checkItem(){
         for(int i = 0; i<items.size(); i++){
             Item item = items.get(i);
             if(dst.intersect(item.getRect())){
                 if(item.type == 0){//Mushroom
-
+                    setForm(1);
+                    view.score += 1000;
+                    item.setVisible(false);
                 }else if(item.type == 1){//Fire Flower
-
-                }else{
-
+                    setForm(2);
+                    view.score += 1000;
+                    item.setVisible(false);
+                }else{//Coin
+                    view.score+= 100;
+                    item.setVisible(false);
                 }
 
             }
