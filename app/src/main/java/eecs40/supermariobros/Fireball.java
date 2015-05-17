@@ -111,7 +111,7 @@ public class Fireball extends Sprite implements TimeConscious{
         if (dir == 1) {
             x += dx + bgdx;
         } else {
-            x -= dx + bgdx;
+            x -= dx - bgdx;
         }
         setLocation(x, y);
         doAnim();
