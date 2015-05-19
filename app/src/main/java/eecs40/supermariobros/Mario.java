@@ -20,7 +20,7 @@ public class Mario extends Sprite implements TimeConscious {
     private ArrayList<Item> items;
     private ArrayList<Sprite> enemies;
     private Bitmap currentImage;
-    private boolean visible = true, ground = true, jumpFlag, fireballFlag, moveLeftFlag, moveRightFlag;
+    private boolean ground = true, jumpFlag, fireballFlag, moveLeftFlag, moveRightFlag;
     private int marioWidth, marioHeight, screenHeight, screenWidth, x2, y2;
     private int dir = 1, timer = 0, fireballDelay;
     private int form = 0; //0 small, 1 big, 2 fire

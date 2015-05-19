@@ -53,6 +53,10 @@ public abstract class Sprite{
         return dead;
     }
 
+    public float getBgdx(){
+        return bgdx;
+    }
+
     public void setVisible(boolean vis){
         visible = vis;
     }

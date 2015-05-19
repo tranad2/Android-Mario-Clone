@@ -10,14 +10,12 @@ import java.util.ArrayList;
 /**
  * Created by Alex on 5/10/2015.
  */
-public class World1 extends World{
+public class World2 extends World{
 
     private static final String TAG = "World1";
     private ArrayList<Bitmap> imageLoader;
-    private int tileWidth;
-    private float distance = 0;
 
-    public World1(MarioSurfaceView view){
+    public World2(MarioSurfaceView view){
         super(view);
         screenWidth = view.getWidth();
         screenHeight = view.getHeight();
@@ -25,12 +23,12 @@ public class World1 extends World{
 
         loadImages(view);
 
-        tileWidth = imageLoader.get(0).getWidth();
+        float tileWidth = imageLoader.get(0).getWidth();
         int offset = 0;
 
         for(int i = 1; i<=2; i++) {
             for(int j = 0; j<50; j++) {
-                scene.add(new Obstacle(j*imageLoader.get(3).getWidth(),screenHeight-imageLoader.get(3).getHeight()*i , imageLoader.get(3)));
+                scene.add(new Obstacle(j*imageLoader.get(3).getWidth(),screenHeight-imageLoader.get(3).getHeight()*i , imageLoader.get(1)));
             }
         }
         scene.add(new Obstacle(imageLoader.get(0).getWidth()*10,screenHeight-imageLoader.get(0).getHeight()*3, imageLoader.get(0)));
@@ -53,11 +51,7 @@ public class World1 extends World{
     public void tick(Canvas c){
         clean();
         boolean backgroundMove = false;
-        Log.v(TAG,"Distance "+distance);
-        distance -= scene.get(0).getBgdx();
-        if(distance>1000)
-            end = true;
-        if (mario.moveRightFlag() && !mario.moveLeftFlag() && mario.getX2() >= screenWidth / 2  && mario.getDx() >= 0 && !mario.isDead()) {
+        if (mario.moveRightFlag() && !mario.moveLeftFlag() && mario.getX2() >= screenWidth / 2  && mario.getDx() >= 0) {
             backgroundMove = true;
         }
         for(Obstacle o : scene){

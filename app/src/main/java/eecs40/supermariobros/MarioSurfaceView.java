@@ -12,10 +12,14 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.ArrayList;
+
+
 public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callback, TimeConscious {
     private MarioRenderThread    renderThread;
+    private ArrayList<World> levels;
     //Background background;
-    World w1;
+    World w1, w2;
     Mario mario;
     Buttons buttons;
     Bitmap title;
@@ -33,10 +37,17 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         renderThread = new MarioRenderThread(this);
         renderThread.start();
         //background = new Background(this);
+        levels = new ArrayList<>();
+
         w1 = new World1(this);
+        w2 = new World2(this);
+        levels.add(w1);
+
         mario = new Mario(this.getWidth()/4,this.getHeight()/2,w1, this);
         w1.setMario(mario);
         buttons = new Buttons(this);
+
+
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         title = BitmapFactory.decodeResource(getResources(), R.drawable.title, options);
@@ -110,7 +121,10 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         //background.draw(c);
         if (gameState > 0 && gameState < 4) {
             if (gameState == 1) {
-                w1.draw(c);
+                if(!w1.end())
+                    w1.start(c);
+                if(w1.end() && !w2.end())
+                    w2.start(c);
             }
             mario.draw(c);
             buttons.draw(c);
@@ -140,7 +154,14 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         else if (gameState > 0 && gameState < 4) {
             time--;
             if (gameState == 1) {
-                w1.tick(c);
+                //TODO
+                //Transition between levels
+                if(!w1.end())
+                    w1.start(c);
+                if(w1.end() && !w2.end()) {
+                    w2.setMario(mario);
+                    w2.start(c);
+                }
             }
             mario.tick(c);
             buttons.draw(c);

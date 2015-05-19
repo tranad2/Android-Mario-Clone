@@ -17,6 +17,7 @@ public abstract class World implements TimeConscious{
     protected ArrayList<Sprite> enemies;
     protected int screenWidth, screenHeight;
     protected Mario mario;
+    protected boolean end;
 
 
     public World(MarioSurfaceView view){
@@ -58,6 +59,15 @@ public abstract class World implements TimeConscious{
             }
         }
 
+    }
+
+    public boolean end(){
+        return end;
+    }
+
+    public void start(Canvas c){
+        end = false;
+        tick(c);
     }
 
     public void setMario(Mario mario){ this.mario = mario; }
