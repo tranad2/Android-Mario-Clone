@@ -339,19 +339,19 @@ public class Mario extends Sprite implements TimeConscious {
 
     @Override
     public void tick(Canvas c) {
-        //Check collisions with matter
+        checkEnemyCollision();
         if (isDead()) {
             if (Math.abs(dy) > 100) {
-                if (dy > 100) {
+                if (dy > 0) {
                     dy = 100;
                 } else {
                     dy = -100;
                 }
             }
         }
-        else {
+        else if (!isDead()){
+            //Check collisions with matter
             checkItem();
-            checkEnemyCollision();
             checkPlatformIntersect();
             checkSideIntersect();
             //Moving
@@ -409,6 +409,7 @@ public class Mario extends Sprite implements TimeConscious {
         }
         y += dy;
         dy += gravity;
+        Log.v("TAG","dy = "+dy);
         setLocation(x, y);
         doAnim();
         draw(c);
@@ -425,6 +426,7 @@ public class Mario extends Sprite implements TimeConscious {
                 if (form == 0) {
                     die();
                     dy = -35f;
+                    Log.v("TAG","dy = "+dy);
                 } else { setForm(--form); }
                 break;
             } else if (left.intersect(s.getRight())) {
@@ -454,6 +456,7 @@ public class Mario extends Sprite implements TimeConscious {
             if(bot.intersect(o.getTop())){//Top intersect
                 ground=true;
                 dy = 0;
+                Log.v("TAG","check platform: dy = "+dy);
                 float d = Math.abs(y+marioHeight-o.getTop().top);  //distance of intersection sides use for offset
                 y-=d-2;
                 break;
