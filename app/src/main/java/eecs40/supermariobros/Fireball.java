@@ -13,7 +13,7 @@ public class Fireball extends Sprite implements TimeConscious{
     private ArrayList<Bitmap> spriteLoader;
     private Bitmap currentImage;
     private int x, y, dir = 1, timer = 0, fireballWidth, fireballHeight, screenWidth, screenHeight;
-    private float dx = 25f;
+    private float dx = 40f;
     private Rect dst;
 
     public Fireball( MarioSurfaceView view, int marioX, int marioY, int marioDir) {

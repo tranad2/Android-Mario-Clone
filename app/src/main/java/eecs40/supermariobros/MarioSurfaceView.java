@@ -67,18 +67,16 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                 }
                 else if (gameState > 0 && gameState < 4) {
                     for (int i = 0; i < e.getPointerCount(); i++) {
-                        if ((e.getY(i) >= 3 * getHeight() / 4) && (e.getY(i) <= 3 * getHeight() / 4 + buttons.getButtonLength()) && !(mario.isDead())) {
+                        if ((e.getY(i) >= 3 * getHeight() / 4) && (e.getY(i) <= 3 * getHeight() / 4 + buttons.getButtonLength()) && !mario.isDead()) {
                             if ((e.getX(i) >= getWidth() / 12) && (e.getX(i) <= getWidth() / 12 + buttons.getButtonLength())) {
                                 //Left button
                                 mario.setDirection(-1);
-                                mario.setDx(-15f);
                                 mario.setMoveLeftFlag(true);
                                 mario.setMoveRightFlag(false);
                             }
                             if ((e.getX(i) >= getWidth() / 12 + buttons.getButtonLength()) && (e.getX(i) <= getWidth() / 12 + 2 * buttons.getButtonLength())) {
                                 //Right button
                                 mario.setDirection(1);
-                                mario.setDx(15f);
                                 mario.setMoveRightFlag(true);
                                 mario.setMoveLeftFlag(false);
 
@@ -101,7 +99,6 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                 mario.setFireballFlag(false);
                 mario.setMoveLeftFlag(false);
                 mario.setMoveRightFlag(false);
-                mario.setDx(0);
                 break;
         }
         return true;
@@ -170,7 +167,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         paint.setTextAlign(Paint.Align.LEFT);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
         c.drawText("Mario", getWidth() / 12, getHeight() / 20, paint);
-        c.drawText(Integer.toString(score / 10), getWidth() / 12, getHeight() / 9, paint);
+        c.drawText(Integer.toString(score), getWidth() / 12, getHeight() / 9, paint);
     }
 
     protected void drawLives( Canvas c ) {

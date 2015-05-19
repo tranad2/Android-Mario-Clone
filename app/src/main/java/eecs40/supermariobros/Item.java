@@ -65,7 +65,7 @@ public class Item extends Sprite implements TimeConscious{
             die();
 
         if(type == 0){
-            dx = 10f;
+            dx = 7f;
             if(ground){
                 dy = 0;
             }

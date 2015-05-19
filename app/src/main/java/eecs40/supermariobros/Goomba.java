@@ -95,12 +95,14 @@ public class Goomba extends Sprite implements TimeConscious {
         if (visible) {
             Paint paint = new Paint();
             c.drawBitmap(currentImage, null, dst, paint);
+            /*
             paint.setColor(Color.BLUE);
             c.drawRect(top, paint);
             c.drawRect(bot, paint);
             paint.setColor(Color.MAGENTA);
             c.drawRect(left, paint);
             c.drawRect(right, paint);
+            */
         }
     }
 

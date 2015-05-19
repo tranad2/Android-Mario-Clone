@@ -125,7 +125,9 @@ public class Mario extends Sprite implements TimeConscious {
     public void setForm(int value) {
         form = value;
         if (form > 0) {
-            marioHeight = currentImage.getHeight();
+            marioHeight = spriteLoader.get(5).getHeight();
+        } else {
+            marioHeight = spriteLoader.get(0).getHeight();
         }
     }
 
@@ -169,6 +171,8 @@ public class Mario extends Sprite implements TimeConscious {
 
         Bitmap fireMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.firemario5, options);
 
+        Bitmap marioDeath1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.mariodeath1, options);
+
         spriteLoader.add(smallRedMario1);
         spriteLoader.add(smallRedMario2);
         spriteLoader.add(smallRedMario3);
@@ -184,6 +188,7 @@ public class Mario extends Sprite implements TimeConscious {
         spriteLoader.add(fireMario3);
         spriteLoader.add(fireMario4);
         spriteLoader.add(fireMario5);
+        spriteLoader.add(marioDeath1);
     }
 
     public Bitmap flipImage(Bitmap src) {
@@ -196,8 +201,11 @@ public class Mario extends Sprite implements TimeConscious {
     //Animates through Mario sprite frames
     public void doAnim(){
         //Run through animation
+        if (dead) {
+            currentImage = spriteLoader.get(15);
+        }
         //Jumping
-        if (!ground) {
+        else if (!ground) {
             if(dir == 1) {
                 if (form == 0) {
                     currentImage = spriteLoader.get(4);     //Jumping right
@@ -331,60 +339,80 @@ public class Mario extends Sprite implements TimeConscious {
 
     @Override
     public void tick(Canvas c) {
-        checkItem();
-        checkEnemyCollision();
-        checkPlatformIntersect();
-        checkSideIntersect();
-        //Horizontal moving bounds
-        if (x <= 0 && dir== -1) {
-            dx = 0;
-        }
-        else if (x2 >= screenWidth / 2 && dir == 1) {
-            dx = 0;
-        }
-
-        //Mario falls into pit
-        if (y >= screenHeight - marioHeight && !jumpFlag) {     //Bottom bound
-            //mario dies
-        }
-        if(ground){
-            dy = 0;
-        }
-        else if(!ground){
+        //Check collisions with matter
+        if (isDead()) {
             if (Math.abs(dy) > 100) {
-                if (dy > 0) {
+                if (dy > 100) {
                     dy = 100;
-                }
-                else {
+                } else {
                     dy = -100;
                 }
             }
         }
-        //Jumping
-        if (jumpFlag && ground) {
-            dy = -35;
-            ground = false;
-
-        }
-
-
-        //Shooting fireball
-        fireballDelay++;
-        if (fireballFlag && form == 2 &&  fireballDelay > 15) {
-            fireballDelay = 0;
-            if (dir == 1) {
-                fireballs.add(new Fireball(view, x2, y2 - marioHeight / 2, dir));
+        else {
+            checkItem();
+            checkEnemyCollision();
+            checkPlatformIntersect();
+            checkSideIntersect();
+            //Moving
+            if (moveLeftFlag) {
+                dx = -15f;
+            } else if (moveRightFlag) {
+                dx = 15f;
             } else {
-                fireballs.add(new Fireball(view, x, y2 - marioHeight / 2, dir));
+                dx = 0;
             }
 
+            //Horizontal moving bounds
+            if (x <= 0 && dir == -1) {
+                dx = 0;
+            } else if (x2 >= screenWidth / 2 && dir == 1) {
+                dx = 0;
+            }
+
+            //Mario falls into pit
+            if (y >= screenHeight - marioHeight && !jumpFlag) {     //Bottom bound
+                //mario dies
+            }
+
+            //Jumping limit
+            if (ground) {
+                dy = 0;
+            } else if (!ground) {
+                if (Math.abs(dy) > 100) {
+                    if (dy > 0) {
+                        dy = 100;
+                    } else {
+                        dy = -100;
+                    }
+                }
+            }
+            //Jumping
+            if (jumpFlag && ground) {
+                dy = -35;
+                ground = false;
+
+            }
+
+            //Shooting fireball
+            fireballDelay++;
+            if (fireballFlag && form == 2 && fireballDelay > 15) {
+                fireballDelay = 0;
+                if (dir == 1) {
+                    fireballs.add(new Fireball(view, x2, y2 - marioHeight / 2, dir));
+                } else {
+                    fireballs.add(new Fireball(view, x, y2 - marioHeight / 2, dir));
+                }
+
+            }
+            x += dx;
         }
         y += dy;
         dy += gravity;
-        x+=dx;
         setLocation(x, y);
         doAnim();
         draw(c);
+
         //Draw fireballs
         for(Fireball f : fireballs){
             f.tick(c);
@@ -394,13 +422,22 @@ public class Mario extends Sprite implements TimeConscious {
     public void checkEnemyCollision() {
         for (Sprite s : enemies) {
             if (right.intersect(s.getLeft())) {
-                die();
+                if (form == 0) {
+                    die();
+                    dy = -35f;
+                } else { setForm(--form); }
                 break;
             } else if (left.intersect(s.getRight())) {
-                die();
+                if (form == 0) {
+                    die();
+                    dy = -35f;
+                } else { setForm(--form); }
                 break;
             } else if (top.intersect(s.getBot())) {
-                die();
+                if (form == 0) {
+                    die();
+                    dy = -35f;
+                } else { setForm(--form); }
                 break;
             } else if (bot.intersect(s.getTop())) {     //Stomp enemy, enemy dies
                 dy=-15f;
@@ -438,21 +475,18 @@ public class Mario extends Sprite implements TimeConscious {
 
     public void checkSideIntersect(){
         for(Obstacle o: scene){
-
-            if(o.getLeft().intersect(right)){
-                if(dx>0){
+                if(o.getLeft().intersect(right)){
                     dx=0;
                     float d = Math.abs(x+marioWidth-o.getLeft().left);
-                    this.x-= d - 1;
+                    this.x -= d - 2;
+                    break;
                 }
-            } if (o.getRight().intersect(left)){
-                if(dx<0) {
+                else if (o.getRight().intersect(left)){
                     dx = 0;
                     float d = Math.abs(x-o.getRight().right);
-                    this.x += d - 1;
+                    this.x += d - 2;
+                    break;
                 }
-            }
-
         }
     }
 
@@ -463,14 +497,14 @@ public class Mario extends Sprite implements TimeConscious {
             if(dst.intersect(item.getRect())){
                 if(item.type == 0){//Mushroom
                     setForm(1);
-                    view.score += 10000;
+                    view.score += 1000;
                     item.die();
                 }else if(item.type == 1){//Fire Flower
                     setForm(2);
-                    view.score += 10000;
+                    view.score += 1000;
                     item.die();
                 }else{//Coin
-                    view.score+= 1000;
+                    view.score+= 100;
                     item.die();
                 }
 

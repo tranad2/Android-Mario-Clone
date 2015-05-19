@@ -50,6 +50,15 @@ public class Obstacle extends Sprite implements TimeConscious{
         if(visible) {
             Paint paint = new Paint();
             c.drawBitmap(image, null, dst, paint);
+            /*
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(Color.GREEN);
+            c.drawRect(top, paint);
+            c.drawRect(bot,paint);
+            paint.setColor(Color.MAGENTA);
+            c.drawRect(left,paint);
+            c.drawRect(right, paint);
+            */
 
         }
     }
