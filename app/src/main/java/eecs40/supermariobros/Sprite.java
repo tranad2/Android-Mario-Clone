@@ -46,7 +46,7 @@ public abstract class Sprite{
 
     public void die(){
         dead = true;
-        visible = false;
+        //visible = false;
     }
 
     public boolean isDead(){

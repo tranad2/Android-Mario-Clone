@@ -20,7 +20,7 @@ public class Mario extends Sprite implements TimeConscious {
     private ArrayList<Item> items;
     private ArrayList<Sprite> enemies;
     private Bitmap currentImage;
-    private boolean ground = true, jumpFlag, fireballFlag, moveLeftFlag, moveRightFlag;
+    private boolean ground = true, jumpFlag, fireballFlag, moveLeftFlag, moveRightFlag, deathTimer = false;
     private int marioWidth, marioHeight, screenHeight, screenWidth, x2, y2;
     private int dir = 1, timer = 0, fireballDelay;
     private int form = 0; //0 small, 1 big, 2 fire
@@ -89,11 +89,9 @@ public class Mario extends Sprite implements TimeConscious {
 
     public float getDx() { return dx; }
 
-    public boolean moveRightFlag() { return moveRightFlag ;}
+    public boolean getMoveRightFlag() { return moveRightFlag ;}
 
-    public boolean moveLeftFlag() { return moveLeftFlag ;}
-
-    public int getDir() { return dir; }
+    public boolean getMoveLeftFlag() { return moveLeftFlag ;}
 
     //True if A button is pressed
     public void setJumpFlag(boolean flag) {
@@ -114,11 +112,6 @@ public class Mario extends Sprite implements TimeConscious {
     //Sets direction of Mario sprite
     public void setDirection(int value){
         dir = value;
-    }
-
-    //Set moving speed
-    public void setDx(float value){
-        dx = value;
     }
 
     //set form (small, big, fire)
@@ -191,8 +184,7 @@ public class Mario extends Sprite implements TimeConscious {
         spriteLoader.add(marioDeath1);
     }
 
-    public Bitmap flipImage(Bitmap src) {
-        // create new matrix for transformation
+    public Bitmap flipImageH(Bitmap src) {
         Matrix matrix = new Matrix();
         matrix.preScale(-1.0f, 1.0f);
         return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
@@ -222,12 +214,12 @@ public class Mario extends Sprite implements TimeConscious {
                 } else if (form == 2) {
                     currentImage = spriteLoader.get(14);
                 }
-                currentImage = flipImage(currentImage);
+                currentImage = flipImageH(currentImage);
             }
         }
 
         //Moving
-        else if(dir == 1 && ground && (moveLeftFlag||moveRightFlag)) {   //Moving right
+        else if(dir == 1 && (moveLeftFlag||moveRightFlag)) {   //Moving right
             if(timer <= 5){
                 if (form == 0) {
                     currentImage = spriteLoader.get(1);
@@ -267,7 +259,7 @@ public class Mario extends Sprite implements TimeConscious {
             } else if(timer <= 30) {
                 timer = 0;
             }
-        } else if(dir == -1 && ground && (moveLeftFlag||moveRightFlag)){   //Left direction
+        } else if(dir == -1 && (moveLeftFlag||moveRightFlag)){   //Left direction
             if(timer <= 5){
                 if (form == 0) {
                     currentImage = spriteLoader.get(1);
@@ -276,7 +268,7 @@ public class Mario extends Sprite implements TimeConscious {
                 } else if (form == 2) {
                     currentImage = spriteLoader.get(11);
                 }
-                currentImage = flipImage(currentImage);
+                currentImage = flipImageH(currentImage);
                 timer++;
             } else if(timer <= 10){
                 if (form == 0) {
@@ -286,7 +278,7 @@ public class Mario extends Sprite implements TimeConscious {
                 } else if (form == 2) {
                     currentImage = spriteLoader.get(12);
                 }
-                currentImage = flipImage(currentImage);
+                currentImage = flipImageH(currentImage);
                 timer++;
             } else if(timer <= 15){
                 if (form == 0) {
@@ -296,7 +288,7 @@ public class Mario extends Sprite implements TimeConscious {
                 } else if (form == 2) {
                     currentImage = spriteLoader.get(13);
                 }
-                currentImage = flipImage(currentImage);
+                currentImage = flipImageH(currentImage);
                 timer++;
             } else if(timer <= 20){
                 if (form == 0) {
@@ -306,7 +298,7 @@ public class Mario extends Sprite implements TimeConscious {
                 } else if (form == 2) {
                     currentImage = spriteLoader.get(12);
                 }
-                currentImage = flipImage(currentImage);
+                currentImage = flipImageH(currentImage);
                 timer++;
             } else if(timer <= 30) {
                 timer = 0;
@@ -331,7 +323,7 @@ public class Mario extends Sprite implements TimeConscious {
                 } else if (form == 2) {
                     currentImage = spriteLoader.get(10);
                 }
-                currentImage = flipImage(currentImage);
+                currentImage = flipImageH(currentImage);
             }
 
         }
@@ -339,7 +331,12 @@ public class Mario extends Sprite implements TimeConscious {
 
     @Override
     public void tick(Canvas c) {
+        Log.v("TAG", "Is visible: "+visible);
         checkEnemyCollision();
+        //Mario falls into pit
+        if (y >= screenHeight - marioHeight && !jumpFlag) {     //Bottom bound
+            die();
+        }
         if (isDead()) {
             if (Math.abs(dy) > 100) {
                 if (dy > 0) {
@@ -348,8 +345,11 @@ public class Mario extends Sprite implements TimeConscious {
                     dy = -100;
                 }
             }
+            if (y >= 3 * screenHeight) {
+                visible = false;
+            }
         }
-        else if (!isDead()){
+        else {
             //Check collisions with matter
             checkItem();
             checkPlatformIntersect();
@@ -370,15 +370,10 @@ public class Mario extends Sprite implements TimeConscious {
                 dx = 0;
             }
 
-            //Mario falls into pit
-            if (y >= screenHeight - marioHeight && !jumpFlag) {     //Bottom bound
-                //mario dies
-            }
-
             //Jumping limit
             if (ground) {
                 dy = 0;
-            } else if (!ground) {
+            } else {
                 if (Math.abs(dy) > 100) {
                     if (dy > 0) {
                         dy = 100;
@@ -426,19 +421,21 @@ public class Mario extends Sprite implements TimeConscious {
                 if (form == 0) {
                     die();
                     dy = -35f;
-                    Log.v("TAG","dy = "+dy);
+                    visible = true;
                 } else { setForm(--form); }
                 break;
             } else if (left.intersect(s.getRight())) {
                 if (form == 0) {
                     die();
                     dy = -35f;
+                    visible = true;
                 } else { setForm(--form); }
                 break;
             } else if (top.intersect(s.getBot())) {
                 if (form == 0) {
                     die();
                     dy = -35f;
+                    visible = true;
                 } else { setForm(--form); }
                 break;
             } else if (bot.intersect(s.getTop())) {     //Stomp enemy, enemy dies
@@ -528,6 +525,19 @@ public class Mario extends Sprite implements TimeConscious {
             c.drawRect(left,paint);
             c.drawRect(right,paint);
             */
+        }
+        else {
+            if (!deathTimer){
+                view.lives--;
+                deathTimer = true;
+            }
+            else {
+                if (view.lives > 0) {
+                    view.gameState = 4;
+                } else {
+                    view.gameState = 5;
+                }
+            }
         }
     }
 }

@@ -57,7 +57,7 @@ public class World1 extends World{
         distance -= scene.get(0).getBgdx();
         if(distance>1000)
             end = true;
-        if (mario.moveRightFlag() && !mario.moveLeftFlag() && mario.getX2() >= screenWidth / 2  && mario.getDx() >= 0 && !mario.isDead()) {
+        if (mario.getMoveRightFlag() && !mario.getMoveLeftFlag() && mario.getX2() >= screenWidth / 2  && mario.getDx() >= 0 && !mario.isDead()) {
             backgroundMove = true;
         }
         for(Obstacle o : scene){

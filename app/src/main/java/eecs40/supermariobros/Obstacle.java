@@ -3,6 +3,7 @@ package eecs40.supermariobros;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
@@ -29,6 +30,11 @@ public class Obstacle extends Sprite implements TimeConscious{
         right = new Rect((x+imageWidth-imageWidth/2), (y+imageHeight/4), (x+imageWidth), (y+imageHeight-imageHeight/4));
     }
 
+    public Bitmap flipImageV(Bitmap src) {
+        Matrix matrix = new Matrix();
+        matrix.preScale(1.0f, -1.0f);
+        return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
+    }
 
     public void tick(Canvas c){
         x += bgdx;
