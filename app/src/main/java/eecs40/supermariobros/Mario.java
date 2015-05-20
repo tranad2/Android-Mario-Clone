@@ -537,7 +537,7 @@ public class Mario extends Sprite implements TimeConscious {
             Item item = items.get(i);
             if(dst.intersect(item.getRect())){
                 if(item.type == 0){//Mushroom
-                    setForm(2);
+                    setForm(1);
                     view.score += 1000;
                     item.die();
                 }else if(item.type == 1){//Fire Flower
