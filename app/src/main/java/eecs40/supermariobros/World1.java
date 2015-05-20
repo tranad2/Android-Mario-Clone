@@ -14,7 +14,7 @@ public class World1 extends World{
 
     private static final String TAG = "World1";
     private ArrayList<Bitmap> imageLoader;
-    private int tileWidth;
+    private int tileWidth, tileHeight;
     private float distance = 0;
 
     public World1(MarioSurfaceView view){
@@ -26,6 +26,14 @@ public class World1 extends World{
         loadImages(view);
 
         tileWidth = imageLoader.get(0).getWidth();
+        tileHeight = imageLoader.get(0).getHeight();
+
+        addElements(view);
+
+        Log.v(TAG, "" + scene.isEmpty());
+    }
+
+    public void addElements(MarioSurfaceView view){
         int offset = 0;
 
         for(int i = 1; i<=2; i++) {
@@ -33,10 +41,12 @@ public class World1 extends World{
                 scene.add(new Obstacle(j*imageLoader.get(3).getWidth(),screenHeight-imageLoader.get(3).getHeight()*i , imageLoader.get(3)));
             }
         }
+
+        Item item = new Item(imageLoader.get(0).getWidth()*6,screenHeight-imageLoader.get(0).getHeight()*8, 0,view);
         scene.add(new Obstacle(imageLoader.get(0).getWidth()*10,screenHeight-imageLoader.get(0).getHeight()*3, imageLoader.get(0)));
-        enemies.add(new Goomba(2*screenWidth/3,screenHeight/2,view, scene));
-        itemList.add(new Item(imageLoader.get(0).getWidth()*10,screenHeight-imageLoader.get(0).getHeight()*4, 0, view, scene));
-        scene.add(new Obstacle(imageLoader.get(0).getWidth()*6,screenHeight-imageLoader.get(0).getHeight()*7, imageLoader.get(0)));
+        enemies.add(new Goomba(2 * screenWidth / 3, screenHeight / 2, view, scene));
+
+        scene.add(new Obstacle(imageLoader.get(0).getWidth()*6,screenHeight-imageLoader.get(0).getHeight()*7, imageLoader.get(0), item, itemList));
 
         offset = (int)((scene.get(scene.size()-1)).getX()+tileWidth);  //New x after last obstacle
 
@@ -45,16 +55,14 @@ public class World1 extends World{
                 scene.add(new Obstacle(j*imageLoader.get(3).getWidth()+2*offset,screenHeight-imageLoader.get(3).getHeight()*i , imageLoader.get(3)));
             }
         }
-
-
-        Log.v(TAG, "" + scene.isEmpty());
     }
 
     public void tick(Canvas c){
-        clean();
+        //clean();
+
+        Log.v(TAG, ""+itemList);
+
         boolean backgroundMove = false;
-        Log.v(TAG,"Distance "+distance);
-        distance -= scene.get(0).getBgdx();
 
         if (mario.getMoveRightFlag() && !mario.getMoveLeftFlag() && mario.getX2() >= screenWidth / 2  && mario.getDx() >= 0 && !mario.isDead()) {
             backgroundMove = true;

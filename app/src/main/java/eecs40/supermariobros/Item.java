@@ -27,6 +27,28 @@ public class Item extends Sprite implements TimeConscious{
 
     public Item(int x, int y, int type, MarioSurfaceView view, ArrayList<Obstacle> scene){
         super(x, y);
+        initX = x;
+        initY = y;
+        this.scene = scene;
+        this.view = view;
+        screenHeight = view.getHeight();
+        screenWidth = view.getWidth();
+
+        loadImages(view);
+        image = imageLoader.get(type);
+        imageWidth = image.getWidth();
+        imageHeight = image.getHeight();
+        dst = new Rect(x, y, (x+imageWidth), (y+imageHeight));
+
+        top = new Rect((x+imageWidth/4), y, (x+imageWidth-imageWidth/4), (y+imageHeight/4));
+        bot = new Rect((x+imageWidth/4), (y+imageHeight-imageHeight/4), (x+imageWidth-imageWidth/4), (y+imageHeight));
+
+        left = new Rect(x, (y+imageHeight/4), (x+imageWidth/2), (y+imageHeight-imageHeight/4));
+        right = new Rect((x+imageWidth-imageWidth/2), (y+imageHeight/4), (x+imageWidth), (y+imageHeight-imageHeight/4));
+    }
+
+    public Item(int x, int y, int type, MarioSurfaceView view){
+        super(x, y);
         this.scene = scene;
         this.view = view;
         screenHeight = view.getHeight();
@@ -60,10 +82,10 @@ public class Item extends Sprite implements TimeConscious{
     }
 
     public void tick(Canvas c){
-        checkPlatformIntersect();
+        //checkPlatformIntersect();
         if(y>screenHeight+imageHeight)
             die();
-
+        /*
         if(type == 0){
             dx = 7f;
             if(ground){
@@ -80,10 +102,11 @@ public class Item extends Sprite implements TimeConscious{
                 }
             }
         }
+        */
         y += dy;
-        dy += gravity;
+        //dy += gravity;
         x+=dx+bgdx;
-        setLocation( x,  y);
+        setLocation(x, y);
         draw(c);
     }
 
@@ -93,8 +116,8 @@ public class Item extends Sprite implements TimeConscious{
         top.set(x, y, (x+imageWidth), (y+imageHeight/4));
         bot.set(x, (y+imageHeight-imageHeight/4), (x+imageWidth), (y+imageHeight));
         left.set(x, (y+imageHeight/4), (x+imageWidth/2), (y+imageHeight-imageHeight/4));
-        right.set( (x + imageWidth - imageWidth / 2),  (y + imageHeight / 4),  (x + imageWidth),  (y + imageHeight - imageHeight / 4));
-        dst.set(xPos, yPos,  (xPos + imageWidth),  (yPos + imageHeight));
+        right.set((x + imageWidth - imageWidth / 2), (y + imageHeight / 4), (x + imageWidth), (y + imageHeight - imageHeight / 4));
+        dst.set(xPos, yPos, (xPos + imageWidth), (yPos + imageHeight));
     }
 
     public void checkPlatformIntersect(){
@@ -112,6 +135,13 @@ public class Item extends Sprite implements TimeConscious{
         }
     }
 
+    public void revive(){
+        dead = false;
+        visible = false;
+        x = initX;
+        y = initY;
+    }
+
     public void draw(Canvas c){
         if(visible) {
             Paint paint = new Paint();
@@ -123,4 +153,7 @@ public class Item extends Sprite implements TimeConscious{
         }
     }
 
+    public String toString(){
+        return "Item: ("+x+","+y+") Visible: "+visible;
+    }
 }

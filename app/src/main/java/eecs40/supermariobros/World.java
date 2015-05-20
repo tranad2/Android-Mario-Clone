@@ -3,6 +3,7 @@ package eecs40.supermariobros;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -47,6 +48,7 @@ public abstract class World implements TimeConscious{
         for(int i = 0; i<itemList.size(); i++){
             Item item = itemList.get(i);
             if(item.isDead()){
+                Log.v("World", "Dead");
                 itemList.remove(i);
                 i--;
             }

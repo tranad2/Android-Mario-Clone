@@ -377,7 +377,6 @@ public class Mario extends Sprite implements TimeConscious {
 
     @Override
     public void tick(Canvas c) {
-        Log.v("TAG", "Is visible: " + visible);
         if(!dead){
             checkEnemyCollision();
         }
@@ -472,32 +471,41 @@ public class Mario extends Sprite implements TimeConscious {
 
     public void checkEnemyCollision() {
         for (Sprite s : enemies) {
-            if (right.intersect(s.getLeft())) {
-                if (form == 0) {
-                    die();
-                    dy = -35f;
-                    visible = true;
-                } else { setForm(--form); }
-                break;
-            } else if (left.intersect(s.getRight())) {
-                if (form == 0) {
-                    die();
-                    dy = -35f;
-                    visible = true;
-                } else { setForm(--form); }
-                break;
-            } else if (top.intersect(s.getBot())) {
-                if (form == 0) {
-                    die();
-                    dy = -35f;
-                    visible = true;
-                } else { setForm(--form); }
-                break;
-            } else if (bot.intersect(s.getTop())) {     //Stomp enemy, enemy dies
-                dy=-15f;
-                s.die();
-                view.score+=1000;
-                break;
+            if(s.isVisible()) {
+                if (right.intersect(s.getLeft())) {
+                    if (form == 0) {
+                        die();
+                        dy = -35f;
+                        visible = true;
+                    } else {
+                        setForm(--form);
+                    }
+                    break;
+                } else if (left.intersect(s.getRight())) {
+                    if (form == 0) {
+                        die();
+                        dy = -35f;
+                        visible = true;
+                    } else {
+                        setForm(--form);
+                    }
+                    break;
+                } else if (top.intersect(s.getBot())) {
+                    if (form == 0) {
+                        die();
+                        dy = -35f;
+                        visible = true;
+                    } else {
+                        setForm(--form);
+                    }
+                    break;
+                } else if (bot.intersect(s.getTop())) {     //Stomp enemy, enemy dies
+                    dy = -15f;
+                    s.die();
+                    s.setVisible(false);
+                    view.score += 1000;
+                    break;
+                }
             }
         }
     }
@@ -508,7 +516,6 @@ public class Mario extends Sprite implements TimeConscious {
             if(bot.intersect(o.getTop())){//Top intersect
                 ground=true;
                 dy = 0;
-                Log.v("TAG","check platform: dy = "+dy);
                 float d = Math.abs(y+marioHeight-o.getTop().top);  //distance of intersection sides use for offset
                 y-=d-2;
                 break;
@@ -519,6 +526,9 @@ public class Mario extends Sprite implements TimeConscious {
 
             if(top.intersect(o.getBot())){//Bot intersect
                 //if mario top touch object bottom (ceiling), no ground and stop moving in that direction, offset outside rectangle
+                if(o.hasItem() && !o.getItem().isDead()) {
+                    o.getItem().setVisible(true);
+                }
                 dy = -dy;
                 float d = Math.abs(y-o.getBot().bottom);  //distance of intersection sides
                 this.y+=d;
@@ -549,7 +559,7 @@ public class Mario extends Sprite implements TimeConscious {
     public void checkItem(){
         for(int i = 0; i<items.size(); i++){
             Item item = items.get(i);
-            if(dst.intersect(item.getRect())){
+            if(dst.intersect(item.getRect()) && item.isVisible()){
                 if(item.type == 0){//Mushroom
                     setForm(1);
                     view.score += 1000;
@@ -562,6 +572,7 @@ public class Mario extends Sprite implements TimeConscious {
                     view.score+= 100;
                     item.die();
                 }
+                item.setVisible(false);
 
             }
         }

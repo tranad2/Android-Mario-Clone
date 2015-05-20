@@ -60,6 +60,10 @@ public abstract class Sprite{
         //visible = false;
     }
 
+    public void setDead(boolean val){
+        dead = val;
+    }
+
     public void revive(){
         dead = false;
         visible = true;

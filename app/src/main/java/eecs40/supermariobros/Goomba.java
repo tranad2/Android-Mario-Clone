@@ -15,7 +15,6 @@ public class Goomba extends Sprite implements TimeConscious {
     private static final String TAG = "Goomba";
     private Bitmap currentImage;
     private Mario mario;
-    private float dx = 0f, dy;
     private boolean ground;
     private int goombaTimer = 0, imageWidth, imageHeight;
     private final float gravity = 1.4f;
@@ -25,6 +24,11 @@ public class Goomba extends Sprite implements TimeConscious {
 
     public Goomba(int x, int y, MarioSurfaceView view, ArrayList<Obstacle> scene) {
         super(x, y);
+        initX = x;
+        initY = y;
+        dx = -5f;
+        initDx = dx;
+        initDy = dy;
         //Load images
         loadImages(view);
         currentImage = spriteLoader.get(0);
