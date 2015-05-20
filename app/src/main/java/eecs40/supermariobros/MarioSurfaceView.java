@@ -19,13 +19,17 @@ import java.util.ArrayList;
 public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callback, TimeConscious {
     private MarioRenderThread    renderThread;
     private ArrayList<World> levels;
+    private ArrayList<Bitmap> colorSelect;
+    private Bitmap redMario, greenMario, yellowMario, purpleMario;
+    private Rect redRect, greenRect, yellowRect, purpleRect;
+    private int redTouch, greenTouch, yellowTouch, purpleTouch, timer = 0;
     World w1, w2;
     Mario mario;
     Buttons buttons;
     Bitmap title;
     Rect dst;
-    int gameState = 0; //0 = title, 1 = world 1, 2 = world 2, 3 = world 3, 4 = dead, 5 = game over
-    int score = 0, lives = 3, time = 15000;
+    float gameState = 0; //0 = title, 0.5 = color select, 1 = world 1, 2 = world 2, 3 = world 3, 4 = dead, 5 = game over
+    int score = 0, lives = 3, time = 9900, color = 0;
 
     public MarioSurfaceView(Context context) {
         super(context);
@@ -51,6 +55,16 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
         buttons = new Buttons(this);
 
+        loadImages(this);
+        redMario = colorSelect.get(0);
+        greenMario = colorSelect.get(4);
+        yellowMario = colorSelect.get(8);
+        purpleMario = colorSelect.get(12);
+
+        redRect = new Rect(2 * getWidth() / 7, 2 * getHeight() / 5, 2 * getWidth() / 7 + redMario.getWidth(), 2 * getHeight() / 5 + redMario.getHeight());
+        greenRect = new Rect(3 * getWidth() / 7, 2 * getHeight() / 5, 3 * getWidth() / 7 + greenMario.getWidth(), 2 * getHeight() / 5 + greenMario.getHeight());
+        yellowRect = new Rect(4 * getWidth() / 7, 2 * getHeight() / 5, 4 * getWidth() / 7 + yellowMario.getWidth(), 2 * getHeight() / 5 + yellowMario.getHeight());
+        purpleRect = new Rect(5 * getWidth() / 7, 2 * getHeight() / 5, 5 * getWidth() / 7 + purpleMario.getWidth(), 2 * getHeight() / 5 + purpleMario.getHeight());
     }
 
     @Override
@@ -74,8 +88,9 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
                 //Start screen
                 if (gameState == 0) {
-                    gameState++;
+                    gameState += 0.5f;
                 }
+
                 //World screen
                 else if (gameState >= 1 && gameState <= 3) {
                     for (int i = 0; i < e.getPointerCount(); i++) {
@@ -116,6 +131,61 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
+                //Character select screen
+                if (gameState == 0.5) {
+                    if ((e.getY() >= 2 * getHeight() / 5) && (e.getY() <= 2 * getHeight() / 5 + redMario.getHeight())) {
+                        if ((e.getX() >= 2 * getWidth() / 7) && (e.getX() <= 2 * getWidth() / 7 + redMario.getWidth())) {
+                            color = 0;
+
+                            redTouch++;
+                            greenTouch = 0;
+                            yellowTouch = 0;
+                            purpleTouch = 0;
+
+                            greenMario = colorSelect.get(4);
+                            yellowMario = colorSelect.get(8);
+                            purpleMario = colorSelect.get(12);
+                        } else if ((e.getX() >= 3 * getWidth() / 7) && (e.getX() <= 3 * getWidth() / 7 + redMario.getWidth())) {
+                            color = 1;
+
+                            redTouch = 0;
+                            greenTouch++;
+                            yellowTouch = 0;
+                            purpleTouch = 0;
+
+                            redMario = colorSelect.get(0);
+                            yellowMario = colorSelect.get(8);
+                            purpleMario = colorSelect.get(12);
+                        } else if ((e.getX() >= 4 * getWidth() / 7) && (e.getX() <= 4 * getWidth() / 7 + redMario.getWidth())) {
+                            color = 2;
+
+                            redTouch = 0;
+                            greenTouch = 0;
+                            yellowTouch++;
+                            purpleTouch = 0;
+
+                            redMario = colorSelect.get(0);
+                            greenMario = colorSelect.get(4);
+                            purpleMario = colorSelect.get(12);
+                        } else if ((e.getX() >= 5 * getWidth() / 7) && (e.getX() <= 5 * getWidth() / 7 + redMario.getWidth())) {
+                            color = 3;
+
+                            redTouch = 0;
+                            greenTouch = 0;
+                            yellowTouch = 0;
+                            purpleTouch++;
+
+                            redMario = colorSelect.get(0);
+                            greenMario = colorSelect.get(4);
+                            yellowMario = colorSelect.get(8);
+                        }
+                    }
+                    if (redTouch == 2 || greenTouch == 2 || yellowTouch == 2 || purpleTouch == 2) {
+                        gameState += 0.5f;
+                        mario = new Mario(this.getWidth()/4,this.getHeight()/2,w1, this);
+                        w1.setMario(mario);
+                    }
+                }
                 mario.setJumpFlag(false);
                 mario.setFireballFlag(false);
                 mario.setMoveLeftFlag(false);
@@ -128,8 +198,10 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     @Override
     public void onDraw(Canvas c) {
         super.onDraw(c);
-        //background.draw(c);
-        if (gameState > 0 && gameState < 4) {
+        if (gameState == 0.5) {
+            drawColors(c);
+        }
+        else if (gameState > 0.5 && gameState < 4) {
             if (gameState == 1) {
                 if(!w1.end())
                     w1.start(c);
@@ -164,6 +236,19 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
             paint.setTypeface(Typeface.DEFAULT_BOLD);
             c.drawText("Tap Anywhere to Start", getWidth() / 2, 5 * getHeight() / 6, paint);
         }
+
+        //Character select screen
+        else if (gameState == 0.5) {
+            paint = new Paint();
+            paint.setTextSize(getWidth() / 16);
+            paint.setColor(Color.WHITE);
+            paint.setTextAlign(Paint.Align.CENTER);
+            paint.setTypeface(Typeface.DEFAULT_BOLD);
+            c.drawText("Select Your Character", getWidth() / 2, 5 * getHeight() / 6, paint);
+            drawColors(c);
+            doAnim();
+        }
+
         //World screen
         else if (gameState >= 1 && gameState <= 3) {
             if (!mario.isDead()) {
@@ -204,7 +289,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
             }
         }
 
-        if (gameState > 0) {
+        if (gameState > 0.5) {
             mario.tick(c);
             buttons.draw(c);
             drawScore(c);
@@ -221,7 +306,15 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         paint.setColor(Color.WHITE);
         paint.setTextAlign(Paint.Align.LEFT);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
-        c.drawText("Mario", getWidth() / 12, getHeight() / 20, paint);
+        if (color == 0) {
+            c.drawText("Mario", getWidth() / 12, getHeight() / 20, paint);
+        } else if (color == 1) {
+            c.drawText("Luigi", getWidth() / 12, getHeight() / 20, paint);
+        } else if (color == 2) {
+            c.drawText("Wario", getWidth() / 12, getHeight() / 20, paint);
+        } else if (color == 3) {
+            c.drawText("Waluigi", getWidth() / 12, getHeight() / 20, paint);
+        }
         c.drawText(Integer.toString(score), getWidth() / 12, getHeight() / 9, paint);
     }
     protected void drawLives( Canvas c ) {
@@ -241,6 +334,105 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         paint.setTextAlign(Paint.Align.RIGHT);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
         c.drawText("Time", 11 * getWidth() / 12, getHeight() / 20, paint);
-        c.drawText(Integer.toString(time/100), 11 * getWidth() / 12, getHeight()/9, paint);
+        c.drawText(Integer.toString(time / 100), 11 * getWidth() / 12, getHeight()/9, paint);
     }
+
+    public void loadImages(MarioSurfaceView view) {
+        Bitmap redMario1, redMario2, redMario3, redMario4, greenMario1, greenMario2, greenMario3, greenMario4, yellowMario1, yellowMario2, yellowMario3, yellowMario4, purpleMario1, purpleMario2, purpleMario3, purpleMario4;
+        colorSelect = new ArrayList<>();
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        redMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario1, options);
+        redMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario2, options);
+        redMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario3, options);
+        redMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario4, options);
+        greenMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.biggreenmario1, options);
+        greenMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.biggreenmario2, options);
+        greenMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.biggreenmario3, options);
+        greenMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.biggreenmario4, options);
+        yellowMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigyellowmario1, options);
+        yellowMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigyellowmario2, options);
+        yellowMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigyellowmario3, options);
+        yellowMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigyellowmario4, options);
+        purpleMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigpurplemario1, options);
+        purpleMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigpurplemario2, options);
+        purpleMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigpurplemario3, options);
+        purpleMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigpurplemario4, options);
+
+        colorSelect.add(redMario1);     //0
+        colorSelect.add(redMario2);     //1
+        colorSelect.add(redMario3);     //2
+        colorSelect.add(redMario4);     //3
+        colorSelect.add(greenMario1);   //4
+        colorSelect.add(greenMario2);   //5
+        colorSelect.add(greenMario3);   //6
+        colorSelect.add(greenMario4);   //7
+        colorSelect.add(yellowMario1);  //8
+        colorSelect.add(yellowMario2);  //9
+        colorSelect.add(yellowMario3);  //10
+        colorSelect.add(yellowMario4);  //11
+        colorSelect.add(purpleMario1);  //12
+        colorSelect.add(purpleMario2);  //13
+        colorSelect.add(purpleMario3);  //14
+        colorSelect.add(purpleMario4);  //15
+    }
+
+    public void doAnim(){
+        if(timer <= 5){
+            if (color == 0) {
+                redMario = colorSelect.get(1);
+            } else if (color == 1) {
+                greenMario = colorSelect.get(5);
+            } else if (color == 2) {
+                yellowMario = colorSelect.get(9);
+            } else if (color == 3) {
+                purpleMario = colorSelect.get(13);
+            }
+            timer++;
+        } else if(timer <= 10){
+            if (color == 0) {
+                redMario = colorSelect.get(2);
+            } else if (color == 1) {
+                greenMario = colorSelect.get(6);
+            } else if (color == 2) {
+                yellowMario = colorSelect.get(10);
+            } else if (color == 3) {
+                purpleMario = colorSelect.get(14);
+            }
+            timer++;
+        } else if(timer <= 15){
+            if (color == 0) {
+                redMario = colorSelect.get(3);
+            } else if (color == 1) {
+                greenMario = colorSelect.get(7);
+            } else if (color == 2) {
+                yellowMario = colorSelect.get(11);
+            } else if (color == 3) {
+                purpleMario = colorSelect.get(15);
+            }
+            timer++;
+        } else if(timer <= 20){
+            if (color == 0) {
+                redMario = colorSelect.get(2);
+            } else if (color == 1) {
+                greenMario = colorSelect.get(6);
+            } else if (color == 2) {
+                yellowMario = colorSelect.get(10);
+            } else if (color == 3) {
+                purpleMario = colorSelect.get(14);
+            }
+            timer++;
+        } else if(timer <= 30) {
+            timer = 0;
+        }
+    }
+
+    public void drawColors(Canvas c){
+        Paint paint = new Paint();
+        c.drawBitmap(redMario, null, redRect, paint);
+        c.drawBitmap(greenMario, null, greenRect, paint);
+        c.drawBitmap(yellowMario, null, yellowRect, paint);
+        c.drawBitmap(purpleMario, null, purpleRect, paint);
+    }
+
 }

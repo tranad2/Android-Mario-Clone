@@ -19,7 +19,7 @@ public class Mario extends Sprite implements TimeConscious {
     private ArrayList<Obstacle> scene;
     private ArrayList<Item> items;
     private ArrayList<Sprite> enemies;
-    private Bitmap currentImage;
+    private Bitmap currentImage, smallMario1, smallMario2, smallMario3, smallMario4, smallMario5, bigMario1, bigMario2, bigMario3, bigMario4, bigMario5, fireMario1, fireMario2, fireMario3, fireMario4, fireMario5, marioDeath1;
     private boolean ground = true, jumpFlag, fireballFlag, moveLeftFlag, moveRightFlag, deathTimer = false;
     private int marioWidth, marioHeight, screenHeight, screenWidth, x2, y2;
     private int dir = 1, timer = 0, fireballDelay;
@@ -134,48 +134,89 @@ public class Mario extends Sprite implements TimeConscious {
 
         BitmapFactory.Options options = new BitmapFactory.Options();
 
-        Bitmap smallRedMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario1, options);
+        if (view.color == 0) {
+            smallMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario1, options);
+            smallMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario2, options);
+            smallMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario3, options);
+            smallMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario4, options);
+            smallMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario5, options);
+            bigMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario1, options);
+            bigMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario2, options);
+            bigMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario3, options);
+            bigMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario4, options);
+            bigMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario5, options);
+            fireMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.firemario1, options);
+            fireMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.firemario2, options);
+            fireMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.firemario3, options);
+            fireMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.firemario4, options);
+            fireMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.firemario5, options);
+            marioDeath1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.mariodeath1, options);
+        }
+        else if (view.color == 1) {
+            smallMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallgreenmario1, options);
+            smallMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallgreenmario2, options);
+            smallMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallgreenmario3, options);
+            smallMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallgreenmario4, options);
+            smallMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallgreenmario5, options);
+            bigMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.biggreenmario1, options);
+            bigMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.biggreenmario2, options);
+            bigMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.biggreenmario3, options);
+            bigMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.biggreenmario4, options);
+            bigMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.biggreenmario5, options);
+            fireMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.greenfiremario1, options);
+            fireMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.greenfiremario2, options);
+            fireMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.greenfiremario3, options);
+            fireMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.greenfiremario4, options);
+            fireMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.greenfiremario5, options);
+            marioDeath1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.greenmariodeath1, options);
+        }
+        else if (view.color == 2) {
+            smallMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallyellowmario1, options);
+            smallMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallyellowmario2, options);
+            smallMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallyellowmario3, options);
+            smallMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallyellowmario4, options);
+            smallMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallyellowmario5, options);
+            bigMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigyellowmario1, options);
+            bigMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigyellowmario2, options);
+            bigMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigyellowmario3, options);
+            bigMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigyellowmario4, options);
+            bigMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigyellowmario5, options);
+            fireMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.yellowfiremario1, options);
+            fireMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.yellowfiremario2, options);
+            fireMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.yellowfiremario3, options);
+            fireMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.yellowfiremario4, options);
+            fireMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.yellowfiremario5, options);
+            marioDeath1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.yellowmariodeath1, options);
+        }
+        else if (view.color == 3) {
+            smallMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallpurplemario1, options);
+            smallMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallpurplemario2, options);
+            smallMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallpurplemario3, options);
+            smallMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallpurplemario4, options);
+            smallMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallpurplemario5, options);
+            bigMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigpurplemario1, options);
+            bigMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigpurplemario2, options);
+            bigMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigpurplemario3, options);
+            bigMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigpurplemario4, options);
+            bigMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigpurplemario5, options);
+            fireMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.purplefiremario1, options);
+            fireMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.purplefiremario2, options);
+            fireMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.purplefiremario3, options);
+            fireMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.purplefiremario4, options);
+            fireMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.purplefiremario5, options);
+            marioDeath1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.purplemariodeath1, options);
+        }
 
-        Bitmap smallRedMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario2, options);
-
-        Bitmap smallRedMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario3, options);
-
-        Bitmap smallRedMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario4, options);
-
-        Bitmap smallRedMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.smallredmario5, options);
-
-        Bitmap bigRedMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario1, options);
-
-        Bitmap bigRedMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario2, options);
-
-        Bitmap bigRedMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario3, options);
-
-        Bitmap bigRedMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario4, options);
-
-        Bitmap bigRedMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.bigredmario5, options);
-
-        Bitmap fireMario1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.firemario1, options);
-
-        Bitmap fireMario2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.firemario2, options);
-
-        Bitmap fireMario3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.firemario3, options);
-
-        Bitmap fireMario4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.firemario4, options);
-
-        Bitmap fireMario5 = BitmapFactory.decodeResource(view.getResources(), R.drawable.firemario5, options);
-
-        Bitmap marioDeath1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.mariodeath1, options);
-
-        spriteLoader.add(smallRedMario1);
-        spriteLoader.add(smallRedMario2);
-        spriteLoader.add(smallRedMario3);
-        spriteLoader.add(smallRedMario4);
-        spriteLoader.add(smallRedMario5);
-        spriteLoader.add(bigRedMario1);
-        spriteLoader.add(bigRedMario2);
-        spriteLoader.add(bigRedMario3);
-        spriteLoader.add(bigRedMario4);
-        spriteLoader.add(bigRedMario5);
+        spriteLoader.add(smallMario1);
+        spriteLoader.add(smallMario2);
+        spriteLoader.add(smallMario3);
+        spriteLoader.add(smallMario4);
+        spriteLoader.add(smallMario5);
+        spriteLoader.add(bigMario1);
+        spriteLoader.add(bigMario2);
+        spriteLoader.add(bigMario3);
+        spriteLoader.add(bigMario4);
+        spriteLoader.add(bigMario5);
         spriteLoader.add(fireMario1);
         spriteLoader.add(fireMario2);
         spriteLoader.add(fireMario3);
