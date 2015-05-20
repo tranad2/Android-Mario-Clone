@@ -117,6 +117,7 @@ public class Fireball extends Sprite implements TimeConscious{
 
     public void setLocation(int xPos, int yPos) {
         dst.set(xPos, yPos, xPos+fireballWidth, yPos+fireballHeight);
+
     }
 
     public void draw (Canvas c) {
@@ -129,6 +130,9 @@ public class Fireball extends Sprite implements TimeConscious{
             x += dx + bgdx;
         } else {
             x -= dx - bgdx;
+        }
+        if (x >= screenWidth) {
+            visible = false;
         }
         setLocation(x, y);
         doAnim();
