@@ -70,6 +70,18 @@ public abstract class World implements TimeConscious{
         tick(c);
     }
 
+    public void reset(){
+        for(Obstacle o : scene){
+            o.revive();
+        }
+        for(Sprite e : enemies){
+            e.revive();
+        }
+        for(Item i : itemList){
+            i.revive();
+        }
+    }
+
     public void setMario(Mario mario){ this.mario = mario; }
 
     protected abstract void draw(Canvas c);

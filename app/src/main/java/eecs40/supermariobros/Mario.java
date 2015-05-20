@@ -29,8 +29,11 @@ public class Mario extends Sprite implements TimeConscious {
     private MarioSurfaceView view;
 
 
+
     public Mario(int x, int y, World w, MarioSurfaceView view) {
         super(x, y);
+        initX = x;
+        initY = y;
         this.view = view;
 
         //Load default bitmap
@@ -88,6 +91,8 @@ public class Mario extends Sprite implements TimeConscious {
     public int getX2() { return x2; }
 
     public float getDx() { return dx; }
+
+    public void setDy(float dy) { this.dy = dy;}
 
     public boolean getMoveRightFlag() { return moveRightFlag ;}
 
@@ -372,8 +377,10 @@ public class Mario extends Sprite implements TimeConscious {
 
     @Override
     public void tick(Canvas c) {
-        Log.v("TAG", "Is visible: "+visible);
-        checkEnemyCollision();
+        Log.v("TAG", "Is visible: " + visible);
+        if(!dead){
+            checkEnemyCollision();
+        }
         //Mario falls into pit
         if (y >= screenHeight - marioHeight && !jumpFlag) {     //Bottom bound
             die();
@@ -451,8 +458,15 @@ public class Mario extends Sprite implements TimeConscious {
         draw(c);
 
         //Draw fireballs
-        for(Fireball f : fireballs){
-            f.tick(c);
+        for(int i = 0; i<fireballs.size(); i++){
+            Fireball f = fireballs.get(i);
+            if(visible) {
+                f.tick(c);
+            }
+            if(!visible){
+                fireballs.remove(i);
+                i--;
+            }
         }
     }
 
@@ -580,5 +594,9 @@ public class Mario extends Sprite implements TimeConscious {
                 }
             }
         }
+    }
+
+    public void setDeathTimer(boolean val){
+        deathTimer = val;
     }
 }

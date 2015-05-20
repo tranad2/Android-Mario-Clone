@@ -6,25 +6,36 @@ import android.graphics.Rect;
 public abstract class Sprite{
 
     protected int x, y;
-    protected float bgdx;
+    protected float bgdx, dx=0, dy=0;
     protected Rect dst, top, bot, left, right;
     protected boolean visible = true;
     protected boolean dead = false;
+    protected int initX, initY;
+    protected float initDx, initDy;
 
     public Sprite(int x, int y){
         this.x = x;
         this.y = y;
+        initX = x;
+        initY = y;
+        initDx = dx;
+        initDy = dy;
     }
 
     public void setBackgroundDx(float bgdx) { this.bgdx = bgdx; }
 
-    public float getX(){
+    public int getX(){
         return x;
     }
 
-    public float getY(){
+    public int getY(){
         return y;
     }
+
+    public void setX(int x){this.x = x;}
+
+    public void setY(int y){this.y= y;}
+
 
     public Rect getRect(){
         return dst;
@@ -47,6 +58,13 @@ public abstract class Sprite{
     public void die(){
         dead = true;
         //visible = false;
+    }
+
+    public void revive(){
+        dead = false;
+        visible = true;
+        x = initX;
+        y = initY;
     }
 
     public boolean isDead(){

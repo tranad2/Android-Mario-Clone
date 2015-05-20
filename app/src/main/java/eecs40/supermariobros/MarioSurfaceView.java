@@ -137,6 +137,17 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                 //Retry screen
                 else if (gameState == 4) {
                     //Restart current level
+                    if(world == 1) {
+                        gameState = 1;
+                        mario.revive();
+                        mario.setDeathTimer(false);
+                        mario.setDy(0);
+                        w1.reset();
+                    }
+                    else if(world == 2)
+                        gameState = 2;
+                    else if(world == 3)
+                        gameState = 3;
                 }
                 //Game Over screen
                 else if (gameState == 5) {

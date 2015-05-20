@@ -15,7 +15,7 @@ public class Goomba extends Sprite implements TimeConscious {
     private static final String TAG = "Goomba";
     private Bitmap currentImage;
     private Mario mario;
-    private float dx = -5f, dy;
+    private float dx = 0f, dy;
     private boolean ground;
     private int goombaTimer = 0, imageWidth, imageHeight;
     private final float gravity = 1.4f;
