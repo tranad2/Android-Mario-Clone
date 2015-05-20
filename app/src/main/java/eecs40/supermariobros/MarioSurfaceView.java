@@ -28,8 +28,8 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     Buttons buttons;
     Bitmap title;
     Rect dst;
-    float gameState = 0; //0 = title, 0.5 = color select, 1 = world 1, 2 = world 2, 3 = world 3, 4 = dead, 5 = game over
-    int score = 0, lives = 3, time = 9900, color = 0;
+    float gameState = 0; //0 = title, 0.5 = color select, 0.75 = stage select,  1 = world 1, 2 = world 2, 3 = world 3, 4 = dead, 5 = game over
+    int world = 0, score = 0, lives = 3, time = 9900, color = 0;
 
     public MarioSurfaceView(Context context) {
         super(context);
@@ -89,6 +89,21 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                 //Start screen
                 if (gameState == 0) {
                     gameState += 0.5f;
+                }
+
+                if (gameState == 0.75) {
+                    if ((e.getY() >= 2 * getHeight() / 5) && (e.getY() <= 2 * getHeight() / 5 + redMario.getHeight())) {
+                        if (e.getX() >= 3 * getWidth() / 12 && e.getX() <= 5 * getWidth() / 12 ){
+                            world = 1;
+                            gameState += 0.25f;
+                        } else if (e.getX() > 5 * getWidth() / 12 && e.getX() < 7 * getWidth() / 12 ){
+                            world = 2;
+                            gameState += 0.25f;
+                        } else if (e.getX() >= 7 * getWidth() / 12 && e.getX() <= 9 * getWidth() / 12 ) {
+                            world = 3;
+                            gameState += 0.25f;
+                        }
+                    }
                 }
 
                 //World screen
@@ -181,7 +196,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                         }
                     }
                     if (redTouch == 2 || greenTouch == 2 || yellowTouch == 2 || purpleTouch == 2) {
-                        gameState += 0.5f;
+                        gameState += 0.25f;
                         mario = new Mario(this.getWidth()/4,this.getHeight()/2,w1, this);
                         w1.setMario(mario);
                     }
@@ -195,7 +210,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         return true;
     }
 
-    @Override
+        @Override
     public void onDraw(Canvas c) {
         super.onDraw(c);
         if (gameState == 0.5) {
@@ -216,7 +231,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     @Override
     public void tick( Canvas c ) {
         Paint paint = new Paint();
-        Log.v("TAG", "gameState: "+gameState);
+        Log.v("TAG", "gameState: " + gameState);
 
         //Fill background with blue for world background
         if (gameState <= 3) {
@@ -247,6 +262,16 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
             c.drawText("Select Your Character", getWidth() / 2, 5 * getHeight() / 6, paint);
             drawColors(c);
             doAnim();
+        } else if (gameState == 0.75) {
+            paint = new Paint();
+            paint.setTextSize(getWidth() / 16);
+            paint.setColor(Color.WHITE);
+            paint.setTextAlign(Paint.Align.CENTER);
+            paint.setTypeface(Typeface.DEFAULT_BOLD);
+            c.drawText("Select Your Stage", getWidth() / 2, 5 * getHeight() / 6, paint);
+            c.drawText("1", 2 * getWidth() / 6, 8 * getHeight() / 15, paint);
+            c.drawText("2", 3 * getWidth() / 6, 8 * getHeight() / 15, paint);
+            c.drawText("3", 4 * getWidth() / 6, 8 * getHeight() / 15, paint);
         }
 
         //World screen
@@ -289,7 +314,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
             }
         }
 
-        if (gameState > 0.5) {
+        if (gameState > 0.75) {
             mario.tick(c);
             buttons.draw(c);
             drawScore(c);
@@ -434,5 +459,4 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         c.drawBitmap(yellowMario, null, yellowRect, paint);
         c.drawBitmap(purpleMario, null, purpleRect, paint);
     }
-
 }
