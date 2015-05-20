@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Fireball extends Sprite implements TimeConscious{
     private ArrayList<Bitmap> spriteLoader;
-    private Bitmap currentImage;
+    private Bitmap currentImage,fireball1, fireball2, fireball3, fireball4;
     private int x, y, dir = 1, timer = 0, fireballWidth, fireballHeight, screenWidth, screenHeight;
     private float dx = 40f;
     private Rect dst;
@@ -40,10 +40,27 @@ public class Fireball extends Sprite implements TimeConscious{
     public void loadImages(MarioSurfaceView view){
         spriteLoader = new ArrayList<>();
         BitmapFactory.Options options = new BitmapFactory.Options();
-        Bitmap fireball1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.fireball1, options);
-        Bitmap fireball2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.fireball2, options);
-        Bitmap fireball3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.fireball3, options);
-        Bitmap fireball4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.fireball4, options);
+        if (view.color == 0) {
+            fireball1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.fireball1, options);
+            fireball2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.fireball2, options);
+            fireball3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.fireball3, options);
+            fireball4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.fireball4, options);
+        } else if (view.color == 1) {
+            fireball1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.greenfireball1, options);
+            fireball2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.greenfireball2, options);
+            fireball3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.greenfireball3, options);
+            fireball4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.greenfireball4, options);
+        } else if (view.color == 2){
+            fireball1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.yellowfireball1, options);
+            fireball2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.yellowfireball2, options);
+            fireball3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.yellowfireball3, options);
+            fireball4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.yellowfireball4, options);
+        } else if (view.color == 3) {
+            fireball1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.purplefireball1, options);
+            fireball2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.purplefireball2, options);
+            fireball3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.purplefireball3, options);
+            fireball4 = BitmapFactory.decodeResource(view.getResources(), R.drawable.purplefireball4, options);
+        }
 
         spriteLoader.add(fireball1);
         spriteLoader.add(fireball2);
