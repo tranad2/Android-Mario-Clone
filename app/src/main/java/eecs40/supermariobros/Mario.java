@@ -386,6 +386,7 @@ public class Mario extends Sprite implements TimeConscious {
             die();
             setForm(0);
             dy = -35f;
+            visible = true;
         }
         if (isDead()) {
             if (Math.abs(dy) > 100) {

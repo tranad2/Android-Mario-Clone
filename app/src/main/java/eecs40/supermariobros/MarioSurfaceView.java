@@ -173,7 +173,6 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                     if (redTouch == 2 || greenTouch == 2 || yellowTouch == 2 || purpleTouch == 2) {
                         gameState = 0.75f;
                         mario = new Mario(this.getWidth()/4,this.getHeight()/2,w1, this);
-                        w1.setMario(mario);
                     }
                     break;
                 }
@@ -183,12 +182,15 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                     if ((e.getY() >= 2 * getHeight() / 5) && (e.getY() <= 2 * getHeight() / 5 + redMario.getHeight())) {
                         if (e.getX() >= 3 * getWidth() / 12 && e.getX() <= 5 * getWidth() / 12 ){
                             world = 1;
+                            w1.setMario(mario);
                             gameState = 1;
                         } else if (e.getX() > 5 * getWidth() / 12 && e.getX() < 7 * getWidth() / 12 ){
                             world = 2;
+                            //w2.setMario(mario);
                             gameState = 2;
                         } else if (e.getX() >= 7 * getWidth() / 12 && e.getX() <= 9 * getWidth() / 12 ) {
                             world = 3;
+                            //w3.setMario(mario);
                             gameState = 3f;
                         }
                     }
@@ -206,17 +208,18 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                 //Retry screen
                 else if (gameState == 4) {
                     //Restart current level
+                    //TODO: respawn items and enemies
                     if(world == 1) {
                         gameState = 1;
-                        mario.revive();
-                        mario.setDeathTimer(false);
-                        mario.setDy(0);
                         w1.reset();
                     } else if(world == 2) {
                         gameState = 2;
                     } else if(world == 3) {
                         gameState = 3;
                     }
+                    mario.revive();
+                    mario.setDeathTimer(false);
+                    mario.setDy(0);
                     time = 10000;
                 }
 
@@ -370,7 +373,6 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
     //In-game HUD
     protected void drawScore( Canvas c ) {
-        //Score
         Paint paint = new Paint() ;
         paint.setTextSize(getWidth() / 36);
         paint.setColor(Color.WHITE);
@@ -388,7 +390,6 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         c.drawText(Integer.toString(score), getWidth() / 12, getHeight() / 9, paint);
     }
     protected void drawLives( Canvas c ) {
-        //Start with 3 lives
         Paint paint = new Paint() ;
         paint.setTextSize(getWidth() / 36);
         paint.setColor(Color.WHITE);
