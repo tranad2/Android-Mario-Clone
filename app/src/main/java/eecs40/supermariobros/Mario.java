@@ -381,8 +381,11 @@ public class Mario extends Sprite implements TimeConscious {
             checkEnemyCollision();
         }
         //Mario falls into pit
-        if (y >= screenHeight - marioHeight && !jumpFlag) {     //Bottom bound
+        if (y >= screenHeight && !dead) {
             die();
+            setForm(0);
+            dy = -35f;
+            visible = true;
         }
         if (isDead()) {
             if (Math.abs(dy) > 100) {
@@ -459,10 +462,10 @@ public class Mario extends Sprite implements TimeConscious {
         //Draw fireballs
         for(int i = 0; i<fireballs.size(); i++){
             Fireball f = fireballs.get(i);
-            if(visible) {
+            if(f.visible) {
                 f.tick(c);
             }
-            if(!visible){
+            if(!f.visible){
                 fireballs.remove(i);
                 i--;
             }
@@ -563,15 +566,13 @@ public class Mario extends Sprite implements TimeConscious {
                 if(item.type == 0){//Mushroom
                     setForm(1);
                     view.score += 1000;
-                    item.die();
                 }else if(item.type == 1){//Fire Flower
                     setForm(2);
                     view.score += 1000;
-                    item.die();
                 }else{//Coin
                     view.score+= 100;
-                    item.die();
                 }
+                item.die();
                 item.setVisible(false);
 
             }
