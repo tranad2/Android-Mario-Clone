@@ -388,11 +388,11 @@ public class Mario extends Sprite implements TimeConscious {
             visible = true;
         }
         if (isDead()) {
-            if (Math.abs(dy) > 100) {
+            if (Math.abs(dy) > 40) {
                 if (dy > 0) {
-                    dy = 100;
+                    dy = 40;
                 } else {
-                    dy = -100;
+                    dy = -40;
                 }
             }
             if (y >= 3 * screenHeight) {
@@ -424,11 +424,11 @@ public class Mario extends Sprite implements TimeConscious {
             if (ground) {
                 dy = 0;
             } else {
-                if (Math.abs(dy) > 100) {
+                if (Math.abs(dy) > 30) {
                     if (dy > 0) {
-                        dy = 100;
+                        dy = 30;
                     } else {
-                        dy = -100;
+                        dy = -30;
                     }
                 }
             }

@@ -23,7 +23,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     private Bitmap redMario, greenMario, yellowMario, purpleMario;
     private Rect redRect, greenRect, yellowRect, purpleRect;
     private int redTouch, greenTouch, yellowTouch, purpleTouch, timer = 0;
-    World w1, w2;
+    World w1, w2, w3;
     Mario mario;
     Buttons buttons;
     Bitmap title;
@@ -44,6 +44,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         levels = new ArrayList<>();
         w1 = new World1(this);
         w2 = new World2(this);
+        w3 = new World3(this);
         levels.add(w1);
 
         mario = new Mario(this.getWidth()/4,this.getHeight()/2,w1, this);
@@ -186,11 +187,11 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                             gameState = 1;
                         } else if (e.getX() > 5 * getWidth() / 12 && e.getX() < 7 * getWidth() / 12 ){
                             world = 2;
-                            //w2.setMario(mario);
+                            w2.setMario(mario);
                             gameState = 2;
                         } else if (e.getX() >= 7 * getWidth() / 12 && e.getX() <= 9 * getWidth() / 12 ) {
                             world = 3;
-                            //w3.setMario(mario);
+                            w3.setMario(mario);
                             gameState = 3f;
                         }
                     }
@@ -240,9 +241,8 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                     yellowMario = colorSelect.get(8);
                     purpleMario = colorSelect.get(12);
                     w1.reset();
-                    //TODO
-                    //w2.reset();
-                    //w3.reset();
+                    w2.reset();
+                    w3.reset();
                 }
                 break;
         }
@@ -261,11 +261,9 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
             if(gameState == 1) {
                 w1.start(c);
             } else if(gameState == 2) {
-                //TODO
-                //w2.start(c);
+                w2.start(c);
             }else if (gameState == 3) {
-                //TODO
-                //w3.start(c);
+                w3.start(c);
             }
             mario.draw(c);
             buttons.draw(c);
@@ -331,11 +329,9 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
             if (gameState == 1) {
                 w1.start(c);
             } else if(gameState == 2) {
-                //TODO
-                //w2.start(c);
+                w2.start(c);
             } else if (gameState == 3) {
-                //TODO
-                //w3.start(c);
+                w3.start(c);
             }
         }
 

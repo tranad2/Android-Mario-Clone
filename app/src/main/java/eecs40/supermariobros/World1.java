@@ -13,8 +13,6 @@ import java.util.ArrayList;
 public class World1 extends World{
 
     private static final String TAG = "World1";
-    private int tileWidth;
-    private float distance = 0;
 
     public World1(MarioSurfaceView view){
         super(view);
@@ -26,21 +24,21 @@ public class World1 extends World{
 
         for(int i = 1; i<=2; i++) {
             for(int j = 0; j<50; j++) {
-                scene.add(new Obstacle(j*imageLoader.get(3).getWidth(),screenHeight-imageLoader.get(3).getHeight()*i , imageLoader.get(3)));
+                scene.add(new Obstacle(j*imageLoader.get(3).getWidth(),screenHeight-imageLoader.get(3).getHeight()*i , imageLoader.get(1)));
             }
         }
 
         Item item = new Item(imageLoader.get(0).getWidth()*6,screenHeight-imageLoader.get(0).getHeight()*8, 0,view);
-        scene.add(new Obstacle(imageLoader.get(0).getWidth()*10,screenHeight-imageLoader.get(0).getHeight()*3, imageLoader.get(0)));
+        scene.add(new Obstacle(imageLoader.get(0).getWidth()*10,screenHeight-imageLoader.get(0).getHeight()*5, imageLoader.get(0)));
         enemies.add(new Goomba(2 * screenWidth / 3, screenHeight / 2, view, scene));
 
         scene.add(new Obstacle(imageLoader.get(0).getWidth()*6,screenHeight-imageLoader.get(0).getHeight()*7, imageLoader.get(0), item, itemList));
 
-        offset = (int)((scene.get(scene.size()-1)).getX()+tileWidth);  //New x after last obstacle
+        offset = ((scene.get(scene.size()-1)).getX()+tileWidth);  //New x after last obstacle
 
         for(int i = 1; i<=2; i++) {
             for(int j = 0; j<10; j++) {
-                scene.add(new Obstacle(j*imageLoader.get(3).getWidth()+2*offset,screenHeight-imageLoader.get(3).getHeight()*i , imageLoader.get(3)));
+                scene.add(new Obstacle(j*imageLoader.get(3).getWidth()+2*offset,screenHeight-imageLoader.get(3).getHeight()*i , imageLoader.get(1)));
             }
         }
     }
