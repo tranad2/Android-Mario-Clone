@@ -13,24 +13,12 @@ import java.util.ArrayList;
 public class World1 extends World{
 
     private static final String TAG = "World1";
-    private ArrayList<Bitmap> imageLoader;
-    private int tileWidth, tileHeight;
+    private int tileWidth;
     private float distance = 0;
 
     public World1(MarioSurfaceView view){
         super(view);
-        screenWidth = view.getWidth();
-        screenHeight = view.getHeight();
-
-
-        loadImages(view);
-
-        tileWidth = imageLoader.get(0).getWidth();
-        tileHeight = imageLoader.get(0).getHeight();
-
         addElements(view);
-
-        Log.v(TAG, "" + scene.isEmpty());
     }
 
     public void addElements(MarioSurfaceView view){
@@ -56,103 +44,4 @@ public class World1 extends World{
             }
         }
     }
-
-    public void tick(Canvas c){
-        //clean();
-
-        Log.v(TAG, ""+itemList);
-
-        boolean backgroundMove = false;
-
-        if (mario.getMoveRightFlag() && !mario.getMoveLeftFlag() && mario.getX2() >= screenWidth / 2  && mario.getDx() >= 0 && !mario.isDead()) {
-            backgroundMove = true;
-        }
-        for(Obstacle o : scene){
-            if (backgroundMove) {
-                o.setBackgroundDx(-15f);
-            }
-            else if ( mario.getDx()== 0 ){
-                o.setBackgroundDx(0f);
-                backgroundMove = false;
-            }
-            else {
-                o.setBackgroundDx(0f);
-                backgroundMove = false;
-            }
-            o.tick(c);
-        }
-        for(Sprite s : enemies){
-            if (backgroundMove) {
-                s.setBackgroundDx(-15f);
-            } else if (mario.getDx() == 0) {
-                s.setBackgroundDx(0f);
-                backgroundMove = false;
-            } else {
-                s.setBackgroundDx(0f);
-                backgroundMove = false;
-            }
-            s.tick(c);
-        }
-
-        for(Item i : itemList){
-            if (backgroundMove) {
-                i.setBackgroundDx(-15f);
-            } else if (mario.getDx() == 0) {
-                i.setBackgroundDx(0f);
-                backgroundMove = false;
-            } else {
-                i.setBackgroundDx(0f);
-                backgroundMove = false;
-            }
-            i.tick(c);
-        }
-
-        for(Fireball f : mario.getFireballs()) {
-            if (backgroundMove) {
-                f.setBackgroundDx(-15f);
-            } else if (mario.getDx() == 0) {
-                f.setBackgroundDx(0f);
-                backgroundMove = false;
-            } else {
-                f.setBackgroundDx(0f);
-                backgroundMove = false;
-            }
-        }
-    }
-
-    protected void draw(Canvas c){
-        for(Obstacle o : scene){
-            o.draw(c);
-        }
-        for(Sprite s : enemies){
-            s.draw(c);
-        }
-        for(Item i : itemList){
-            i.draw(c);
-        }
-    }
-
-
-
-
-    public void loadImages(MarioSurfaceView view){
-        imageLoader = new ArrayList<>();
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-
-        Bitmap block1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.block1, options);
-        Bitmap block2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.block2, options);
-        Bitmap brick1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.brick1, options);
-        Bitmap tile1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.tile1, options);
-        Bitmap mushroom1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.mushroom1, options);
-
-        imageLoader.add(block1);
-        imageLoader.add(block2);
-        imageLoader.add(brick1);
-        imageLoader.add(tile1);
-        imageLoader.add(mushroom1);
-    }
-
-
-
 }
