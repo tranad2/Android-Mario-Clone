@@ -81,6 +81,8 @@ public class Bullet extends Sprite implements TimeConscious{
             c.drawRect(right, paint);
         }
     }
+
+    //Checks side collision and resets position
     public void checkSideIntersect(){
         for(Obstacle o: scene){
             if(o.getLeft().intersect(right) || o.getRight().intersect(left)){
@@ -91,6 +93,7 @@ public class Bullet extends Sprite implements TimeConscious{
         }
     }
 
+    //Change Bullet location
     public void setLocation(int xPos, int yPos) {
         x = xPos;
         y = yPos;

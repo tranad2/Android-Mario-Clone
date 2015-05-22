@@ -24,6 +24,7 @@ public class Flag extends Obstacle {
         right = new Rect(x, y-image.getHeight(), x+image.getWidth(), y);
     }
 
+    //Change Flag location
     public void setLocation(int x, int y){
         dst.set(x, y-image.getHeight(), x+image.getWidth(), y);
         top.set(x, y-image.getHeight(), x+image.getWidth(), y);

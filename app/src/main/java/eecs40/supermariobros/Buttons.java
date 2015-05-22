@@ -43,6 +43,7 @@ public class Buttons implements TimeConscious {
         dst4 = new Rect( x1, y1, x2, y2 );  //B button
     }
 
+    //Returns length of button
     public int getButtonLength() { return y2 - y1; }
 
     public void tick(Canvas c) {

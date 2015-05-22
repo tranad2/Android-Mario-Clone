@@ -22,6 +22,7 @@ public abstract class Sprite{
         initDy = dy;
     }
 
+    //set background speed
     public void setBackgroundDx(float bgdx) { this.bgdx = bgdx; }
 
     public int getX(){
@@ -35,7 +36,6 @@ public abstract class Sprite{
     public void setX(int x){this.x = x;}
 
     public void setY(int y){this.y= y;}
-
 
     public Rect getRect(){
         return dst;
@@ -55,15 +55,17 @@ public abstract class Sprite{
 
     public Rect getLeft(){ return left; }
 
+    //sprite is dead
     public void die(){
         dead = true;
-        //visible = false;
     }
 
+    //@param val set death to val
     public void setDead(boolean val){
         dead = val;
     }
 
+    //return sprite to initial living state
     public void revive(){
         dead = false;
         visible = true;
@@ -71,18 +73,22 @@ public abstract class Sprite{
         y = initY;
     }
 
+    //@return dead
     public boolean isDead(){
         return dead;
     }
 
+    //@return background speed
     public float getBgdx(){
         return bgdx;
     }
 
+    //@param set visibility
     public void setVisible(boolean vis){
         visible = vis;
     }
 
+    //@return visible
     public boolean isVisible(){
         return visible;
     }

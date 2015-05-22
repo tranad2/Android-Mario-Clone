@@ -47,11 +47,11 @@ public abstract class World implements TimeConscious{
         return enemies;
     }
 
+    //cleans dead sprites
     public void clean(){
         for(int i = 0; i<itemList.size(); i++){
             Item item = itemList.get(i);
             if(item.isDead()){
-                Log.v("World", "Dead");
                 itemList.remove(i);
                 i--;
             }
@@ -66,15 +66,18 @@ public abstract class World implements TimeConscious{
 
     }
 
+    //return world state
     public boolean end(){
         return end;
     }
 
+    //starts world level and sets end=false
     public void start(Canvas c){
         end = false;
         tick(c);
     }
 
+    //returns world to initial state
     public void reset(){
         for(Item i : itemList){
             i.revive();
@@ -90,6 +93,7 @@ public abstract class World implements TimeConscious{
         }
     }
 
+    //add mario to world
     public void setMario(Mario mario){ this.mario = mario; }
 
     public void tick(Canvas c){
@@ -165,6 +169,7 @@ public abstract class World implements TimeConscious{
         }
     }
 
+    //load images to array
     public void loadImages(MarioSurfaceView view){
         imageLoader = new ArrayList<>();
 
@@ -199,8 +204,10 @@ public abstract class World implements TimeConscious{
         imageLoader.add(flag);
     }
 
+    //Add objects to World
     public abstract void addElements(MarioSurfaceView view);
 
+    //Add horizontal line of obstacles
     public void addLine(int x, int y, int length, Bitmap b){
         for(int i = 0; i<length; i++){
             scene.add(new Obstacle(x+b.getWidth()*i, y, b));
@@ -215,6 +222,7 @@ public abstract class World implements TimeConscious{
         }
     }
 
+    //Adds stairs facing right
     public void addStairsR(int x, int y, int length, Bitmap b){
         for(int i = 0; i<length; i++){
             for(int j = i; j<length ; j++){
@@ -224,6 +232,7 @@ public abstract class World implements TimeConscious{
 
     }
 
+    //Adds stairs facing left
     public void addStairsL(int x, int y, int length, Bitmap b){
         for(int i = 0; i<length; i++){
             for(int j = i; j<length ; j++){

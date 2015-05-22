@@ -40,6 +40,7 @@ public class Background implements TimeConscious {
         dst2 = new Rect( X1, Y1, X2, Y2 );
     }
 
+    //Change background location
     public void setLocation( int x1, int y1, int x2, int y2, int X1, int Y1, int X2, int Y2 ) {
         this.x1 = x1;
         this.y1 = y1;

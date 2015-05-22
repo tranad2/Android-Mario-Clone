@@ -72,6 +72,7 @@ public class Obstacle extends Sprite implements TimeConscious{
         draw(c);
     }
 
+    //Change obstacle location
     public void setLocation(int xPos, int yPos) {
         x = xPos;
         y = yPos;
@@ -86,19 +87,10 @@ public class Obstacle extends Sprite implements TimeConscious{
         if(visible) {
             Paint paint = new Paint();
             c.drawBitmap(image, null, dst, paint);
-            /*
-            paint.setStyle(Paint.Style.FILL);
-            paint.setColor(Color.GREEN);
-            c.drawRect(top, paint);
-            c.drawRect(bot,paint);
-            paint.setColor(Color.MAGENTA);
-            c.drawRect(left,paint);
-            c.drawRect(right, paint);
-            */
-
         }
     }
 
+    //@return true if obstacle carrying item
     public boolean hasItem(){
         if(item!=null) {
             Log.v("Obstacle","HasItem"+true);
@@ -108,14 +100,13 @@ public class Obstacle extends Sprite implements TimeConscious{
             return false;
     }
 
+    //return item obstacle is carrying
     public Item getItem(){
 
         if(item!=null) {
-            Log.v("Obstacle","Item");
             return item;
         }
         else {
-            Log.v("Obstacle","Else");
             return null;
         }
     }

@@ -45,6 +45,7 @@ public class Fireball extends Sprite implements TimeConscious{
         screenWidth = view.getWidth();
     }
 
+    //Load images to array
     public void loadImages(MarioSurfaceView view){
         spriteLoader = new ArrayList<>();
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -76,6 +77,7 @@ public class Fireball extends Sprite implements TimeConscious{
         spriteLoader.add(fireball4);
     }
 
+    //Flip bitmap
     public Bitmap flipImage(Bitmap src) {
         // create new matrix for transformation
         Matrix matrix = new Matrix();
@@ -83,6 +85,7 @@ public class Fireball extends Sprite implements TimeConscious{
         return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
     }
 
+    //Animated fireball
     public void doAnim() {
         if(dir == 1) {
             if(timer <= 2){
@@ -123,6 +126,7 @@ public class Fireball extends Sprite implements TimeConscious{
         }
     }
 
+    //Change fireball location
     public void setLocation(int xPos, int yPos) {
         dst.set(xPos, yPos, xPos + fireballWidth, yPos + fireballHeight);
 
@@ -147,13 +151,11 @@ public class Fireball extends Sprite implements TimeConscious{
         draw(c);
     }
 
+    //Check if fireball hit enemy
     public void checkFireball(){
-        Log.v(TAG, "Check1");
         for(Sprite s : enemies){
             if (s.isVisible()) {
                 if (dst.intersect(s.getRect())) {
-                    Log.v(TAG, "Check5");
-
                     s.die();
                     s.setVisible(false);
                     visible = false;
@@ -162,6 +164,8 @@ public class Fireball extends Sprite implements TimeConscious{
             }
         }
     }
+
+    //Check side collision and disappears
     public void checkSideIntersect(){
         for(Obstacle o: scene){
             if(dst.intersect(o.getLeft()) || dst.intersect(o.getRight())){

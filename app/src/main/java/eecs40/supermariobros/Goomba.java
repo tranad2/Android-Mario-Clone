@@ -17,11 +17,9 @@ public class Goomba extends Sprite implements TimeConscious {
     private Mario mario;
     private boolean ground;
     private int goombaTimer = 0, moveGoomba = 0, imageWidth, imageHeight;
-    private int initX2;
     private final float gravity = 1.4f;
     private ArrayList<Obstacle> scene;
     private ArrayList<Bitmap> spriteLoader;
-//    private Mario mario;
 
     public Goomba(int x, int y, MarioSurfaceView view, ArrayList<Obstacle> scene) {
         super(x, y);
@@ -50,6 +48,7 @@ public class Goomba extends Sprite implements TimeConscious {
 
     }
 
+    //Load images to array
     public void loadImages(MarioSurfaceView view) {
         spriteLoader = new ArrayList<>();
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -60,6 +59,7 @@ public class Goomba extends Sprite implements TimeConscious {
         spriteLoader.add(goomba2);
     }
 
+    //Run thorugh animation
     public void doAnim() {
         if (goombaTimer <= 10) {
             currentImage = spriteLoader.get(0);
@@ -120,6 +120,7 @@ public class Goomba extends Sprite implements TimeConscious {
         }
     }
 
+    //Check for side collision
     public void checkSideIntersect() {
         for (Obstacle o : scene) {
 
@@ -141,6 +142,7 @@ public class Goomba extends Sprite implements TimeConscious {
         }
     }
 
+    //Check for behavior on platforms
     public void checkPlatformIntersect() {
         for (Obstacle o : scene) {
             if (bot.intersect(o.getTop())) {//Top intersect
@@ -164,6 +166,7 @@ public class Goomba extends Sprite implements TimeConscious {
         }
     }
 
+    //Change goomba location
     public void setLocation(int xPos, int yPos) {
         x = xPos;
         y = yPos;
@@ -178,6 +181,7 @@ public class Goomba extends Sprite implements TimeConscious {
         right.set((int) (x + imageWidth - imageWidth / 2), (int) (y + imageHeight / 4), (int) (x + imageWidth), (int) (y + imageHeight - imageHeight / 4));
     }
 
+    //Resets goomba move timer, visibile, dead, x, y, dx, dy
     public void revive(){
         super.revive();
         moveGoomba = 0;

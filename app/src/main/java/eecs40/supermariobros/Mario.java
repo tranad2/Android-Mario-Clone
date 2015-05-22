@@ -76,6 +76,7 @@ public class Mario extends Sprite implements TimeConscious {
         setForm(0);
     }
 
+    //Change mario location
     public void setLocation(int xPos, int yPos) {
         x = xPos;
         y = yPos;
@@ -89,14 +90,19 @@ public class Mario extends Sprite implements TimeConscious {
         right.set(x2-marioWidth/2,y+marioHeight/4,x2,y2-marioHeight/4);
     }
 
+    //return right-side of mario
     public int getX2() { return x2; }
 
+    //return mario dx
     public float getDx() { return dx; }
 
+    //set mario dy
     public void setDy(float dy) { this.dy = dy;}
 
+    //if moving right, return true
     public boolean getMoveRightFlag() { return moveRightFlag ;}
 
+    //if moving left, return true
     public boolean getMoveLeftFlag() { return moveLeftFlag ;}
 
     //True if A button is pressed
@@ -130,6 +136,7 @@ public class Mario extends Sprite implements TimeConscious {
         }
     }
 
+    //return fireball array
     public ArrayList<Fireball> getFireballs() {
         return fireballs;
     }
@@ -231,6 +238,7 @@ public class Mario extends Sprite implements TimeConscious {
         spriteLoader.add(marioDeath1);
     }
 
+    //flip bitmap horizontally
     public Bitmap flipImageH(Bitmap src) {
         Matrix matrix = new Matrix();
         matrix.preScale(-1.0f, 1.0f);
@@ -456,13 +464,11 @@ public class Mario extends Sprite implements TimeConscious {
         }
         y += dy;
         dy += gravity;
-        Log.v("TAG","dy = "+dy);
         setLocation(x, y);
         doAnim();
         draw(c);
 
         //Draw fireballs
-        Log.v(TAG,"Fireballs"+fireballs.size());
         for(int i = 0; i<fireballs.size(); i++){
             Fireball f = fireballs.get(i);
             if(f.visible) {
@@ -477,6 +483,7 @@ public class Mario extends Sprite implements TimeConscious {
         }
     }
 
+    //Check collision with enemy
     public void checkEnemyCollision() {
         for (Sprite s : enemies) {
             if(s.isVisible()) {
@@ -518,6 +525,7 @@ public class Mario extends Sprite implements TimeConscious {
         }
     }
 
+    //Check behavior with platform
     public void checkPlatformIntersect(){
 
         for(Obstacle o : scene) {
@@ -546,6 +554,7 @@ public class Mario extends Sprite implements TimeConscious {
         }
     }
 
+    //check side collision
     public void checkSideIntersect(){
         for(Obstacle o: scene){
 
@@ -597,15 +606,6 @@ public class Mario extends Sprite implements TimeConscious {
         if(visible) {
             Paint paint = new Paint();
             c.drawBitmap(currentImage, null, dst, paint);
-            /*
-            paint.setStyle(Paint.Style.FILL);
-            paint.setColor(Color.RED);
-            c.drawRect(top, paint);
-            c.drawRect(bot,paint);
-            paint.setColor(Color.CYAN);
-            c.drawRect(left,paint);
-            c.drawRect(right,paint);
-            */
         }
         else {
             if (!deathTimer){
@@ -622,6 +622,7 @@ public class Mario extends Sprite implements TimeConscious {
         }
     }
 
+    //set delay for death animation
     public void setDeathTimer(boolean val){
         deathTimer = val;
     }

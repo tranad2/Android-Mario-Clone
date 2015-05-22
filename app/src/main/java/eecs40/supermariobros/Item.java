@@ -83,6 +83,8 @@ public class Item extends Sprite implements TimeConscious{
     }
 
     public void tick(Canvas c){
+
+        //Uncomment for moving mushroom
         //checkPlatformIntersect();
         if(y>screenHeight+imageHeight)
             die();
