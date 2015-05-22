@@ -27,6 +27,7 @@ public class Mario extends Sprite implements TimeConscious {
     private float dx = 0, dy;
     private static final float gravity = 1.9f;
     private MarioSurfaceView view;
+    private World w;
 
 
 
@@ -35,7 +36,7 @@ public class Mario extends Sprite implements TimeConscious {
         initX = x;
         initY = y;
         this.view = view;
-
+        this.w = w;
         //Load default bitmap
         scene = w.getObstacles();
         items = w.getItems();
@@ -547,6 +548,9 @@ public class Mario extends Sprite implements TimeConscious {
 
     public void checkSideIntersect(){
         for(Obstacle o: scene){
+            if(o instanceof Flag){
+                w.end = true;
+            }
             if(o.getLeft().intersect(right)){
                 dx = 0;
                 float d = Math.abs(x+marioWidth-o.getLeft().left);
