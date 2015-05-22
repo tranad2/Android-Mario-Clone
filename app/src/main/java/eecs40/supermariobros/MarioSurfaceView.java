@@ -176,7 +176,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                         }
                     }
                     if (redTouch == 2 || greenTouch == 2 || yellowTouch == 2 || purpleTouch == 2) {
-                        gameState = 0.75f;
+                        gameState = 0.75;
                         //
                     }
                     break;

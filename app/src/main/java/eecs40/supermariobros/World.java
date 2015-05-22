@@ -95,7 +95,11 @@ public abstract class World implements TimeConscious{
     public void tick(Canvas c){
 
         boolean backgroundMove = false;
-        
+
+        if (mario.getMoveRightFlag() && !mario.getMoveLeftFlag() && mario.getX2() >= screenWidth / 2  && mario.getDx() >= 0 && !mario.isDead()) {
+            backgroundMove = true;
+        }
+
         for(Obstacle o : scene){
             if (backgroundMove) {
                 o.setBackgroundDx(-18);
