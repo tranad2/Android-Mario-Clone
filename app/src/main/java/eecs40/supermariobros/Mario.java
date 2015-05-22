@@ -72,7 +72,7 @@ public class Mario extends Sprite implements TimeConscious {
         screenHeight = view.getHeight();
         screenWidth = view.getWidth();
         jumpFlag = false;
-        setForm(2);
+        setForm(0);
     }
 
     public void setLocation(int xPos, int yPos) {
