@@ -16,7 +16,7 @@ public class Goomba extends Sprite implements TimeConscious {
     private Bitmap currentImage;
     private Mario mario;
     private boolean ground;
-    private int goombaTimer = 0, imageWidth, imageHeight;
+    private int goombaTimer = 0, moveGoomba = 0, imageWidth, imageHeight;
     private final float gravity = 1.4f;
     private ArrayList<Obstacle> scene;
     private ArrayList<Bitmap> spriteLoader;
@@ -26,7 +26,7 @@ public class Goomba extends Sprite implements TimeConscious {
         super(x, y);
         initX = x;
         initY = y;
-        dx = 0f;
+        dx = 5f;
         initDx = dx;
         initDy = dy;
         //Load images
@@ -86,11 +86,19 @@ public class Goomba extends Sprite implements TimeConscious {
                 }
             }
         }
-
+        if (moveGoomba <= 25) {
+            dx = 5f;
+            moveGoomba++;
+        } else if (moveGoomba <= 50) {
+            dx = -5f;
+            moveGoomba++;
+        } else if (moveGoomba <= 75) {
+            moveGoomba = 0;
+        }
         y += dy;
         dy += gravity;
         x += dx + bgdx;
-        setLocation((int) x, (int) y);
+        setLocation(x, y);
         doAnim();
         draw(c);
 

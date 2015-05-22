@@ -585,7 +585,7 @@ public class Mario extends Sprite implements TimeConscious {
         for (int i = 0; i < fireballs.size(); i++){
             for (Sprite s : enemies) {
                 if(s.isVisible()) {
-                    if (fireballs.get(i).getRect().intersect(s.getLeft()) && fireballs.get(i).getRect().intersect(s.getRight())) {
+                    if (fireballs.get(i).getRect().intersect(s.getLeft()) || fireballs.get(i).getRect().intersect(s.getRight())) {
                         s.die();
                         s.setVisible(false);
                         view.score += 1000;
