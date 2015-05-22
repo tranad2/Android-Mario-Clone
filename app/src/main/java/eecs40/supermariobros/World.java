@@ -21,7 +21,6 @@ public abstract class World implements TimeConscious{
     protected Mario mario;
     protected boolean end;
 
-
     public World(MarioSurfaceView view){
         screenWidth = view.getWidth();
         screenHeight = view.getHeight();
@@ -96,32 +95,29 @@ public abstract class World implements TimeConscious{
     public void tick(Canvas c){
 
         boolean backgroundMove = false;
-
-        if (mario.getMoveRightFlag() && !mario.getMoveLeftFlag() && mario.getX2() >= screenWidth / 2  && mario.getDx() >= 0 && !mario.isDead()) {
-            backgroundMove = true;
-        }
+        
         for(Obstacle o : scene){
             if (backgroundMove) {
-                o.setBackgroundDx(-18f);
+                o.setBackgroundDx(-18);
             }
             else if ( mario.getDx()== 0 ){
-                o.setBackgroundDx(0f);
+                o.setBackgroundDx(0);
                 backgroundMove = false;
             }
             else {
-                o.setBackgroundDx(0f);
+                o.setBackgroundDx(0);
                 backgroundMove = false;
             }
             o.tick(c);
         }
         for(Sprite s : enemies){
             if (backgroundMove) {
-                s.setBackgroundDx(-18f);
+                s.setBackgroundDx(-18);
             } else if (mario.getDx() == 0) {
-                s.setBackgroundDx(0f);
+                s.setBackgroundDx(0);
                 backgroundMove = false;
             } else {
-                s.setBackgroundDx(0f);
+                s.setBackgroundDx(0);
                 backgroundMove = false;
             }
             s.tick(c);
@@ -129,12 +125,12 @@ public abstract class World implements TimeConscious{
 
         for(Item i : itemList){
             if (backgroundMove) {
-                i.setBackgroundDx(-18f);
+                i.setBackgroundDx(-18);
             } else if (mario.getDx() == 0) {
-                i.setBackgroundDx(0f);
+                i.setBackgroundDx(0);
                 backgroundMove = false;
             } else {
-                i.setBackgroundDx(0f);
+                i.setBackgroundDx(0);
                 backgroundMove = false;
             }
             i.tick(c);
@@ -144,10 +140,10 @@ public abstract class World implements TimeConscious{
             if (backgroundMove) {
                 f.setBackgroundDx(-20f);
             } else if (mario.getDx() == 0) {
-                f.setBackgroundDx(0f);
+                f.setBackgroundDx(0);
                 backgroundMove = false;
             } else {
-                f.setBackgroundDx(0f);
+                f.setBackgroundDx(0);
                 backgroundMove = false;
             }
         }
@@ -204,6 +200,14 @@ public abstract class World implements TimeConscious{
     public void addLine(int x, int y, int length, Bitmap b){
         for(int i = 0; i<length; i++){
             scene.add(new Obstacle(x+b.getWidth()*i, y, b));
+        }
+    }
+
+    //Adds verticle line of Obstacles starting from bottom
+    //@param length size of vertical line
+    public void addVertLine(int x, int y, int length, Bitmap b){
+        for(int i = 0; i<length; i++){
+            scene.add(new Obstacle(x, y-b.getHeight()*i, b));
         }
     }
 

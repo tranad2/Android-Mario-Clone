@@ -3,6 +3,7 @@ package eecs40.supermariobros;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
@@ -17,14 +18,19 @@ public class Bullet extends Sprite implements TimeConscious{
     private Bitmap currentImage;
     private ArrayList<Obstacle> scene;
     private int imageWidth, imageHeight;
-    private float dx;
+    private int screenWidth, screenHeight;
+    private int initX2;
 
     public Bullet(int x, int y, float dx,MarioSurfaceView view, ArrayList<Obstacle> scene){
         super(x, y);
         initX = x;
+        initX2 = initX;
         initY = y;
-        initDx = dx;
         this.dx = dx;
+        initDx = dx;
+
+        screenWidth = view.getWidth();
+        screenHeight = view.getHeight();
         //Load images
         BitmapFactory.Options options = new BitmapFactory.Options();
 
@@ -38,34 +44,48 @@ public class Bullet extends Sprite implements TimeConscious{
         this.scene = scene;
 
         //Design hitbox
-        top = new Rect((x+imageWidth/6), y, (x+imageWidth-imageWidth/6), (y+imageHeight/4));
-        bot = new Rect((x+imageWidth/6), (y+imageHeight-imageHeight/4), (x+imageWidth-imageWidth/6), (y+imageHeight));
+        int x2 = x+imageWidth;
+        int y2 = y+imageHeight;
+        top = new Rect(x, y, x2, y+imageHeight/4);
+        bot = new Rect(x, y2-imageHeight/4, x2, y2);
 
-        left = new Rect(x, (y+imageHeight/4), (x+imageWidth/2), (y+imageHeight/4));
-        right = new Rect((x+imageWidth-imageWidth/2), (y-imageHeight/4), (x+imageWidth), (y+imageHeight-imageHeight/4));
+        left = new Rect(x+imageWidth/6, y+imageHeight/4, x+imageWidth/2, y+imageHeight/4);
+        right = new Rect(x2-imageWidth/2, y2-imageHeight/4, x2-imageWidth/6, y2-imageHeight/4);
 
     }
 
     public void tick(Canvas c){
         checkSideIntersect();
-        if(visible) {
-            x += dx + bgdx;
+        if(x<-screenWidth/6) {
+            x = initX2;
+            dead = false;
+            visible = true;
         }
+        x += dx + bgdx;
+        initX2+=bgdx;
         setLocation(x, y);
         draw(c);
 
     }
 
     protected void draw(Canvas c){
-        Paint paint = new Paint();
-        c.drawBitmap(currentImage, null, dst, paint);
+        if(visible) {
+            Paint paint = new Paint();
+            c.drawBitmap(currentImage, null, dst, paint);
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(Color.RED);
+            c.drawRect(top, paint);
+            c.drawRect(bot,paint);
+            paint.setColor(Color.CYAN);
+            c.drawRect(left,paint);
+            c.drawRect(right, paint);
+        }
     }
     public void checkSideIntersect(){
-        //boolean sidecollision = false;
         for(Obstacle o: scene){
-
             if(o.getLeft().intersect(right) || o.getRight().intersect(left)){
                 visible = false;
+                dead = true;
             }
 
         }
@@ -77,9 +97,10 @@ public class Bullet extends Sprite implements TimeConscious{
         int x2 = (x + imageWidth);
         int y2 = (y + imageHeight);
         dst.set(x, y, x2, y2);
-        top.set(x,y,x2,(y+imageHeight/4));
-        bot.set(x,(y2-imageHeight/4),x2,y2);
-        left.set(x,y,(x+imageWidth/2),y2);
-        right.set( (x2 - imageWidth / 2),  y,  x2,  y2);
+
+        top.set(x,y,x2,y+imageHeight/4);
+        bot.set(x,y2-imageHeight/4,x2,y2);
+        left.set(x+imageWidth/6,y+imageHeight/4,x+imageWidth/2,y2-imageHeight/4);
+        right.set(x2-imageWidth/2,y+imageHeight/4,x2-imageWidth/6,y2-imageHeight/4);
     }
 }

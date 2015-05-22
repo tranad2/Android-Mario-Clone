@@ -72,7 +72,7 @@ public class Mario extends Sprite implements TimeConscious {
         screenHeight = view.getHeight();
         screenWidth = view.getWidth();
         jumpFlag = false;
-        setForm(0);
+        setForm(2);
     }
 
     public void setLocation(int xPos, int yPos) {
@@ -404,7 +404,6 @@ public class Mario extends Sprite implements TimeConscious {
             checkItem();
             checkPlatformIntersect();
             checkSideIntersect();
-            checkFireball();
 
             //Moving
             if (moveLeftFlag) {
@@ -446,9 +445,9 @@ public class Mario extends Sprite implements TimeConscious {
             if (fireballFlag && form == 2 && fireballDelay > 15) {
                 fireballDelay = 0;
                 if (dir == 1) {
-                    fireballs.add(new Fireball(view, x2, y2 - marioHeight / 2, dir));
+                    fireballs.add(new Fireball(view, x2, y2 - marioHeight / 2, dir, enemies, scene));
                 } else {
-                    fireballs.add(new Fireball(view, x, y2 - marioHeight / 2, dir));
+                    fireballs.add(new Fireball(view, x, y2 - marioHeight / 2, dir, enemies, scene));
                 }
 
             }
@@ -462,9 +461,12 @@ public class Mario extends Sprite implements TimeConscious {
         draw(c);
 
         //Draw fireballs
+        Log.v(TAG,"Fireballs"+fireballs.size());
         for(int i = 0; i<fireballs.size(); i++){
             Fireball f = fireballs.get(i);
             if(f.visible) {
+                f.checkSideIntersect();
+                f.checkFireball();
                 f.tick(c);
             }
             if(!f.visible){
@@ -529,7 +531,7 @@ public class Mario extends Sprite implements TimeConscious {
                 ground = false; //if none of objects' top touch mario bottom, no ground
             }
 
-            if(top.intersect(o.getBot())){//Bot intersect
+            if (top.intersect(o.getBot())){//Bot intersect
                 //if mario top touch object bottom (ceiling), no ground and stop moving in that direction, offset outside rectangle
                 if(o.hasItem() && !o.getItem().isDead()) {
                     o.getItem().setVisible(true);
@@ -577,23 +579,6 @@ public class Mario extends Sprite implements TimeConscious {
                 item.die();
                 item.setVisible(false);
 
-            }
-        }
-    }
-
-    public void checkFireball(){
-        for (int i = 0; i < fireballs.size(); i++){
-            for (Sprite s : enemies) {
-                if(s.isVisible()) {
-                    if (fireballs.get(i).getRect().intersect(s.getLeft()) && fireballs.get(i).getRect().intersect(s.getRight())) {
-                        s.die();
-                        s.setVisible(false);
-                        view.score += 1000;
-                        fireballs.remove(i);
-                        i--;
-                        break;
-                    }
-                }
             }
         }
     }

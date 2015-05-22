@@ -6,18 +6,26 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 
 import java.util.ArrayList;
 
 public class Fireball extends Sprite implements TimeConscious{
+    private static final String TAG = "Fireball";
     private ArrayList<Bitmap> spriteLoader;
+    private ArrayList<Sprite> enemies;
+    private ArrayList<Obstacle> scene;
     private Bitmap currentImage,fireball1, fireball2, fireball3, fireball4;
     private int x, y, dir = 1, timer = 0, fireballWidth, fireballHeight, screenWidth, screenHeight;
     private float dx = 40f;
     private Rect dst;
+    private MarioSurfaceView view;
 
-    public Fireball( MarioSurfaceView view, int marioX, int marioY, int marioDir) {
+    public Fireball( MarioSurfaceView view, int marioX, int marioY, int marioDir, ArrayList<Sprite> enemies, ArrayList<Obstacle> scene) {
         super(marioX,marioY);
+        this.enemies = enemies;
+        this.scene = scene;
+        this.view = view;
         //Load fireball bitmaps
         loadImages(view);
         currentImage = spriteLoader.get(0);
@@ -137,5 +145,31 @@ public class Fireball extends Sprite implements TimeConscious{
         setLocation(x, y);
         doAnim();
         draw(c);
+    }
+
+    public void checkFireball(){
+        Log.v(TAG, "Check1");
+        for(Sprite s : enemies){
+            if (dst.intersect(s.getRect())) {
+                Log.v(TAG,"Check5");
+
+                s.die();
+                s.setVisible(false);
+                view.score += 1000;
+            }
+        }
+    }
+
+    public void checkSideIntersect(){
+        for(Obstacle o: scene){
+            if(o.getLeft().intersect(right)){
+                visible = false;
+                break;
+            }
+            else if (o.getRight().intersect(left)){
+                visible = false;
+                break;
+            }
+        }
     }
 }

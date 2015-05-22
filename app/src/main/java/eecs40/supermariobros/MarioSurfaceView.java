@@ -29,8 +29,8 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     Buttons buttons;
     Bitmap title;
     Rect dst;
-    float gameState = 0; //0 = title, 0.5 = color select, 0.75 = stage select,  1 = world 1, 2 = world 2, 3 = world 3, 4 = dead, 5 = game over
-    int world = 0, score = 0, lives = 3, time = 9900, color = 0;
+    double gameState = 0; //0 = title, 0.5 = color select, 0.75 = stage select,  1 = world 1, 2 = world 2, 3 = world 3, 4 = dead, 5 = game over
+    int world = 0, hiscore=0, score = 0, lives = 3, time = 9900, color = 0;
 
     public MarioSurfaceView(Context context) {
         super(context);
@@ -219,7 +219,6 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                 //Retry screen
                 else if (gameState == 4) {
                     //Restart current level
-                    //TODO: respawn items and enemies
                     if(world == 1) {
                         gameState = 1;
                     } else if(world == 2) {
@@ -332,6 +331,11 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
             }
             if (gameState >=1 && gameState<=3) {
                 w.start(c);
+            }
+            if(w.end()){
+                if(score>hiscore)
+                    hiscore = score;
+                gameState = 0.75;
             }
         }
 
