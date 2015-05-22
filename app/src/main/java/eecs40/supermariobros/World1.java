@@ -24,21 +24,22 @@ public class World1 extends World{
 
         for(int i = 1; i<=2; i++) {
             for(int j = 0; j<50; j++) {
-                scene.add(new Obstacle(j*imageLoader.get(3).getWidth(),screenHeight-imageLoader.get(3).getHeight()*i , imageLoader.get(1)));
+                scene.add(new Obstacle(j*imageLoader.get(3).getWidth(),screenHeight-imageLoader.get(3).getHeight()*i , imageLoader.get(3)));
             }
         }
-
-        Item item = new Item(imageLoader.get(0).getWidth()*6,screenHeight-imageLoader.get(0).getHeight()*8, 0,view);
-        scene.add(new Obstacle(imageLoader.get(0).getWidth()*10,screenHeight-imageLoader.get(0).getHeight()*5, imageLoader.get(0)));
+        scene.add(new Obstacle(tileWidth*10,screenHeight-tileWidth*3, imageLoader.get(3)));
+        addLine(tileWidth*40, screenHeight-tileWidth*4, 10, imageLoader.get(2));
+        addStairsR(tileWidth*15, screenHeight-tileWidth*3, 5, imageLoader.get(3));
+        addStairsL(tileWidth*24, screenHeight-tileWidth*3, 5, imageLoader.get(3));
         enemies.add(new Goomba(2 * screenWidth / 3, screenHeight / 2, view, scene));
 
-        scene.add(new Obstacle(imageLoader.get(0).getWidth()*6,screenHeight-imageLoader.get(0).getHeight()*7, imageLoader.get(0), item, itemList));
+        scene.add(new Obstacle(tileWidth*6,screenHeight-tileWidth*7, imageLoader.get(0), new Item(tileWidth*6,screenHeight-tileWidth*8, 0,view), itemList));
 
         offset = ((scene.get(scene.size()-1)).getX()+tileWidth);  //New x after last obstacle
-
+        Log.v(TAG,"Offset: "+offset);
         for(int i = 1; i<=2; i++) {
             for(int j = 0; j<10; j++) {
-                scene.add(new Obstacle(j*imageLoader.get(3).getWidth()+2*offset,screenHeight-imageLoader.get(3).getHeight()*i , imageLoader.get(1)));
+                scene.add(new Obstacle(j*tileWidth+2*offset,screenHeight-tileWidth*i , imageLoader.get(2)));
             }
         }
     }

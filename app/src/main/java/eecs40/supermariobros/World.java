@@ -181,4 +181,28 @@ public abstract class World implements TimeConscious{
     }
 
     public abstract void addElements(MarioSurfaceView view);
+
+    public void addLine(int x, int y, int length, Bitmap b){
+        for(int i = 0; i<length; i++){
+            scene.add(new Obstacle(x+tileWidth*i, y, b));
+        }
+    }
+
+    public void addStairsR(int x, int y, int length, Bitmap b){
+        for(int i = 0; i<length; i++){
+            for(int j = i; j<length ; j++){
+                scene.add(new Obstacle(x+tileWidth*j, y-tileWidth*i, b));
+            }
+        }
+
+    }
+
+    public void addStairsL(int x, int y, int length, Bitmap b){
+        for(int i = 0; i<length; i++){
+            for(int j = i; j<length ; j++){
+                scene.add(new Obstacle(x-tileWidth*j, y-tileWidth*i, b));
+            }
+        }
+
+    }
 }
