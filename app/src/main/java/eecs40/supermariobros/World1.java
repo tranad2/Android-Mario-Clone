@@ -40,7 +40,7 @@ public class World1 extends World{
         addVertLine(31 * tileWidth, screenHeight - tileWidth * 9, 3, imageLoader.get(3));
 
         addLine(tileWidth * 35, screenHeight - tileWidth * 5, 7, imageLoader.get(1));
-        scene.add(new Obstacle(tileWidth * 35, screenHeight - tileWidth * 5, imageLoader.get(0), new Item(tileWidth * 35, screenHeight - tileWidth * 6, 0, view), itemList));
+        scene.add(new Obstacle(tileWidth * 35, screenHeight - tileWidth * 5, imageLoader.get(0), new Item(tileWidth * 36, screenHeight - tileWidth * 6, 0, view), itemList));
 
         scene.add(new Obstacle(tileWidth * 12, screenHeight - tileWidth * 8, imageLoader.get(0), new Item(tileWidth * 12, screenHeight - tileWidth * 9, 0, view), itemList));
 
@@ -49,5 +49,6 @@ public class World1 extends World{
         enemies.add(new Bullet(70 * tileWidth, screenHeight - tileWidth*9, -15, view, scene));
         enemies.add(new Bullet(70 * tileWidth, screenHeight - tileWidth*10, -15, view, scene));
         enemies.add(new Bullet(70 * tileWidth, screenHeight - tileWidth*11, -15, view, scene));
+        scene.add(new Flag(69*tileWidth, screenHeight - tileWidth*3, view));
     }
 }

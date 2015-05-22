@@ -56,6 +56,10 @@ public class Obstacle extends Sprite implements TimeConscious{
         right = new Rect((x+imageWidth-imageWidth/2), (y+imageHeight/4), (x+imageWidth), (y+imageHeight-imageHeight/4));
     }
 
+    public Obstacle(int x, int y){
+        super(x, y);
+    }
+
     public Bitmap flipImageV(Bitmap src) {
         Matrix matrix = new Matrix();
         matrix.preScale(1.0f, -1.0f);
