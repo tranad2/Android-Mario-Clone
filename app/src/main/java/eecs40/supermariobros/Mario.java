@@ -552,6 +552,7 @@ public class Mario extends Sprite implements TimeConscious {
             if(o.getLeft().intersect(right)){
                 if(o instanceof Flag){
                     w.end = true;
+                    break;
                 }
                 dx = 0;
                 float d = Math.abs(x+marioWidth-o.getLeft().left);
@@ -561,6 +562,7 @@ public class Mario extends Sprite implements TimeConscious {
             else if (o.getRight().intersect(left)){
                 if(o instanceof Flag){
                     w.end = true;
+                    break;
                 }
                 dx = 0;
                 float d = Math.abs(x-o.getRight().right);

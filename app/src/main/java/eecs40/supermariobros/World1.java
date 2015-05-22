@@ -49,6 +49,6 @@ public class World1 extends World{
         enemies.add(new Bullet(70 * tileWidth, screenHeight - tileWidth*9, -15, view, scene));
         enemies.add(new Bullet(70 * tileWidth, screenHeight - tileWidth*10, -15, view, scene));
         enemies.add(new Bullet(70 * tileWidth, screenHeight - tileWidth*11, -15, view, scene));
-        scene.add(new Flag(60*tileWidth, screenHeight - tileWidth*3, view));
+        scene.add(new Flag(60*tileWidth, screenHeight - tileWidth, view));
     }
 }

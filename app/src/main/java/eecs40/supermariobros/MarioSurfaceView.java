@@ -329,7 +329,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
                 time--;
                 time--;
             }
-            if (gameState >=1 && gameState<=3) {
+            if (gameState >=1 && gameState<=3 && !w.end()) {
                 w.start(c);
             }
             if(w.end()){
