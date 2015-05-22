@@ -155,20 +155,8 @@ public class Fireball extends Sprite implements TimeConscious{
 
                 s.die();
                 s.setVisible(false);
+                visible = false;
                 view.score += 1000;
-            }
-        }
-    }
-
-    public void checkSideIntersect(){
-        for(Obstacle o: scene){
-            if(o.getLeft().intersect(right)){
-                visible = false;
-                break;
-            }
-            else if (o.getRight().intersect(left)){
-                visible = false;
-                break;
             }
         }
     }

@@ -465,7 +465,6 @@ public class Mario extends Sprite implements TimeConscious {
         for(int i = 0; i<fireballs.size(); i++){
             Fireball f = fireballs.get(i);
             if(f.visible) {
-                f.checkSideIntersect();
                 f.checkFireball();
                 f.tick(c);
             }
@@ -548,7 +547,7 @@ public class Mario extends Sprite implements TimeConscious {
     public void checkSideIntersect(){
         for(Obstacle o: scene){
             if(o.getLeft().intersect(right)){
-                dx=0;
+                dx = 0;
                 float d = Math.abs(x+marioWidth-o.getLeft().left);
                 this.x -= d - 2;
                 break;
