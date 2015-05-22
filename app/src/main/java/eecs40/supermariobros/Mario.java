@@ -548,16 +548,20 @@ public class Mario extends Sprite implements TimeConscious {
 
     public void checkSideIntersect(){
         for(Obstacle o: scene){
-            if(o instanceof Flag){
-                w.end = true;
-            }
+
             if(o.getLeft().intersect(right)){
+                if(o instanceof Flag){
+                    w.end = true;
+                }
                 dx = 0;
                 float d = Math.abs(x+marioWidth-o.getLeft().left);
                 this.x -= d - 2;
                 break;
             }
             else if (o.getRight().intersect(left)){
+                if(o instanceof Flag){
+                    w.end = true;
+                }
                 dx = 0;
                 float d = Math.abs(x-o.getRight().right);
                 this.x += d - 2;
