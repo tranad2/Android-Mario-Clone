@@ -26,7 +26,7 @@ public class Goomba extends Sprite implements TimeConscious {
         super(x, y);
         initX = x;
         initY = y;
-        dx = -5f;
+        dx = 0f;
         initDx = dx;
         initDy = dy;
         //Load images
@@ -86,6 +86,7 @@ public class Goomba extends Sprite implements TimeConscious {
                 }
             }
         }
+
         y += dy;
         dy += gravity;
         x += dx + bgdx;

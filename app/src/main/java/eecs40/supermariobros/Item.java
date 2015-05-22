@@ -17,7 +17,7 @@ public class Item extends Sprite implements TimeConscious{
     private int imageWidth, imageHeight;
     private Bitmap image;
     private ArrayList<Bitmap> imageLoader;
-    public int type;
+    public int type;    //0 = mushroom, 1 = flower, 2 = coin
     private float dx=0, dy;
     private static final float gravity = 3f;
     private boolean ground;
@@ -51,6 +51,7 @@ public class Item extends Sprite implements TimeConscious{
         super(x, y);
         this.scene = scene;
         this.view = view;
+        this.type = type;
         screenHeight = view.getHeight();
         screenWidth = view.getWidth();
 
@@ -133,13 +134,6 @@ public class Item extends Sprite implements TimeConscious{
                 //if none of objects' top touch mario bottom, no ground
             }
         }
-    }
-
-    public void revive(){
-        dead = false;
-        visible = false;
-        x = initX;
-        y = initY;
     }
 
     public void draw(Canvas c){

@@ -25,7 +25,7 @@ public class Mario extends Sprite implements TimeConscious {
     private int dir = 1, timer = 0, fireballDelay;
     private int form = 0; //0 small, 1 big, 2 fire
     private float dx = 0, dy;
-    private static final float gravity = 1.4f;
+    private static final float gravity = 1.9f;
     private MarioSurfaceView view;
 
 
@@ -388,11 +388,11 @@ public class Mario extends Sprite implements TimeConscious {
             visible = true;
         }
         if (isDead()) {
-            if (Math.abs(dy) > 40) {
+            if (Math.abs(dy) > 100) {
                 if (dy > 0) {
-                    dy = 40;
+                    dy = 100;
                 } else {
-                    dy = -40;
+                    dy = -100;
                 }
             }
             if (y >= 3 * screenHeight) {
@@ -404,11 +404,13 @@ public class Mario extends Sprite implements TimeConscious {
             checkItem();
             checkPlatformIntersect();
             checkSideIntersect();
+            checkFireball();
+
             //Moving
             if (moveLeftFlag) {
-                dx = -15f;
+                dx = -18f;
             } else if (moveRightFlag) {
-                dx = 15f;
+                dx = 18f;
             } else {
                 dx = 0;
             }
@@ -424,17 +426,17 @@ public class Mario extends Sprite implements TimeConscious {
             if (ground) {
                 dy = 0;
             } else {
-                if (Math.abs(dy) > 40) {
+                if (Math.abs(dy) > 100) {
                     if (dy > 0) {
-                        dy = 40;
+                        dy = 100;
                     } else {
-                        dy = -40;
+                        dy = -100;
                     }
                 }
             }
             //Jumping
             if (jumpFlag && ground) {
-                dy = -35;
+                dy = -40;
                 ground = false;
 
             }
@@ -543,18 +545,18 @@ public class Mario extends Sprite implements TimeConscious {
 
     public void checkSideIntersect(){
         for(Obstacle o: scene){
-                if(o.getLeft().intersect(right)){
-                    dx=0;
-                    float d = Math.abs(x+marioWidth-o.getLeft().left);
-                    this.x -= d - 2;
-                    break;
-                }
-                else if (o.getRight().intersect(left)){
-                    dx = 0;
-                    float d = Math.abs(x-o.getRight().right);
-                    this.x += d - 2;
-                    break;
-                }
+            if(o.getLeft().intersect(right)){
+                dx=0;
+                float d = Math.abs(x+marioWidth-o.getLeft().left);
+                this.x -= d - 2;
+                break;
+            }
+            else if (o.getRight().intersect(left)){
+                dx = 0;
+                float d = Math.abs(x-o.getRight().right);
+                this.x += d - 2;
+                break;
+            }
         }
     }
 
@@ -575,6 +577,23 @@ public class Mario extends Sprite implements TimeConscious {
                 item.die();
                 item.setVisible(false);
 
+            }
+        }
+    }
+
+    public void checkFireball(){
+        for (int i = 0; i < fireballs.size(); i++){
+            for (Sprite s : enemies) {
+                if(s.isVisible()) {
+                    if (fireballs.get(i).getRect().intersect(s.getLeft()) && fireballs.get(i).getRect().intersect(s.getRight())) {
+                        s.die();
+                        s.setVisible(false);
+                        view.score += 1000;
+                        fireballs.remove(i);
+                        i--;
+                        break;
+                    }
+                }
             }
         }
     }

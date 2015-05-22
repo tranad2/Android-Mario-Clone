@@ -77,14 +77,17 @@ public abstract class World implements TimeConscious{
     }
 
     public void reset(){
+        for(Item i : itemList){
+            i.revive();
+        }
         for(Obstacle o : scene){
             o.revive();
+            if (o.hasItem()){
+                o.getItem().setVisible(false);
+            }
         }
         for(Sprite e : enemies){
             e.revive();
-        }
-        for(Item i : itemList){
-            i.revive();
         }
     }
 
@@ -99,7 +102,7 @@ public abstract class World implements TimeConscious{
         }
         for(Obstacle o : scene){
             if (backgroundMove) {
-                o.setBackgroundDx(-15f);
+                o.setBackgroundDx(-18f);
             }
             else if ( mario.getDx()== 0 ){
                 o.setBackgroundDx(0f);
@@ -113,7 +116,7 @@ public abstract class World implements TimeConscious{
         }
         for(Sprite s : enemies){
             if (backgroundMove) {
-                s.setBackgroundDx(-15f);
+                s.setBackgroundDx(-18f);
             } else if (mario.getDx() == 0) {
                 s.setBackgroundDx(0f);
                 backgroundMove = false;
@@ -126,7 +129,7 @@ public abstract class World implements TimeConscious{
 
         for(Item i : itemList){
             if (backgroundMove) {
-                i.setBackgroundDx(-15f);
+                i.setBackgroundDx(-18f);
             } else if (mario.getDx() == 0) {
                 i.setBackgroundDx(0f);
                 backgroundMove = false;
@@ -139,7 +142,7 @@ public abstract class World implements TimeConscious{
 
         for(Fireball f : mario.getFireballs()) {
             if (backgroundMove) {
-                f.setBackgroundDx(-15f);
+                f.setBackgroundDx(-20f);
             } else if (mario.getDx() == 0) {
                 f.setBackgroundDx(0f);
                 backgroundMove = false;

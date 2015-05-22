@@ -20,15 +20,19 @@ public class World2 extends World{
 
         addLine(tileWidth*0, screenHeight-tileWidth*1, 9, imageLoader.get(3));
         addLine(tileWidth*0, screenHeight-tileWidth*2, 9, imageLoader.get(3));
-        addLine(tileWidth*12, screenHeight-tileWidth*5, 7, imageLoader.get(2));
-        addLine(tileWidth*14, screenHeight-tileWidth*8, 1, imageLoader.get(2));
-        addLine(tileWidth*15, screenHeight-tileWidth*8, 1, imageLoader.get(0));
-        addLine(tileWidth*16, screenHeight-tileWidth*8, 1, imageLoader.get(2));
+        addLine(tileWidth * 12, screenHeight - tileWidth * 5, 7, imageLoader.get(2));
+        for (int i = 0; i < 7; i++)
+            itemList.add(new Item(tileWidth * (12+i), screenHeight - tileWidth * 6, 2, view));
+        addLine(tileWidth*14, screenHeight - tileWidth * 8, 1, imageLoader.get(2));
+        scene.add(new Obstacle(tileWidth * 15, screenHeight - tileWidth * 8, imageLoader.get(0), new Item(tileWidth * 15, screenHeight - tileWidth * 9, 0, view), itemList));
+        addLine(tileWidth*16, screenHeight - tileWidth * 8, 1, imageLoader.get(2));
         addLine(tileWidth*23, screenHeight-tileWidth*2, 1, imageLoader.get(8));
-        addLine(tileWidth*29, screenHeight-tileWidth*4, 1, imageLoader.get(10));
-        addLine(tileWidth*30, screenHeight-tileWidth*7, 1, imageLoader.get(0));
-        addLine(tileWidth*37, screenHeight-tileWidth*1, 33, imageLoader.get(3));
-        addLine(tileWidth*37, screenHeight-tileWidth*2, 33, imageLoader.get(3));
+        addLine(tileWidth*29, screenHeight-tileWidth*3, 1, imageLoader.get(9));
+        addLine(tileWidth*35, screenHeight - tileWidth * 4, 1, imageLoader.get(10));
+        scene.add(new Obstacle(tileWidth * 36, screenHeight - tileWidth * 7, imageLoader.get(0), new Item(tileWidth * 36, screenHeight - tileWidth * 8, 1, view), itemList));
+        addLine(tileWidth*43, screenHeight-tileWidth*1, 33, imageLoader.get(3));
+        addLine(tileWidth*43, screenHeight-tileWidth*2, 33, imageLoader.get(3));
+        enemies.add(new Goomba(tileWidth*50, screenHeight-tileWidth*3, view, scene));
 
         addLine(tileWidth*70, screenHeight-tileWidth*1, 10, imageLoader.get(3));
         addLine(tileWidth*70, screenHeight-tileWidth*2, 10, imageLoader.get(3));
