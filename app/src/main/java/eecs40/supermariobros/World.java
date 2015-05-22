@@ -178,6 +178,7 @@ public abstract class World implements TimeConscious{
         Bitmap pipe1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.pipe1, options);            //8
         Bitmap pipe2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.pipe2, options);            //9
         Bitmap pipe3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.pipe3, options);            //10
+        Bitmap flag = BitmapFactory.decodeResource(view.getResources(), R.drawable.flag, options);              //11
 
 
         imageLoader.add(block1);
@@ -192,6 +193,7 @@ public abstract class World implements TimeConscious{
         imageLoader.add(pipe2);
         imageLoader.add(pipe3);
         imageLoader.add(pipe3);
+        imageLoader.add(flag);
     }
 
     public abstract void addElements(MarioSurfaceView view);
