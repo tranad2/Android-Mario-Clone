@@ -320,6 +320,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
             c.drawText("1", 2 * getWidth() / 6, 8 * getHeight() / 15, paint);
             c.drawText("2", 3 * getWidth() / 6, 8 * getHeight() / 15, paint);
             c.drawText("3", 4 * getWidth() / 6, 8 * getHeight() / 15, paint);
+            c.drawText("Hi-Score: "+Integer.toString(hiscore), getWidth() / 2, getHeight() / 8, paint);
         }
 
 
