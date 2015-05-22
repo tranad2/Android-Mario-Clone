@@ -466,6 +466,7 @@ public class Mario extends Sprite implements TimeConscious {
             Fireball f = fireballs.get(i);
             if(f.visible) {
                 f.checkFireball();
+                f.checkSideIntersect();
                 f.tick(c);
             }
             if(!f.visible){

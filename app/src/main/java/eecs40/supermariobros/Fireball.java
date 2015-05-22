@@ -124,7 +124,7 @@ public class Fireball extends Sprite implements TimeConscious{
     }
 
     public void setLocation(int xPos, int yPos) {
-        dst.set(xPos, yPos, xPos+fireballWidth, yPos+fireballHeight);
+        dst.set(xPos, yPos, xPos + fireballWidth, yPos + fireballHeight);
 
     }
 
@@ -150,13 +150,23 @@ public class Fireball extends Sprite implements TimeConscious{
     public void checkFireball(){
         Log.v(TAG, "Check1");
         for(Sprite s : enemies){
-            if (dst.intersect(s.getRect())) {
-                Log.v(TAG,"Check5");
+            if (s.isVisible()) {
+                if (dst.intersect(s.getRect())) {
+                    Log.v(TAG, "Check5");
 
-                s.die();
-                s.setVisible(false);
+                    s.die();
+                    s.setVisible(false);
+                    visible = false;
+                    view.score += 1000;
+                }
+            }
+        }
+    }
+    public void checkSideIntersect(){
+        for(Obstacle o: scene){
+            if(dst.intersect(o.getLeft()) || dst.intersect(o.getRight())){
                 visible = false;
-                view.score += 1000;
+                break;
             }
         }
     }

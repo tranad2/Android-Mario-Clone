@@ -17,6 +17,7 @@ public class Goomba extends Sprite implements TimeConscious {
     private Mario mario;
     private boolean ground;
     private int goombaTimer = 0, moveGoomba = 0, imageWidth, imageHeight;
+    private int initX2;
     private final float gravity = 1.4f;
     private ArrayList<Obstacle> scene;
     private ArrayList<Bitmap> spriteLoader;
@@ -175,5 +176,11 @@ public class Goomba extends Sprite implements TimeConscious {
 
         left.set(x, (int) (y + imageHeight / 4), (int) (x + imageWidth / 2), (int) (y + imageHeight - imageHeight / 4));
         right.set((int) (x + imageWidth - imageWidth / 2), (int) (y + imageHeight / 4), (int) (x + imageWidth), (int) (y + imageHeight - imageHeight / 4));
+    }
+
+    public void revive(){
+        super.revive();
+        moveGoomba = 0;
+        goombaTimer = 0;
     }
 }
