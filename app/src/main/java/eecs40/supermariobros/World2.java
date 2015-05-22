@@ -17,26 +17,30 @@ public class World2 extends World{
     }
 
     public void addElements(MarioSurfaceView view){
-        int offset = 0;
 
-        for(int i = 1; i<=2; i++) {
-            for(int j = 0; j<50; j++) {
-                scene.add(new Obstacle(j*imageLoader.get(3).getWidth(),screenHeight-imageLoader.get(3).getHeight()*i , imageLoader.get(2)));
-            }
-        }
+        addLine(tileWidth*0, screenHeight-tileWidth*1, 9, imageLoader.get(3));
+        addLine(tileWidth*0, screenHeight-tileWidth*2, 9, imageLoader.get(3));
+        addLine(tileWidth*12, screenHeight-tileWidth*5, 7, imageLoader.get(2));
+        addLine(tileWidth*14, screenHeight-tileWidth*8, 1, imageLoader.get(2));
+        addLine(tileWidth*15, screenHeight-tileWidth*8, 1, imageLoader.get(0));
+        addLine(tileWidth*16, screenHeight-tileWidth*8, 1, imageLoader.get(2));
+        addLine(tileWidth*23, screenHeight-tileWidth*2, 1, imageLoader.get(8));
+        addLine(tileWidth*29, screenHeight-tileWidth*4, 1, imageLoader.get(10));
+        addLine(tileWidth*30, screenHeight-tileWidth*7, 1, imageLoader.get(0));
+        addLine(tileWidth*37, screenHeight-tileWidth*1, 33, imageLoader.get(3));
+        addLine(tileWidth*37, screenHeight-tileWidth*2, 33, imageLoader.get(3));
 
-        Item item = new Item(imageLoader.get(0).getWidth()*6,screenHeight-imageLoader.get(0).getHeight()*8, 0,view);
-        scene.add(new Obstacle(imageLoader.get(0).getWidth()*10,screenHeight-imageLoader.get(0).getHeight()*5, imageLoader.get(0)));
-        enemies.add(new Goomba(2 * screenWidth / 3, screenHeight / 2, view, scene));
+        addLine(tileWidth*70, screenHeight-tileWidth*1, 10, imageLoader.get(3));
+        addLine(tileWidth*70, screenHeight-tileWidth*2, 10, imageLoader.get(3));
+        addLine(tileWidth*70, screenHeight-tileWidth*3, 10, imageLoader.get(3));
+        addLine(tileWidth*70, screenHeight-tileWidth*4, 10, imageLoader.get(3));
+        addLine(tileWidth*70, screenHeight-tileWidth*5, 10, imageLoader.get(3));
+        addLine(tileWidth*70, screenHeight-tileWidth*6, 10, imageLoader.get(3));
+        addLine(tileWidth*70, screenHeight-tileWidth*7, 10, imageLoader.get(3));
+        addLine(tileWidth*70, screenHeight-tileWidth*8, 10, imageLoader.get(3));
+        addLine(tileWidth*70, screenHeight-tileWidth*9, 10, imageLoader.get(3));
+        addLine(tileWidth*70, screenHeight-tileWidth*10, 10, imageLoader.get(3));
+        addLine(tileWidth*70, screenHeight-tileWidth*11, 10, imageLoader.get(3));
 
-        scene.add(new Obstacle(imageLoader.get(0).getWidth() * 6, screenHeight - imageLoader.get(0).getHeight() * 7, imageLoader.get(0), item, itemList));
-
-        offset = ((scene.get(scene.size()-1)).getX()+tileWidth);  //New x after last obstacle
-
-        for(int i = 1; i<=2; i++) {
-            for(int j = 0; j<10; j++) {
-                scene.add(new Obstacle(j*imageLoader.get(3).getWidth()+2*offset,screenHeight-imageLoader.get(3).getHeight()*i , imageLoader.get(2)));
-            }
-        }
     }
 }

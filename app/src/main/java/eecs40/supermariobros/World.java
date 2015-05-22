@@ -167,24 +167,38 @@ public abstract class World implements TimeConscious{
 
         BitmapFactory.Options options = new BitmapFactory.Options();
 
-        Bitmap block1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.block1, options);
-        Bitmap block2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.block2, options);
-        Bitmap brick1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.brick1, options);
-        Bitmap tile1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.tile1, options);
-        Bitmap mushroom1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.mushroom1, options);
+        Bitmap block1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.block1, options);          //0
+        Bitmap block2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.block2, options);          //1
+        Bitmap brick1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.brick1, options);          //2
+        Bitmap tile1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.tile1, options);            //3
+        Bitmap mushroom1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.mushroom1, options);    //4
+        Bitmap mushroom2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.mushroom2, options);    //5
+        Bitmap flower = BitmapFactory.decodeResource(view.getResources(), R.drawable.flower1, options);         //6
+        Bitmap coin = BitmapFactory.decodeResource(view.getResources(), R.drawable.coin1, options);             //7
+        Bitmap pipe1 = BitmapFactory.decodeResource(view.getResources(), R.drawable.pipe1, options);            //8
+        Bitmap pipe2 = BitmapFactory.decodeResource(view.getResources(), R.drawable.pipe2, options);            //9
+        Bitmap pipe3 = BitmapFactory.decodeResource(view.getResources(), R.drawable.pipe3, options);            //10
+
 
         imageLoader.add(block1);
         imageLoader.add(block2);
         imageLoader.add(brick1);
         imageLoader.add(tile1);
         imageLoader.add(mushroom1);
+        imageLoader.add(mushroom2);
+        imageLoader.add(flower);
+        imageLoader.add(coin);
+        imageLoader.add(pipe1);
+        imageLoader.add(pipe2);
+        imageLoader.add(pipe3);
+        imageLoader.add(pipe3);
     }
 
     public abstract void addElements(MarioSurfaceView view);
 
     public void addLine(int x, int y, int length, Bitmap b){
         for(int i = 0; i<length; i++){
-            scene.add(new Obstacle(x+tileWidth*i, y, b));
+            scene.add(new Obstacle(x+b.getWidth()*i, y, b));
         }
     }
 

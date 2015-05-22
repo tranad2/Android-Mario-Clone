@@ -424,11 +424,11 @@ public class Mario extends Sprite implements TimeConscious {
             if (ground) {
                 dy = 0;
             } else {
-                if (Math.abs(dy) > 30) {
+                if (Math.abs(dy) > 40) {
                     if (dy > 0) {
-                        dy = 30;
+                        dy = 40;
                     } else {
-                        dy = -30;
+                        dy = -40;
                     }
                 }
             }
