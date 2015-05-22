@@ -72,6 +72,7 @@ public class Bullet extends Sprite implements TimeConscious{
         if(visible) {
             Paint paint = new Paint();
             c.drawBitmap(currentImage, null, dst, paint);
+            /*
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(Color.RED);
             c.drawRect(top, paint);
@@ -79,6 +80,7 @@ public class Bullet extends Sprite implements TimeConscious{
             paint.setColor(Color.CYAN);
             c.drawRect(left,paint);
             c.drawRect(right, paint);
+            */
         }
     }
 
